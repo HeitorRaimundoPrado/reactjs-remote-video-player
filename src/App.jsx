@@ -1,11 +1,18 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { API_BASE_URL } from './constants.js'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
+
 function App() {
   const [count, setCount] = useState(0)
 
+  useEffect(()=> {
+    fetch(`${API_BASE_URL}/hello`)
+      .then((res) => res.json()
+      .then((data) => console.log(data)))
+  }, [])
   return (
     <>
       <div>
