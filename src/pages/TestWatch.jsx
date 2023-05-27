@@ -1,13 +1,15 @@
-import  {useState} from 'react'
+import  {useState, useEffect} from 'react'
 import { API_BASE_URL } from '../constants.js'
 
 const TestWatch = () => {
+  
   const [text, setText] = useState('')
   const [realURL, setRealURL] = useState('')
+  const [watchDivHTML, setWatchDivHTML] = useState('')
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let watchDiv = document.getElementById('watch');
 
     console.log(text);
     await fetch(`${API_BASE_URL}/api/youtube/get?` + new URLSearchParams({url: text}))
@@ -16,7 +18,10 @@ const TestWatch = () => {
 
     console.log(realURL)
 
-    watchDiv.innerHTML = `<iframe src='${realURL}' frameborder=0></iframe>`
+    setWatchDivHTML( <>
+        <iframe src={realURL} frameboard='0'></iframe>
+      </>)
+
     setText('');
     return;
   }
@@ -27,6 +32,7 @@ const TestWatch = () => {
         <button type="submit">Submit</button>
       </form>
       <div id="watch">
+        {watchDivHTML}
       </div>
     </>
   )
