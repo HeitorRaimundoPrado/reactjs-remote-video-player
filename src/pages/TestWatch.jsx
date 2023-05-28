@@ -12,14 +12,14 @@ const TestWatch = () => {
     e.preventDefault();
 
     console.log(text);
-    await fetch(`${API_BASE_URL}/api/youtube/get?` + new URLSearchParams({url: text}))
-      .then(res => res.json())
-      .then(data => setRealURL(data[0]))
+    const res = await fetch(`${API_BASE_URL}/api/youtube/get?` + new URLSearchParams({url: text}));
+    const json = await res.json();
+    setRealURL(json[0])
 
     console.log(realURL)
 
     setWatchDivHTML( <>
-        <iframe src={realURL} frameboard='0'></iframe>
+        <iframe src={realURL} frameBorder='0'></iframe>
       </>)
 
     setText('');
