@@ -1,5 +1,7 @@
-from flask import Blueprint, request
+from os import path
+from flask import Blueprint, request, send_from_directory, send_file
 import pytube
+import tempfile
 
 bp = Blueprint('youtube', __name__)
 
@@ -31,3 +33,12 @@ def youtube_search():
     # print('\n\n')
 
     return ret_json 
+
+# return youtube video as attachment so user downloads it
+@bp.route('/api/youtube/download')
+def youtube_download():
+    url = request.args['url']
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        file_name = pytube.YouTube(url).streams.get_highest_resolution().download(output_path=tmp_dir) # type: ignore
+        return send_file(file_name, as_attachment=True)
+
