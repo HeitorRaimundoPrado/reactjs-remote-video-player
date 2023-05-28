@@ -1,5 +1,6 @@
 import  {useState, useEffect} from 'react'
 import { API_BASE_URL } from '../constants.js'
+import { useSearchParams } from 'react-router-dom'
 
 const TestWatch = () => {
   
@@ -7,12 +8,37 @@ const TestWatch = () => {
   const [realURL, setRealURL] = useState('')
   const [watchDivHTML, setWatchDivHTML] = useState('')
 
+  const [searchParams] = useSearchParams();
+  console.log(searchParams);
+  const vid = searchParams.get('vid');
+  console.log(vid);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (vid) {
+        const res = await fetch(`${API_BASE_URL}/api/youtube/get?` + new URLSearchParams({url: vid}));
+        const json = await res.json();
+        setRealURL(json[0])
+      }
+    }
+    fetchData();
+  }, [])
+
+  useEffect(() => {
+    setWatchDivHTML(
+      <>
+        {console.log('real url in useEffect -> ' + realURL)}
+        <iframe src={realURL} frameBorder="0"></iframe>
+      </>
+    )
+  }, [realURL])
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(text);
-    const res = await fetch(`${API_BASE_URL}/api/youtube/get?` + new URLSearchParams({url: text}));
+    console.log(e.target[0].value);
+    const res = await fetch(`${API_BASE_URL}/api/youtube/get?` + new URLSearchParams({url: e.target[0].value}));
     const json = await res.json();
     setRealURL(json[0])
 

@@ -24,6 +24,10 @@ def youtube_search():
 
     ret_json = list()
     for video in search:
-        ret_json.append(video.title)
+        ret_json.append({'title': video.title, 'url': video.watch_url})
+
+    # print('\n\n')
+    # print(ret_json)
+    # print('\n\n')
 
     return ret_json 
