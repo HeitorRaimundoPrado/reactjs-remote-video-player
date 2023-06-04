@@ -2,3 +2,6 @@ flask
 flask-cors
 flask-restful
 pytube
+beautifulsoup4
+requests
+
