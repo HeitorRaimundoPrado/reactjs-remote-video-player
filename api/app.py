@@ -1,7 +1,9 @@
 from __init__ import create_app
 
 
-app = create_app(False)
+DEPLOYMENT = False
+
+app = create_app(DEPLOYMENT)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=bool(~DEPLOYMENT))
