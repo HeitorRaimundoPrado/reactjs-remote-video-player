@@ -7,4 +7,5 @@ requests
 scipy
 numpy
 audio2numpy
+pydub
 sox
