@@ -4,4 +4,7 @@ flask-restful
 pytube
 beautifulsoup4
 requests
-
+scipy
+numpy
+audio2numpy
+sox
