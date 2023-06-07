@@ -6,7 +6,7 @@ const TestAudio = () => {
   const file = searchParams.get("file")
   return (
     <>
-      <audio src={`${API_BASE_URL}/api/music/${file}`} controls/>
+      <audio preload="none" type="audio/wav" src={`${API_BASE_URL}/api/music/${file}`} controls/>
     </>
   )
 }

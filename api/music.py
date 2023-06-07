@@ -7,7 +7,7 @@ import numpy as np
 from scipy.io import wavfile
 import pydub
 
-ALLOWED_EXTENSIONS = ['wav', 'ogg']
+ALLOWED_EXTENSIONS = ['mp3', 'wav', 'ogg']
 CHANNELS = 2
 RATE = 44100
 CHUNK = 1024
@@ -26,8 +26,8 @@ def test_current_app():
 
 
 # Generates the .wav file header for a given set of samples and specs
-def genHeader(sampleRate, bitsPerSample, channels, samples):
-    datasize = len(samples) * channels * bitsPerSample // 8
+def genHeader(sampleRate, bitsPerSample, channels, sampleSize):
+    datasize = sampleSize * channels * bitsPerSample // 8
     o = bytes("RIFF",'ascii')                                               # (4byte) Marks file as RIFF
     o += (datasize + 36).to_bytes(4,'little')                               # (4byte) File size in bytes excluding this and RIFF marker
     o += bytes("WAVE",'ascii')                                              # (4byte) File type
@@ -46,7 +46,7 @@ def genHeader(sampleRate, bitsPerSample, channels, samples):
 # returns all music files in UPLOAD_DIRECTORY/music
 @bp.route('/api/music')
 def get_all_music():
-    return ['a', 'b', 'c']
+    return os.listdir(current_app.config['UPLOAD_DIRECTORY'])
 
 
 # returns an audio file as attachment
@@ -54,100 +54,74 @@ def get_all_music():
 def get_music_file(filename: str):
     instance_path = current_app.config["UPLOAD_DIRECTORY"]
     file_path = os.path.join(instance_path, filename)
-    print(file_path)
-    def generate():
-        if (os.path.exists(file_path)):
-            print(f'\n\n{file_path}\n\n')
 
-        else:
-            print('\n\nDoesnt exist\n\n')
+    def generate():
+        if (not os.path.exists(file_path)):
+            return
+
         if file_path[-4:] == '.wav': 
-            if os.path.exists(file_path):
-                print("####\nFILE EXISTS\n####")
             segment = pydub.AudioSegment.from_wav(file_path)
-            info = pydub.utils.mediainfo(file_path)
 
             data = segment.raw_data
-            samples = np.frombuffer(data, dtype=np.int16, count=len(data)//2, offset=0)
-            print()
-            print(samples)
-            print()
-
-            wav_header = genHeader(44100, 16, 2, samples)
+            with open(file_path, 'rb') as f:
+                import io
+                input_wav = f.read()
+                rate, signal = wavfile.read(io.BytesIO(input_wav))
 
 
-            sample_rate = int(info['sample_rate'])
-            print("###")
-            print(sample_rate)
-            print("###")
+            samples = signal
+            sample_rate = rate
 
 
-            slice_length = 1
+            wav_header = genHeader(sample_rate, 16, 2, len(samples))
+
+            slice_length = 13
             overlap = 0
             slices = np.arange(0, len(samples) / sample_rate  , slice_length - overlap)
-            print(slices)
+            slices = np.append(slices, len(samples)/sample_rate)
 
+            
             for start, end in zip(slices[:-1], slices[1:]):
                 start_audio = start * sample_rate
                 end_audio = (end + overlap) * sample_rate
                 audio_slice = samples[int(start_audio) : int(end_audio)]
-                print(audio_slice)
 
                 import io
 
                 bytes_wav = bytes()
                 byte_io = io.BytesIO(bytes_wav)
-                wavfile.write(byte_io, 44100, audio_slice)
+                wavfile.write(byte_io, sample_rate, audio_slice)
                 yield wav_header + byte_io.read()
 
         elif file_path[-4:] == '.mp3':
-            if os.path.exists(file_path):
-                print("####\nFILE EXISTS\n####")
             segment = pydub.AudioSegment.from_mp3(file_path)
-            info = pydub.utils.mediainfo(file_path)
 
-            data = segment.raw_data
-            samples = np.frombuffer(data, dtype=np.int16, count=len(data)//2, offset=0)
-            print()
-            print(samples)
-            print()
+            samples = np.array(segment.get_array_of_samples())
 
-            wav_header = genHeader(44100, 16, 2, samples)
+            sample_rate = segment.frame_rate
+
+            wav_header = genHeader(int(sample_rate), 16, 2, len(samples)//2)
 
 
-            sample_rate = int(info['sample_rate'])
-            print("###")
-            print(sample_rate)
-            print("###")
-
-
-            slice_length = 1
+            slice_length = 13
             overlap = 0
             slices = np.arange(0, len(samples) / sample_rate  , slice_length - overlap)
-            print(slices)
+            slices = np.append(slices, len(samples)/sample_rate)
 
             for start, end in zip(slices[:-1], slices[1:]):
                 start_audio = start * sample_rate
                 end_audio = (end + overlap) * sample_rate
                 audio_slice = samples[int(start_audio) : int(end_audio)]
-                print(audio_slice)
 
                 import io
 
                 bytes_wav = bytes()
                 byte_io = io.BytesIO(bytes_wav)
                 wavfile.write(byte_io, 44100, audio_slice)
+
                 yield wav_header + byte_io.read()
 
-    return current_app.response_class(generate(), mimetype="multipart/x-mixed-replace; boundary=frame")
-
-@bp.route('/test-yield')
-def test_yield():
-    def gen():
-        for i in range(200):
-            yield bytes(str(i), encoding="UTF-8")
-            
-    return current_app.response_class(gen(), mimetype="json")
+    return current_app.response_class(generate(), mimetype="audio/x-wav")
 
 # returns an array with all playlists in UPLOAD_DIRECTORY/playlists
 @bp.route('/api/playlists')
