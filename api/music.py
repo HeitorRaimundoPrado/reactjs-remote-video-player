@@ -1,4 +1,4 @@
-from flask import Blueprint, Response, current_app, request
+from flask import Blueprint, Response, current_app, request, send_from_directory
 from werkzeug.utils import secure_filename
 import wave
 import pydub.utils
@@ -7,7 +7,7 @@ import numpy as np
 from scipy.io import wavfile
 import pydub
 
-ALLOWED_EXTENSIONS = ['mp3', 'wav', 'ogg']
+ALLOWED_EXTENSIONS = ['mp3', 'wav', 'ogg', 'm3u', 'txt']
 CHANNELS = 2
 RATE = 44100
 CHUNK = 1024
@@ -18,11 +18,6 @@ bp = Blueprint('music', __name__)
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-@bp.route('/test-current-app')
-def test_current_app():
-    print(current_app.config["UPLOAD_DIRECTORY"])
-    return [200]
 
 
 # Generates the .wav file header for a given set of samples and specs
@@ -46,14 +41,14 @@ def genHeader(sampleRate, bitsPerSample, channels, sampleSize):
 # returns all music files in UPLOAD_DIRECTORY/music
 @bp.route('/api/music')
 def get_all_music():
-    return os.listdir(current_app.config['UPLOAD_DIRECTORY'])
+    return os.listdir(os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'music'))
 
 
 # returns an audio file as attachment
 @bp.route('/api/music/<string:filename>')
 def get_music_file(filename: str):
-    instance_path = current_app.config["UPLOAD_DIRECTORY"]
-    file_path = os.path.join(instance_path, filename)
+    music_upload_dir = os.path.join(current_app.config["UPLOAD_DIRECTORY"], 'music')
+    file_path = os.path.join(music_upload_dir, filename)
 
     def generate():
         if (not os.path.exists(file_path)):
@@ -62,7 +57,6 @@ def get_music_file(filename: str):
         if file_path[-4:] == '.wav': 
             segment = pydub.AudioSegment.from_wav(file_path)
 
-            data = segment.raw_data
             with open(file_path, 'rb') as f:
                 import io
                 input_wav = f.read()
@@ -126,12 +120,13 @@ def get_music_file(filename: str):
 # returns an array with all playlists in UPLOAD_DIRECTORY/playlists
 @bp.route('/api/playlists')
 def get_all_playlists():
-    return []
+    return os.listdir(os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'playlists'))
 
 # returns the text file that corresponds to <filename> playlist
 @bp.route('/api/playlists/<string:filename>')
 def get_playlist(filename: str):
-    return 'file'
+    playlists_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'playlists')
+    return send_from_directory(playlists_dir, filename)
 
 # uploads an audio file
 @bp.route('/api/upload/music/', methods=["POST"])
@@ -148,11 +143,42 @@ def upload_music_file():
         if file.filename is None:
             return "NO file Identified"
         filename = secure_filename(file.filename)
-        file.save(os.path.join(current_app.config['UPLOAD_DIRECTORY'], filename))
 
-    return [200]
+        music_upload_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'music')
+        try:
+            os.makedirs(music_upload_dir)
+
+        except OSError:
+            pass
+        
+        file.save(os.path.join(music_upload_dir, filename))
+
+    return ''
 
 # uploads a text playlist
 @bp.route('/api/upload/playlist/', methods=["POST"])
 def upload_text_playlis():
-    return [200]
+    if 'file' not in request.files:
+        return "No file Identified"
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return "No file Identified"
+
+    if file and allowed_file(file.filename):
+        if file.filename is None:
+            return "NO file Identified"
+
+        filename = secure_filename(file.filename)
+
+        playlist_upload_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'playlists')
+        try:
+            os.makedirs(playlist_upload_dir)
+
+        except OSError:
+            pass
+
+        file.save(os.path.join(playlist_upload_dir, filename))
+
+    return ''
