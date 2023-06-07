@@ -54,5 +54,6 @@ def youtube_download():
     url = request.args['url']
     with tempfile.TemporaryDirectory() as tmp_dir:
         file_name = pytube.YouTube(url).streams.get_highest_resolution().download(output_path=tmp_dir) # type: ignore
+        print('sending file')
         return send_file(file_name, as_attachment=True)
 
