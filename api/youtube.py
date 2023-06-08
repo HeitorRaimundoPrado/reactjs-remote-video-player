@@ -7,17 +7,22 @@ from bs4 import BeautifulSoup
 import json
 import tempfile
 
+get_pfp_memo = dict()
+
 bp = Blueprint('youtube', __name__)
 
 def get_pfp(url: str) -> str:
+    if get_pfp_memo.get(url) is not None:
+        return get_pfp_memo[url]
+
     soup = BeautifulSoup(requests.get(url, cookies={'CONSENT': 'YES+1'}).text, 'html.parser')
 
     data = re.search(r"var ytInitialData = ({.*});", str(soup.prettify())).group(1) #type: ignore
 
     json_data = json.loads(data)
 
-    channel_pfp = json_data['header']['c4TabbedHeaderRenderer']['avatar']['thumbnails'][2]['url']
-    return channel_pfp
+    get_pfp_memo[url] = json_data['header']['c4TabbedHeaderRenderer']['avatar']['thumbnails'][2]['url']
+    return get_pfp_memo[url]
 
 # get the true urls for video and audio in <url>
 @bp.route('/api/youtube/get/')
