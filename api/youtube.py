@@ -1,4 +1,4 @@
-from os import path
+import os
 from flask import Blueprint, request, send_from_directory, send_file
 import pytube
 import requests
@@ -6,6 +6,7 @@ import re
 from bs4 import BeautifulSoup
 import json
 import tempfile
+import subprocess
 
 get_pfp_memo = dict()
 
@@ -59,5 +60,18 @@ def youtube_download():
     url = request.args['url']
     with tempfile.TemporaryDirectory() as tmp_dir:
         file_name = pytube.YouTube(url).streams.get_highest_resolution().download(output_path=tmp_dir) # type: ignore
-        return send_file(file_name, as_attachment=True)
+        print('sending file')
+        return send_file(file_name, as_attachment=True, mimetype="application/octet-stream")
 
+@bp.route('/api/youtube/download_audio')
+def youtube_download_audio():
+    url = request.args['url']
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        yt = pytube.YouTube(url)
+        file_name = yt.streams.get_audio_only().download(output_path=tmp_dir) # type: ignore
+        print(os.listdir(tmp_dir))
+        dest = os.path.join(tmp_dir, file_name.replace('.mp4', '.mp3'))
+        subprocess.run(f'ffmpeg -i "{file_name}" "{dest}" ', shell=True)
+
+        response = send_file(dest, as_attachment=True, mimetype="application/octet-stream")
+        return response
