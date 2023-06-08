@@ -13,4 +13,4 @@ app.register_blueprint(music.bp)
 app.register_blueprint(youtube.bp)
 
 if __name__ == '__main__':
-    app.run(debug=bool(~DEPLOYMENT))
+    app.run(threaded=True, debug=bool(~DEPLOYMENT))

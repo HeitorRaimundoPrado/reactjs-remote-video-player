@@ -2,7 +2,7 @@ import {API_BASE_URL} from '../constants.js'
 import { useState, useEffect } from 'react'
 
 const TestGetAllMusic = () => {
-  const [data, setData] = useState([])
+  const [data, setData] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       const resp = await fetch(`${API_BASE_URL}/api/music`);
