@@ -1,4 +1,6 @@
+import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Home from './pages/Home/Home'
 import TestWatch from './pages/TestWatch.jsx'
 import TestSearch from './pages/TestSearch.jsx'
 import TestUpload from './pages/TestUpload.jsx'
@@ -27,6 +29,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
+          <Route path='/' element={<Home/>}/>
           <Route path='/test-watch' element={<TestWatch/>}/>
           <Route path='/test-search' element={<TestSearch/>}/>
           <Route path='/test-upload' element={<TestUpload/>}/>
