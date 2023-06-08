@@ -10,9 +10,10 @@ def create_app(debug=False):
         UPLOAD_DIRECTORY=os.path.join(app.instance_path, UPLOAD_DIRECTORY)
         )
 
-    if debug == True:
-        from flask_cors import CORS # remove on deployment
-        CORS(app)
+    # if debug == True:
+    from flask_cors import CORS # remove on deployment
+    CORS(app)
+    # app.config['CORS_HEADERS'] = 'Content-Type'
 
     try:
         os.makedirs(app.instance_path)

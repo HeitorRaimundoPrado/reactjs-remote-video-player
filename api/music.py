@@ -7,7 +7,7 @@ import numpy as np
 from scipy.io import wavfile
 import pydub
 
-ALLOWED_EXTENSIONS = ['mp3', 'wav', 'ogg', 'm3u', 'txt']
+ALLOWED_EXTENSIONS = ['mp3', 'wav', 'm3u', 'txt']
 CHANNELS = 2
 RATE = 44100
 CHUNK = 1024
@@ -126,7 +126,8 @@ def get_all_playlists():
 @bp.route('/api/playlists/<string:filename>')
 def get_playlist(filename: str):
     playlists_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'playlists')
-    return send_from_directory(playlists_dir, filename)
+    with open(os.path.join(playlists_dir, filename)) as f:
+        return f.read().split('\n')
 
 # uploads an audio file
 @bp.route('/api/upload/music/', methods=["POST"])
@@ -158,17 +159,30 @@ def upload_music_file():
 # uploads a text playlist
 @bp.route('/api/upload/playlist/', methods=["POST"])
 def upload_text_playlis():
+    print()
+    print(request.files)
+    print(request.args)
+    print()
     if 'file' not in request.files:
         return "No file Identified"
 
     file = request.files['file']
+    file_name = request.form['filename']
 
     if file.filename == '':
         return "No file Identified"
 
+    if file.filename == 'blob':
+        file.filename = file_name
+
+    print()
+    print(file.filename)
+    print()
+
     if file and allowed_file(file.filename):
         if file.filename is None:
             return "NO file Identified"
+
 
         filename = secure_filename(file.filename)
 
@@ -179,6 +193,9 @@ def upload_text_playlis():
         except OSError:
             pass
 
-        file.save(os.path.join(playlist_upload_dir, filename))
+        print()
+        print(os.path.join(playlist_upload_dir, file.filename))
+        print()
+        file.save(os.path.join(playlist_upload_dir, file.filename))
 
-    return ''
+    return 'saved'
