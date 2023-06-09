@@ -48,6 +48,7 @@ function App() {
               <Route path='/' element={<HomePage/>}/>
               <Route path='/sound' element={<SoundPage/>}/>
               <Route path='/youtube' element={<YouTubePage/>}/>
+
               <Route path='/create-playlist' element={<CreatePlaylist/>}/>
 
               <Route path='/watch' element={<WatchVid/>}/>
