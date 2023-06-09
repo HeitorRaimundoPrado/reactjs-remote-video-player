@@ -161,8 +161,9 @@ def upload_music_file():
 def upload_text_playlis():
     print()
     print(request.files)
-    print(request.args)
+    print(request.form)
     print()
+
     if 'file' not in request.files:
         return "No file Identified"
 

@@ -174,7 +174,7 @@ const SoundPage = () => {
     <>
       <div style={{display: 'inline-block'}}>
         {playlistsHTML}
-        <a href="/new-playlist"><button>Create New Playlist</button></a>
+        <a href="/create-playlist"><button>Create New Playlist</button></a>
       </div>
 
       <DataContext.Provider value={allSongs}>
