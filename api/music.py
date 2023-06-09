@@ -200,3 +200,13 @@ def upload_text_playlis():
         file.save(os.path.join(playlist_upload_dir, file.filename))
 
     return 'saved'
+
+@bp.route('/api/delete/playlist')
+def delete_playlist():
+    playlist_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'playlists')
+    playlist_to_delete = os.path.join(playlist_dir, request.args['playlist'])
+    if os.path.exists(playlist_to_delete):
+        os.remove(playlist_to_delete)
+
+    return 'deleted'
+
