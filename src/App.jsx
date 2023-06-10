@@ -10,7 +10,8 @@ import TestGetAllMusic from './pages/TestGetAllMusic.jsx'
 import HomePage from './pages/HomePage.jsx'
 import SoundPage from './pages/SoundPage.jsx'
 import YouTubePage from './pages/YouTubePage.jsx'
-import CreatePlaylist from './pages/CreatePlaylist'
+import CreatePlaylist from './pages/CreatePlaylist.jsx'
+import EditPlaylist from './pages/EditPlaylist.jsx'
 
 import WatchVid from './pages/WatchVid.jsx'
 
@@ -52,6 +53,8 @@ function App() {
               <Route path='/create-playlist' element={<CreatePlaylist/>}/>
 
               <Route path='/watch' element={<WatchVid/>}/>
+
+              <Route path='edit-playlist' element={<EditPlaylist/>}/>
               
             </Routes>
           </BrowserRouter>
