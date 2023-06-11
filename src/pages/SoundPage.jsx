@@ -73,7 +73,7 @@ const useFunctions = (audioRef) => {
     } else {
       setRepIdx(0);
     }
-  }, [audioRef, replist])
+  }, [audioRef, replist, repIdx])
 
   return {
     handlePlaylist, 
@@ -169,6 +169,7 @@ const SoundPage = () => {
   useEffect(() => {
     setAllSongs(songsFromFetch);
     setReplist(songsFromFetch);
+    // setRepIdx(3);
   }, [songsFromFetch])
 
   const audioRef = useRef();
