@@ -1,5 +1,6 @@
 import {useState} from 'react'
 import { API_BASE_URL } from '../constants'
+import '../style/Search.scss'
 
 const TestSearch = () => {
   const [searchResults, setSearchResults] = useState([])
@@ -12,7 +13,7 @@ const TestSearch = () => {
   }
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className='form'>
         <input type="text"/>
         <input type="submit"/>
       </form>

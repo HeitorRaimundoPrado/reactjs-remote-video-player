@@ -1,0 +1,36 @@
+@use '../style/var';
+
+
+form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+    span {
+        height: 50px;
+        width: 50px;
+        padding: 14px 0px 0px 15px;
+        border: none;
+        border-radius: 25px 0px 0px 25px;
+        color: var.$c1;
+        background-color: var.$c2;
+    }
+    input[type='text']{
+        height: 50px;
+        width: 60%;
+        padding-left: 10px;
+        outline: none;
+        border: none;
+        border-radius: 0px 0px 0px 0px;
+        background-color: var.$c2;
+    }
+    input[type='submit'] {
+        height: 50px;
+        width: 50px;
+        border: none;
+        border-radius: 0px 25px 25px 0px;
+        cursor: pointer;
+        background-color: var.$c2;
+    }
+}

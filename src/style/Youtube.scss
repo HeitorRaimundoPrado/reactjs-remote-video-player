@@ -1,0 +1,45 @@
+@use './var';
+
+h2 {
+    margin: 20px 0px 20px 20px;
+}
+
+.search-results {
+    ul {
+        li {
+            margin-bottom: 40px;
+            .thumb {
+                img {
+                    height: 250px;
+                    width: 100%;
+                }
+            }
+            .title-channel {
+                display: flex;
+                align-items: center;
+                margin: 8px 0px 0px 10px;
+                img {
+                    height: 40px;
+                    width: 40px;
+                    margin-right: 15px;
+                    border-radius: 50%;
+                }
+                div {
+                    a {
+                        font-sizez: 18px;
+                        color: var.$c2;
+                        text-decoration: none;
+                    }
+                    p {
+                        margin-top: 5px;
+                        color: gray;
+                    }
+                }
+                
+            }
+        }
+        li:last-child {
+            padding-bottom: 90px;
+        }
+    }
+}

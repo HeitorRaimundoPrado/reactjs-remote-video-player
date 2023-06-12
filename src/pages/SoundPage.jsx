@@ -187,6 +187,7 @@ const SoundPage = () => {
 
   return (
     <>
+      <h2>Uploads</h2>
       <div style={{display: 'inline-block'}}>
         {globalPlaylists.map((playlist) => {
           return (
