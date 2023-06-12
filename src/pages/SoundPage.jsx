@@ -2,6 +2,8 @@ import { API_BASE_URL } from "../constants";
 import { useCallback, useState, useEffect, useRef, createContext, useContext } from 'react'
 import HandleReplistContext from "../contexts/HandlePlaylist.jsx"
 import RepIdxContext from "../contexts/RepIdx";
+import ContextMenu from '../components/ContextMenu.jsx'
+import playlistContext from "../contexts/PlaylistContext";
 
 import jQuery from "jquery";
 
@@ -71,7 +73,7 @@ const useFunctions = (audioRef) => {
     } else {
       setRepIdx(0);
     }
-  }, [audioRef, replist])
+  }, [audioRef, replist, repIdx])
 
   return {
     handlePlaylist, 
@@ -132,11 +134,31 @@ const handleChangePlaylist = (playlist, addToPlaylistSong, addToPlaylistRef) => 
   })
 }
 
+const handlePlaylistContextMenu = (e, playlist, contextMenuRef, setContextMenuSong) => {
+  e.preventDefault();
+
+  const x = e.pageX;
+  const y = e.pageY;
+  console.log("x: " + x);
+  console.log("y: " + y);
+
+  contextMenuRef.current.style.display = 'flex';
+  contextMenuRef.current.style.position = 'absolute';
+  contextMenuRef.current.style.top = y + 'px';
+  contextMenuRef.current.style.left = x + 'px';
+
+  setContextMenuSong(playlist);
+
+  console.log('right click');
+}
+
 const SoundPage = () => {
   const [allSongs, setAllSongs] = useState([]);
   const [playlistsHTML, setPlaylistsHTML] = useState(<></>)
   const [globalPlaylists, setGlobalPlaylists] = useState([]);
   const [addToPlaylistSong, setAddToPlaylistSong] = useState('');
+  const [contextMenuSong, setContextMenuSong] = useState('');
+
 
   const { replist, setReplist } = useContext(HandleReplistContext);
   const { repIdx, setRepIdx } = useContext(RepIdxContext);
@@ -147,10 +169,12 @@ const SoundPage = () => {
   useEffect(() => {
     setAllSongs(songsFromFetch);
     setReplist(songsFromFetch);
+    // setRepIdx(3);
   }, [songsFromFetch])
 
   const audioRef = useRef();
   const addToPlaylistRef = useRef();
+  const contextMenuRef = useRef();
 
   const { handlePlaylist, nextSong } = useFunctions(audioRef);
 
@@ -158,41 +182,40 @@ const SoundPage = () => {
     jQuery.get(`${API_BASE_URL}/api/playlists`, (playlists) => {
       // alert(playlists)
       setGlobalPlaylists(playlists);
-      setPlaylistsHTML(
-      <div>
-        {playlists.map((playlist) => {
-            return (
-              <button onClick={() => handlePlaylist(playlist)}>{playlist}</button>
-            )
-        })}
-      </div>)
     })
   }, [])
-
 
   return (
     <>
       <h2>Uploads</h2>
       <div style={{display: 'inline-block'}}>
-        {playlistsHTML}
-        <a href="/create-playlist">
-          <button>Create New Playlist</button>
-        </a>
+        {globalPlaylists.map((playlist) => {
+          return (
+            <button onContextMenu={(e) => {handlePlaylistContextMenu(e, playlist, contextMenuRef, setContextMenuSong)}}onClick={() => handlePlaylist(playlist)}>{playlist}</button>
+          )
+        })}
+        <br/>
+        <a href="/create-playlist"><button>Create New Playlist</button></a>
       </div>
 
       <DataContext.Provider value={allSongs}>
         <Songs addToPlaylistRef={addToPlaylistRef} setAddToPlaylistSong={setAddToPlaylistSong} playAudio={playAudio} audRef={audioRef} handleAddToPlaylist={handleAddToPlaylist}/>
       </DataContext.Provider>
 
-      <audio onEnded={() => {nextSong()}} src="" preload="none" type="audio/wav" controls ref={audioRef} style={{display: 'none'}}></audio>
+      <audio onEnded={() => {nextSong()}} src="" preload="auto" type="audio/wav" controls ref={audioRef} style={{display: 'none'}}></audio>
 
       <UploadSongForm/>
 
       <div ref={addToPlaylistRef} style={{display: 'none'}}>
         { globalPlaylists.map((playlist) => {
+          console.log("\n\ninside globalPlaylists.map\n\n")
           return <button onClick={() => handleChangePlaylist(playlist, addToPlaylistSong, addToPlaylistRef)}>{playlist}</button>
         })}
       </div>
+
+      <playlistContext.Provider value={[contextMenuSong, globalPlaylists, setGlobalPlaylists]}>
+        <ContextMenu contextMenuRef={contextMenuRef}/>
+      </playlistContext.Provider>
     </>
   );
 }
