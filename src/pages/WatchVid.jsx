@@ -25,8 +25,8 @@ const WatchVid = () => {
       <video width="900px" height="600px" controls src={realURL}></video>
         <div>
           {console.log(realURL)}
-          <a href={`${API_BASE_URL}/api/youtube/download?url=${vid}`}><input type="button" value="Donwload Video"/></a>
-          <a href={`${API_BASE_URL}/api/youtube/download_audio?url=${vid}`}><input type="button" value="Download Audio"/></a>
+          <a download href={`${API_BASE_URL}/api/youtube/download?url=${vid}`}><input type="button" value="Donwload Video"/></a>
+          <a download href={`${API_BASE_URL}/api/youtube/download_audio?url=${vid}`}><input type="button" value="Download Audio"/></a>
         </div>
       </>
     )
