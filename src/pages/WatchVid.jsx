@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { API_BASE_URL } from '../constants';
 import { useSearchParams } from 'react-router-dom'
 import '../style/YoutubeWatch.scss'
@@ -20,32 +20,20 @@ const WatchVid = () => {
     fetchData();
   }, [])
 
-  const invIframe = useRef();
-
-  const handleDownloadVideo = (e) => {
-    e.preventDefault();
-    invIframe.current.src = `${API_BASE_URL}/api/youtube/download?url=${vid}`;
-  }
-
-  const handleDownloadAudio = (e) => {
-    e.preventDefault();
-    invIframe.current.src = `${API_BASE_URL}/api/youtube/download_audio?url=${vid}`
-
-  }
-
   useEffect(() => {
     setWatchDivHTML(
       <main className="main_video">
-      <video width="900px" height="600px" controls src={realURL}></video>
-      <form className="main_form_download">
-        {console.log(realURL)}
+        <video width="900px" height="600px" controls src={realURL}></video>
 
-        <input type="submit" onClick={handleDownloadVideo} value="Download Video" className="form_download"/>
-
-        <input type="submit" onClick={handleDownloadAudio} value="Download Audio" className="form_download"/>
-
-        <iframe ref={invIframe} style={{display: 'none'}} ></iframe>
-      </form>
+        <div>
+          {console.log(realURL)}
+          <a download href={`${API_BASE_URL}/api/youtube/download?url=${vid}`}>
+            <input type="button" value="Donwload Video" className="form_download"/>
+          </a>
+          <a download href={`${API_BASE_URL}/api/youtube/download_audio?url=${vid}`}>
+            <input type="button" value="Download Audio" className="form_download"/>
+          </a>
+        </div>
       </main>
     )
   },[realURL])
