@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { API_BASE_URL } from '../constants';
 import { useSearchParams } from 'react-router-dom'
+import '../style/YoutubeWatch.scss'
 
 const WatchVid = () => {
   const [realURL, setRealURL] = useState('');
@@ -21,14 +22,19 @@ const WatchVid = () => {
 
   useEffect(() => {
     setWatchDivHTML(
-      <>
-      <video width="900px" height="600px" controls src={realURL}></video>
+      <main className="main_video">
+        <video width="900px" height="600px" controls src={realURL}></video>
+
         <div>
           {console.log(realURL)}
-          <a download href={`${API_BASE_URL}/api/youtube/download?url=${vid}`}><input type="button" value="Donwload Video"/></a>
-          <a download href={`${API_BASE_URL}/api/youtube/download_audio?url=${vid}`}><input type="button" value="Download Audio"/></a>
+          <a download href={`${API_BASE_URL}/api/youtube/download?url=${vid}`}>
+            <input type="button" value="Donwload Video" className="form_download"/>
+          </a>
+          <a download href={`${API_BASE_URL}/api/youtube/download_audio?url=${vid}`}>
+            <input type="button" value="Download Audio" className="form_download"/>
+          </a>
         </div>
-      </>
+      </main>
     )
   },[realURL])
 

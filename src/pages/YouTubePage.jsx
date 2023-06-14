@@ -28,21 +28,23 @@ const YouTubePage = () => {
         <span className="material-symbols-outlined">
           search
         </span>
-        <input type="text" placeholder="Search YouTube"/>
-        <input type="submit"/>
+        <input type="text" placeholder="Search YouTube" className="form_youtube_search"/>
+        <input type="submit" value="Go" onClick={() => {
+          //document.querySelector(".form_youtube_search").value = ''
+        }}/>
       </form>
 
       <div className="search-results">
         <ul>
           {searchResults.map((item) => {
             return (
-            <li>
-              <div className="thumb">
+            <li className="list">
+              <div className="list_thumb">
                 <a href={`/watch?vid=${item.url}`}>
-                  <img src={item.thumbnail}/> 
+                  <img src={item.thumbnail}/>
                 </a>
               </div>
-              <div className="title-channel">
+              <div className="list_channel">
                 <img src={item.pfp}/>
                 <div>
                   <a href={`/watch?vid=${item.url}`}>
