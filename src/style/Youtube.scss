@@ -6,15 +6,15 @@ h2 {
 
 .search-results {
     ul {
-        li {
+        .list {
             margin-bottom: 40px;
-            .thumb {
+            .list_thumb {
                 img {
                     height: 250px;
                     width: 100%;
                 }
             }
-            .title-channel {
+            .list_channel {
                 display: flex;
                 align-items: center;
                 margin: 8px 0px 0px 10px;
@@ -26,7 +26,7 @@ h2 {
                 }
                 div {
                     a {
-                        font-sizez: 18px;
+                        font-size: 18px;
                         color: var.$c2;
                         text-decoration: none;
                     }

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { API_BASE_URL } from '../constants';
 import { useSearchParams } from 'react-router-dom'
+import '../style/YoutubeWatch.scss'
 
 const WatchVid = () => {
   const [realURL, setRealURL] = useState('');
@@ -34,15 +35,18 @@ const WatchVid = () => {
 
   useEffect(() => {
     setWatchDivHTML(
-      <>
+      <main className="main_video">
       <video width="900px" height="600px" controls src={realURL}></video>
-      <form>
+      <form className="main_form_download">
         {console.log(realURL)}
-        <input type="submit" onClick={handleDownloadVideo} value="Donwload Video"/>
-        <input type="submit" onClick={handleDownloadAudio} value="Download Audio"/>
+
+        <input type="submit" onClick={handleDownloadVideo} value="Download Video" className="form_download"/>
+
+        <input type="submit" onClick={handleDownloadAudio} value="Download Audio" className="form_download"/>
+
         <iframe ref={invIframe} style={{display: 'none'}} ></iframe>
       </form>
-      </>
+      </main>
     )
   },[realURL])
 
