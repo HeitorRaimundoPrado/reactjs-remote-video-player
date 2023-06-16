@@ -1,6 +1,5 @@
 flask
 flask-cors
-flask-restful
 pytube
 beautifulsoup4
 requests
@@ -8,4 +7,6 @@ scipy
 numpy
 audio2numpy
 pydub
-sox
+flask-jwt-extended
+flask-sqlalchemy
+

@@ -15,6 +15,10 @@ import EditPlaylist from './pages/EditPlaylist.jsx'
 
 import WatchVid from './pages/WatchVid.jsx'
 
+import SingUp from './pages/SingUp'
+import LogIn from './pages/LogIn'
+import UseToken from './components/UseToken.jsx'
+
 import Nav from './components/Nav.jsx'
 import { API_BASE_URL } from './constants.js'
 import { useEffect, useState } from 'react'
@@ -32,6 +36,8 @@ function App() {
       .then((res) => res.json()
       .then((data) => console.log(data)))
   }, [])
+
+  const { token, removeToken, setToken } = UseToken();
 
   return (
     <>
@@ -53,6 +59,9 @@ function App() {
               <Route path='/create-playlist' element={<CreatePlaylist/>}/>
 
               <Route path='/watch' element={<WatchVid/>}/>
+
+              <Route path='/signup' element={<SingUp/>}/>
+              <Route path='/login' element={<LogIn setToken={setToken}/>}/>
 
               <Route path='edit-playlist' element={<EditPlaylist/>}/>
               
