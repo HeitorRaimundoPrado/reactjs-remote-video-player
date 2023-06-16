@@ -19,6 +19,7 @@ nav {
         text-decoration: none;
         color: var.$c3;
         cursor: pointer;
+        user-select: none;
         .material-symbols-outlined {
             font-size: 1.9em;
         }

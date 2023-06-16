@@ -4,7 +4,9 @@ h2 {
     margin: 20px 0px 20px 20px;
 }
 
-.search-results {
+.search_results {
+    display: flex;
+    justify-content: center;
     ul {
         .list {
             margin-bottom: 40px;
@@ -39,7 +41,7 @@ h2 {
             }
         }
         li:last-child {
-            padding-bottom: 90px;
+            padding-bottom: 50px;
         }
     }
 }
