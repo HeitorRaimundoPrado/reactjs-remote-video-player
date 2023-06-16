@@ -1,6 +1,7 @@
 import '../../src/style/Nav.scss'
+/*import { FaHouse, FaPlay, FaArrowUpFromBracket } from "react-icons/fa6"*/
 
-const Nav = () => {
+function Nav() {
   return (
     <nav>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
@@ -20,7 +21,18 @@ const Nav = () => {
         </span>
       </a>
     </nav>
-  )
+    /*<nav>
+      <a href="/sound">
+        <FaArrowUpFromBracket />
+      </a>
+      <a href="/">
+        <FaHouse />
+      </a>
+      <a href="/youtube">
+        <FaPlay />
+      </a>
+    </nav>*/
+  );
 }
 
 export default Nav;

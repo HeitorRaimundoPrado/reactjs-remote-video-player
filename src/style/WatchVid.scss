@@ -1,0 +1,33 @@
+@use './var';
+
+.main_video {
+    display: flex;
+    flex-direction: column;
+    video {
+        height: auto;
+        width: 100%;
+    }
+    .video_div_download {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 15%;
+        padding-bottom: 100px;
+        a {
+            .form_download {
+                height: 50px;
+                width: 150px;
+                border-radius: 25px;
+                border: none;
+                font-size: 0.9em;
+                color: var.$c3;
+                background: var.$c4;
+                cursor: pointer;
+                transition: .3s;
+            }
+    
+            .form_download:hover {
+                background: var.$hover-c4;
+            }
+        }
+    }
+}
