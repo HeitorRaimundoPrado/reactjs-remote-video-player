@@ -44,7 +44,11 @@ const UploadSongForm = () => {
 const playAudio = (nsrc, aud) => {
   console.log("called playAudio")
   aud.current.src = nsrc;
+
+
+  // console.log('guessed mimetype: ' + mimeType);
   aud.current.style.display = 'inline-block';
+  // aud.current.querySelector('source').type = mimeType;
   aud.current.play();
 }
 
@@ -202,7 +206,8 @@ const SoundPage = () => {
         <Songs addToPlaylistRef={addToPlaylistRef} setAddToPlaylistSong={setAddToPlaylistSong} playAudio={playAudio} audRef={audioRef} handleAddToPlaylist={handleAddToPlaylist}/>
       </DataContext.Provider>
 
-      <audio onEnded={() => {nextSong()}} src="" preload="auto" type="audio/wav" controls ref={audioRef} style={{display: 'none'}}></audio>
+      <audio onEnded={() => {nextSong()}} preload="auto" controls  style={{display: 'none'}} ref={audioRef}>
+      </audio>
 
       <UploadSongForm/>
 
