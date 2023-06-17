@@ -10,18 +10,18 @@ import jQuery from "jquery";
 const DataContext = createContext();
 
 const Songs = (props) => {
-  const{playAudio, handleAddToPlaylist, audRef, addToPlaylistRef, setAddToPlaylistSong} = props;
+  const{playAudio, handleAddToPlaylist, audRef, addToPlaylistRef, setAddToPlaylistSong, setRepIdx} = props;
 
   const data = useContext(DataContext);
   console.log("data: " + data);
 
   return (
     <ul>
-    {data.map((item) => {
+    {data.map((item, idx) => {
       return (
       <li key={item}>
-        <button onClick={() => playAudio(`${API_BASE_URL}/api/music/${item}`, audRef)}>{item}</button>
-        <button onClick={() => handleAddToPlaylist(item, addToPlaylistRef, setAddToPlaylistSong)}>Add To Playlist</button>
+        <button onClick={() => playAudio(`${API_BASE_URL}/api/music/${item}`, audRef, setRepIdx, idx)}>{item}</button>
+        <button onClick={() => handleAddToPlaylist(item, addToPlaylistRef, setAddToPlaylistSong, setRepIdx, idx)}>Add To Playlist</button>
         </li>
       )
     })}
@@ -41,7 +41,12 @@ const UploadSongForm = () => {
   )
 }
 
-const playAudio = (nsrc, aud) => {
+const playAudio = (nsrc, aud, setRepIdx, songIdx = null) => {
+  
+  if (songIdx !== null) {
+    setRepIdx(songIdx);
+  }
+
   console.log("called playAudio")
   aud.current.src = nsrc;
 
@@ -61,7 +66,7 @@ const useFunctions = (audioRef) => {
       console.log(songs);
       setReplist(songs);
       setRepIdx(0);
-      playAudio(`${API_BASE_URL}/api/music/${songs[0]}`, audioRef);
+      playAudio(`${API_BASE_URL}/api/music/${songs[0]}`, audioRef, setRepIdx);
     })
   }, [audioRef])
   
@@ -72,7 +77,7 @@ const useFunctions = (audioRef) => {
     console.log("replist.length = " + String(replist.length))
 
     if (repIdx + 1 < replist.length) {
-      playAudio(`${API_BASE_URL}/api/music/${replist[repIdx+1]}`, audioRef);
+      playAudio(`${API_BASE_URL}/api/music/${replist[repIdx+1]}`, audioRef, setRepIdx);
       setRepIdx(repIdx+1);
     } else {
       setRepIdx(0);
@@ -158,8 +163,8 @@ const handlePlaylistContextMenu = (e, playlist, contextMenuRef, setContextMenuSo
 
 const SoundPage = () => {
   const [allSongs, setAllSongs] = useState([]);
-  const [playlistsHTML, setPlaylistsHTML] = useState(<></>)
   const [globalPlaylists, setGlobalPlaylists] = useState([]);
+  const [songsToRender, setSongsToRender] = useState([]);
   const [addToPlaylistSong, setAddToPlaylistSong] = useState('');
   const [contextMenuSong, setContextMenuSong] = useState('');
 
@@ -172,6 +177,7 @@ const SoundPage = () => {
 
   useEffect(() => {
     setAllSongs(songsFromFetch);
+    setSongsToRender(songsFromFetch);
     setReplist(songsFromFetch);
     // setRepIdx(3);
   }, [songsFromFetch])
@@ -202,8 +208,14 @@ const SoundPage = () => {
         <a href="/create-playlist"><button>Create New Playlist</button></a>
       </div>
 
-      <DataContext.Provider value={allSongs}>
-        <Songs addToPlaylistRef={addToPlaylistRef} setAddToPlaylistSong={setAddToPlaylistSong} playAudio={playAudio} audRef={audioRef} handleAddToPlaylist={handleAddToPlaylist}/>
+      <DataContext.Provider value={songsToRender}>
+        <Songs addToPlaylistRef={addToPlaylistRef}
+               setAddToPlaylistSong={setAddToPlaylistSong} 
+               playAudio={playAudio} 
+               audRef={audioRef}
+               handleAddToPlaylist={handleAddToPlaylist}
+               setRepIdx={setRepIdx}/>
+
       </DataContext.Provider>
 
       <audio onEnded={() => {nextSong()}} preload="auto" controls  style={{display: 'none'}} ref={audioRef}>
