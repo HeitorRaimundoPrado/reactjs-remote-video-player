@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import playlistContext from '../contexts/PlaylistContext.jsx'
 import jQuery from "jquery"
 import { API_BASE_URL } from "../constants.js";
@@ -8,6 +8,10 @@ const ContextMenu = (props) => {
   const {contextMenuRef} = props;
 
   const [playlist, globalPlaylists, setGlobalPlaylists] = useContext(playlistContext)
+
+  useEffect(() => {
+    document.addEventListener('mousedown', () => contextMenuRef.current.style.display = 'none');
+  }, [contextMenuRef])
 
   const handleDeletePlaylist = () => {
     jQuery.ajax({
