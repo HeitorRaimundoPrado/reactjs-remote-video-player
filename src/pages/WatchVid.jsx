@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { API_BASE_URL } from '../constants';
 import { useSearchParams } from 'react-router-dom'
 import '../style/WatchVid.scss'
@@ -10,11 +10,14 @@ const WatchVid = () => {
   const [searchParams] = useSearchParams();
   const vid = searchParams.get('vid');
 
+  const vidRef = useRef();
+
   useEffect(() => {
     const fetchData = async () => {
       const res = await fetch(`${API_BASE_URL}/api/youtube/get?` + new URLSearchParams({url: vid}))
       const json = await res.json();
       setRealURL(json[0]);
+      vidRef.current.style.display = 'inline-block';
     }
 
     fetchData();
@@ -23,7 +26,7 @@ const WatchVid = () => {
   useEffect(() => {
     setWatchDivHTML(
       <main className="main_video">
-        <video width="900px" height="600px" controls src={realURL}></video>
+        <video style={{display: 'none'}} width="900px" height="600px" controls src={realURL} ref={vidRef}></video>
 
         <div className="video_div_download">
           {console.log(realURL)}

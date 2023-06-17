@@ -164,7 +164,6 @@ const handlePlaylistContextMenu = (e, playlist, contextMenuRef, setContextMenuSo
 const SoundPage = () => {
   const [allSongs, setAllSongs] = useState([]);
   const [globalPlaylists, setGlobalPlaylists] = useState([]);
-  const [songsToRender, setSongsToRender] = useState([]);
   const [addToPlaylistSong, setAddToPlaylistSong] = useState('');
   const [contextMenuSong, setContextMenuSong] = useState('');
 
@@ -177,7 +176,6 @@ const SoundPage = () => {
 
   useEffect(() => {
     setAllSongs(songsFromFetch);
-    setSongsToRender(songsFromFetch);
     setReplist(songsFromFetch);
     // setRepIdx(3);
   }, [songsFromFetch])
@@ -201,14 +199,16 @@ const SoundPage = () => {
       <div style={{display: 'inline-block'}}>
         {globalPlaylists.map((playlist) => {
           return (
-            <button onContextMenu={(e) => {handlePlaylistContextMenu(e, playlist, contextMenuRef, setContextMenuSong)}}onClick={() => handlePlaylist(playlist)}>{playlist}</button>
+            <button onContextMenu={(e) => {handlePlaylistContextMenu(e, playlist, contextMenuRef, setContextMenuSong)}}
+                    onClick={() => handlePlaylist(playlist)}>{playlist}</button>
           )
         })}
         <br/>
         <a href="/create-playlist"><button>Create New Playlist</button></a>
+        <button onClick={() => setReplist(allSongs)}>All Songs</button>
       </div>
 
-      <DataContext.Provider value={songsToRender}>
+      <DataContext.Provider value={replist}>
         <Songs addToPlaylistRef={addToPlaylistRef}
                setAddToPlaylistSong={setAddToPlaylistSong} 
                playAudio={playAudio} 
