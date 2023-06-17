@@ -85,10 +85,21 @@ const useFunctions = (audioRef) => {
     }
   }, [audioRef, replist, repIdx])
 
+  const previousSong = useCallback(() => {
+    if (repIdx - 1 >= 0) {
+      playAudio(`${API_BASE_URL}/api/music/${replist[repIdx-1]}`, audioRef, setRepIdx);
+      setRepIdx(repIdx-1);
+    } else {
+      setRepIdx(0);
+    }
+  }, [audioRef, replist, repIdx])
+
   return {
     handlePlaylist, 
-    nextSong
+    nextSong,
+    previousSong
   }
+
 }
 
 const useFetchData = () => {
@@ -185,7 +196,7 @@ const SoundPage = () => {
   const addToPlaylistRef = useRef();
   const contextMenuRef = useRef();
 
-  const { handlePlaylist, nextSong } = useFunctions(audioRef);
+  const { handlePlaylist, nextSong, previousSong } = useFunctions(audioRef);
 
   useEffect(() => {
     jQuery.get(`${API_BASE_URL}/api/playlists`, (playlists) => {
@@ -219,7 +230,10 @@ const SoundPage = () => {
 
       </DataContext.Provider>
 
-      <AudioPlayer src={""} audRef={audioRef} onEnded={() => {nextSong()}}/>
+      <AudioPlayer src={""}
+                   audRef={audioRef}
+                   nextSong={nextSong}
+                   previousSong={previousSong}/>
       {/* <audio onEnded={() => {nextSong()}} preload="auto" controls  style={{display: 'none'}} ref={audioRef}> */}
       {/* </audio> */}
 

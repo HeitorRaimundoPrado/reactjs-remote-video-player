@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-const AudioPlayer = ({ src, audRef, onEnded}) => {
+const AudioPlayer = ({ src, audRef, nextSong, previousSong}) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
@@ -65,10 +65,12 @@ const AudioPlayer = ({ src, audRef, onEnded}) => {
 
   return (
     <div>
-      <audio src="" ref={audRef} onEnded={onEnded} style={{display: 'none'}}></audio>
+      <audio src="" ref={audRef} onEnded={() => nextSong()} style={{display: 'none'}}></audio>
       <button onClick={togglePlay}>
         Pause
       </button>
+      <button onClick={() => previousSong()}>Previous Song</button>
+      <button onClick={() => nextSong()}>Next Song</button>
       <button onClick={toggleMute}>
         {isMuted ? 'Unmute' : 'Mute'}
       </button>
