@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/jsx-key */
 import { API_BASE_URL } from "../constants";
 import { useCallback, useState, useEffect, useRef, createContext, useContext } from 'react'
 import HandleReplistContext from "../contexts/HandlePlaylist.jsx"
@@ -5,6 +7,7 @@ import RepIdxContext from "../contexts/RepIdx";
 import ContextMenu from '../components/ContextMenu.jsx'
 import AudioPlayer from "../components/AudioPlayer";
 import playlistContext from "../contexts/PlaylistContext";
+import '../style/SoundPage.scss'
 
 import jQuery from "jquery";
 
@@ -211,13 +214,20 @@ const SoundPage = () => {
       <div style={{display: 'inline-block'}}>
         {globalPlaylists.map((playlist) => {
           return (
-            <button onContextMenu={(e) => {handlePlaylistContextMenu(e, playlist, contextMenuRef, setContextMenuSong)}}
-                    onClick={() => handlePlaylist(playlist)}>{playlist}</button>
+            <button onContextMenu={(e) => {
+              handlePlaylistContextMenu(e, playlist, contextMenuRef, setContextMenuSong)}}
+              onClick={() => handlePlaylist(playlist)}>
+              {playlist}
+            </button>
           )
         })}
         <br/>
-        <a href="/create-playlist"><button>Create New Playlist</button></a>
-        <button onClick={() => setReplist(allSongs)}>All Songs</button>
+        <a href="/create-playlist">
+          <button>Create New Playlist</button>
+        </a>
+        <button onClick={() => setReplist(allSongs)}>
+          All Songs
+        </button>
       </div>
 
       <DataContext.Provider value={replist}>
@@ -227,7 +237,6 @@ const SoundPage = () => {
                audRef={audioRef}
                handleAddToPlaylist={handleAddToPlaylist}
                setRepIdx={setRepIdx}/>
-
       </DataContext.Provider>
 
       <AudioPlayer src={""}
@@ -242,6 +251,7 @@ const SoundPage = () => {
       <div ref={addToPlaylistRef} style={{display: 'none'}}>
         { globalPlaylists.map((playlist) => {
           console.log("\n\ninside globalPlaylists.map\n\n")
+          // eslint-disable-next-line react/jsx-key
           return <button onClick={() => handleChangePlaylist(playlist, addToPlaylistSong, addToPlaylistRef)}>{playlist}</button>
         })}
       </div>
