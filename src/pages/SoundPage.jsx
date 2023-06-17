@@ -3,6 +3,7 @@ import { useCallback, useState, useEffect, useRef, createContext, useContext } f
 import HandleReplistContext from "../contexts/HandlePlaylist.jsx"
 import RepIdxContext from "../contexts/RepIdx";
 import ContextMenu from '../components/ContextMenu.jsx'
+import AudioPlayer from "../components/AudioPlayer";
 import playlistContext from "../contexts/PlaylistContext";
 
 import jQuery from "jquery";
@@ -218,8 +219,9 @@ const SoundPage = () => {
 
       </DataContext.Provider>
 
-      <audio onEnded={() => {nextSong()}} preload="auto" controls  style={{display: 'none'}} ref={audioRef}>
-      </audio>
+      <AudioPlayer src={""} audRef={audioRef} onEnded={() => {nextSong()}}/>
+      {/* <audio onEnded={() => {nextSong()}} preload="auto" controls  style={{display: 'none'}} ref={audioRef}> */}
+      {/* </audio> */}
 
       <UploadSongForm/>
 
