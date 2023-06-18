@@ -20,7 +20,7 @@ def create_app(debug=False):
 
     # if debug == True:
     from flask_cors import CORS # remove on deployment
-    CORS(app)
+    CORS(app, supports_credentials=True, expose_headers="Authorization")
  
     jwt = JWTManager(app)
     # app.config['CORS_HEADERS'] = 'Content-Type'
@@ -30,11 +30,20 @@ def create_app(debug=False):
     with app.app_context():
         db.create_all()
 
-    try:
-        os.makedirs(app.instance_path)
-        os.makedirs(app.config["UPLOAD_DIRECTORY"])
+    private_dir = os.path.join(app.config["UPLOAD_DIRECTORY"], "private")
+    music_dir = os.path.join(app.config["UPLOAD_DIRECTORY"], "music")
+    playlist_dir = os.path.join(app.config["UPLOAD_DIRECTORY"], "playlists")
 
-    except OSError:
-        pass
+    dirs_to_create = [app.instance_path, app.config["UPLOAD_DIRECTORY"], private_dir, music_dir, playlist_dir]
+
+    for dir in dirs_to_create:
+        try:
+            os.makedirs(dir)
+
+        except OSError:
+            print("directory already exists...")
+            print("skipping creation\n")
+
+
 
     return app

@@ -37,6 +37,12 @@ const UploadSongForm = () => {
       <br/>
       <input id="file-input" style={{display: 'none'}} type="file" name="file"/>
 
+      <label htmlFor="input-private">Private</label>
+      <input type="radio" name="private" value="1" id="input-private"/>
+
+      <label htmlFor="input-public">Public</label>
+      <input type="radio" name="private" value="0" id="input-public"/>
+
       <input type="submit"/>
     </form>
   )
@@ -178,6 +184,7 @@ const SoundPage = () => {
   const [globalPlaylists, setGlobalPlaylists] = useState([]);
   const [addToPlaylistSong, setAddToPlaylistSong] = useState('');
   const [contextMenuSong, setContextMenuSong] = useState('');
+  const [privateFiles, setPrivateFiles] = useState([])
 
 
   const { replist, setReplist } = useContext(HandleReplistContext);
@@ -203,6 +210,21 @@ const SoundPage = () => {
       // alert(playlists)
       setGlobalPlaylists(playlists);
     })
+
+    if (localStorage.getItem('token') != null) {
+      jQuery.ajax({
+        url: `${API_BASE_URL}/api/files/private`,
+        data: '',
+        headers: {
+          "Authorization": "Bearer " + localStorage.getItem('token')
+        },
+        success: (privFiles) => {
+          setPrivateFiles(privFiles);
+          console.log("PivFiles = " + String(privFiles));
+        },
+        dataType: 'json',
+      })
+    }
   }, [])
 
   return (
@@ -215,9 +237,12 @@ const SoundPage = () => {
                     onClick={() => handlePlaylist(playlist)}>{playlist}</button>
           )
         })}
+
         <br/>
         <a href="/create-playlist"><button>Create New Playlist</button></a>
         <button onClick={() => setReplist(allSongs)}>All Songs</button>
+        <button onClick={() => setReplist(privateFiles)}>Private Files</button>
+
       </div>
 
       <DataContext.Provider value={replist}>

@@ -1,5 +1,6 @@
-from flask import Blueprint, Response, current_app, request, send_from_directory
+from flask import Blueprint, Response, current_app, request, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
+from flask_jwt_extended import jwt_required, get_jwt_identity
 import os
 import mimetypes
 
@@ -73,7 +74,12 @@ def get_playlist(filename: str):
 
 # uploads an audio file
 @bp.route('/api/upload/music/', methods=["POST"])
+@jwt_required(True)
 def upload_music_file():
+
+    private = request.form.get('private')
+    private = 0 if private is None else int(private)
+
     if 'file' not in request.files:
         return "No file Identified"
 
@@ -88,13 +94,27 @@ def upload_music_file():
         filename = secure_filename(file.filename)
 
         music_upload_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'music')
+        private_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'private')
+
+
+        
         try:
             os.makedirs(music_upload_dir)
 
         except OSError:
             pass
         
-        file.save(os.path.join(music_upload_dir, filename))
+        if not private:
+            file.save(os.path.join(music_upload_dir, filename))
+
+        else:
+            from models import User
+
+            user_email = get_jwt_identity()
+            user = User.query.filter_by(email=user_email).first()
+
+            user_dir = os.path.join(private_dir, str(user.id))
+            file.save(os.path.join(user_dir, filename))
 
     return ''
 
@@ -118,14 +138,10 @@ def upload_text_playlis():
     if file.filename == 'blob':
         file.filename = file_name
 
-    print()
-    print(file.filename)
-    print()
 
     if file and allowed_file(file.filename):
         if file.filename is None:
             return "NO file Identified"
-
 
         filename = secure_filename(file.filename)
 
@@ -137,19 +153,14 @@ def upload_text_playlis():
             pass
 
         print()
-        print(os.path.join(playlist_upload_dir, file.filename))
+        print(os.path.join(playlist_upload_dir, filename))
         print()
-        file.save(os.path.join(playlist_upload_dir, file.filename))
+        file.save(os.path.join(playlist_upload_dir, filename))
 
     return 'saved'
 
 @bp.route('/api/delete/playlist')
 def delete_playlist():
-    print()
-    print(request.args)
-    print(request.form)
-    print(request.data)
-    print()
     playlist_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'playlists')
     playlist_to_delete = os.path.join(playlist_dir, request.args['playlist'])
     if os.path.exists(playlist_to_delete):
@@ -157,3 +168,17 @@ def delete_playlist():
 
     return 'deleted'
 
+@bp.route('/api/files/private')
+@jwt_required(False)
+def get_private_files():
+    user_email = get_jwt_identity()
+
+    from models import User
+    user = User.query.filter_by(email=user_email).first()
+
+    all_private_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'private') 
+    user_dir = os.path.join(all_private_dir, str(user.id))
+
+    print("\n\nuser_dir = " + str(os.listdir(user_dir)) + "\n\n")
+
+    return jsonify(os.listdir(user_dir)), 200
