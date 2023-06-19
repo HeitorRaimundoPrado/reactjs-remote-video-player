@@ -56,7 +56,7 @@ def create_token():
 
 @bp.route('/logout', methods=["POST"])
 def logout():
-    response = jsonify({'msg': 'sucess'})
+    response = jsonify({'msg': 'success'})
     unset_jwt_cookies(response)
     return response
 

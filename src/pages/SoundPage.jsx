@@ -274,7 +274,11 @@ const SoundPage = () => {
 
         <br/>
         <a href="/create-playlist"><button>Create New Playlist</button></a>
-        <button onClick={() => setReplist(allSongs)}>All Songs</button>
+
+        <button onClick={() => {
+        setReplist(allSongs)
+        setBaseUrl(`${API_BASE_URL}/api/music`)}}>All Songs</button>
+
         <button onClick={() => {
         setReplist(privateFiles)
         setBaseUrl(`${API_BASE_URL}/api/private/music`)}}>Private Files</button>
@@ -304,8 +308,8 @@ const SoundPage = () => {
       <UploadSongForm/>
 
       <div ref={addToPlaylistRef} style={{display: 'none'}}>
+        <h2>Add To Playlist:</h2>
         { globalPlaylists.map((playlist) => {
-          console.log("\n\ninside globalPlaylists.map\n\n")
           return <button onClick={() => handleChangePlaylist(playlist, addToPlaylistSong, addToPlaylistRef)}>{playlist}</button>
         })}
       </div>
