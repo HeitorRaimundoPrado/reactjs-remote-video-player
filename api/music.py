@@ -17,7 +17,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@bp.route('/api/music/delete/<string:filename>')
+@bp.route('/api/music/delete/<string:filename>', methods=["POST"])
 @jwt_required(True)
 def delete_song(filename: str):
     private = request.args.get('private')
