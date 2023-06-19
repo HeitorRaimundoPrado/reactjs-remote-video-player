@@ -233,15 +233,36 @@ const SoundPage = () => {
   const [globalPlaylists, setGlobalPlaylists] = useState([]);
   const [addToPlaylistSong, setAddToPlaylistSong] = useState('');
   const [contextMenuSong, setContextMenuSong] = useState('');
-  const [privateFiles, setPrivateFiles] = useState([])
+  const [privateFiles, setPrivateFiles] = useState([]);
+  const [baseUrl, setBaseUrl] = useState(`${API_BASE_URL}/api/music`);
+  const [searchContent, setSearchContent] = useState('');
 
-  const [baseUrl, setBaseUrl] = useState(`${API_BASE_URL}/api/music`)
 
   const { replist, setReplist } = useContext(HandleReplistContext);
   const { repIdx, setRepIdx } = useContext(RepIdxContext);
 
   const songsFromFetch = useFetchData();
   console.log("outside useEffect -> " + String(songsFromFetch));
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const filteredSongs = allSongs.filter((item) => {
+      return item.toLowerCase().includes(searchContent.toLowerCase());
+    })
+    setReplist(filteredSongs);
+  }
+
+  useEffect(() => { // update results when searching
+    if (searchContent === '') {
+      setReplist(allSongs);
+      return;
+    }
+    const filteredSongs = allSongs.filter((item) => {
+      return item.toLowerCase().includes(searchContent.toLowerCase());
+    })
+    setReplist(filteredSongs);
+
+  }, [searchContent])
 
   useEffect(() => {
     setAllSongs(songsFromFetch);
@@ -280,6 +301,10 @@ const SoundPage = () => {
   return (
     <>
       <h2>Uploads</h2>
+      <form onSubmit={handleSearch}>
+        <input type="text" onChange={(e) => setSearchContent(e.target.value)}/>
+        <input type="submit" value="Search"/>
+      </form>
       <div style={{display: 'inline-block'}}>
         {globalPlaylists.map((playlist) => {
           return (
