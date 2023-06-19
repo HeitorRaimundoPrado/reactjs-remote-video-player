@@ -4,6 +4,7 @@ import HandleReplistContext from "../contexts/HandlePlaylist.jsx"
 import RepIdxContext from "../contexts/RepIdx";
 import ContextMenu from '../components/ContextMenu.jsx'
 import AudioPlayer from "../components/AudioPlayer";
+import { useNavigate } from 'react-router-dom';
 import playlistContext from "../contexts/PlaylistContext";
 
 import jQuery from "jquery";
@@ -25,7 +26,7 @@ const handleDeleteSong = (songs, setSongs, baseUrl, idx) => {
   songsCopy.splice(idx, 1);
   setSongs(songsCopy);
 }
-const Songs = (props) => {
+const Files = (props) => {
   const{playAudio, handleAddToPlaylist, audRef, addToPlaylistRef, setAddToPlaylistSong, setRepIdx, baseUrl} = props;
 
   const [data, setData] = useContext(DataContext);
@@ -47,7 +48,7 @@ const Songs = (props) => {
   )
 }
 
-const UploadSongForm = () => {
+const UploadForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     let headers = {}
@@ -56,7 +57,8 @@ const UploadSongForm = () => {
         Authorization: "Bearer " + localStorage.getItem('token'),
       }
     }
-    fetch(`${API_BASE_URL}/api/upload/music/`, { method: "POST", headers: headers, body: new FormData(e.target)})
+    
+    fetch(`${API_BASE_URL}/api/upload`, { method: "POST", headers: headers, body: new FormData(e.target)})
   }
   
   return (
@@ -76,7 +78,33 @@ const UploadSongForm = () => {
   )
 }
 
+const playVideo = (nsrc) => {
+  const url = new URL('/watch', window.location.href);
+  let params = new URLSearchParams();
+  let src = nsrc.slice(1);
+  params.append('vid', src);
+  params.append('local', '1');
+  url.search = params;
+
+  var link = document.createElement('a');
+  link.href = url;
+  link.style.display = 'none';
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  // Remove the link from the DOM after we click it
+  document.body.removeChild(link);
+
+}
+
 const playAudio = (nsrc, aud, setRepIdx, songIdx = null) => {
+  if (nsrc.split('.')[1] == 'mp4') {
+    playVideo(nsrc);
+    return;
+  }
+
   console.log("called playAudio")
   
   if (songIdx !== null) {
@@ -236,6 +264,7 @@ const SoundPage = () => {
   const [privateFiles, setPrivateFiles] = useState([]);
   const [baseUrl, setBaseUrl] = useState(`${API_BASE_URL}/api/music`);
   const [searchContent, setSearchContent] = useState('');
+  const [allVideo, setAllVideo] = useState([]);
 
 
   const { replist, setReplist } = useContext(HandleReplistContext);
@@ -243,6 +272,10 @@ const SoundPage = () => {
 
   const songsFromFetch = useFetchData();
   console.log("outside useEffect -> " + String(songsFromFetch));
+
+  useEffect(() => { // when the results change
+    setRepIdx(0);
+  }, [replist])
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -296,15 +329,21 @@ const SoundPage = () => {
         dataType: 'json',
       })
     }
+
+    fetch(`${API_BASE_URL}/api/video`)
+      .then(resp => resp.json())
+      .then(data => setAllVideo(data))
   }, [])
 
   return (
     <>
       <h2>Uploads</h2>
+
       <form onSubmit={handleSearch}>
         <input type="text" onChange={(e) => setSearchContent(e.target.value)}/>
         <input type="submit" value="Search"/>
       </form>
+      
       <div style={{display: 'inline-block'}}>
         {globalPlaylists.map((playlist) => {
           return (
@@ -317,17 +356,22 @@ const SoundPage = () => {
         <a href="/create-playlist"><button>Create New Playlist</button></a>
 
         <button onClick={() => {
-        setReplist(allSongs)
-        setBaseUrl(`${API_BASE_URL}/api/music`)}}>All Songs</button>
+          setReplist(allSongs)
+          setBaseUrl(`${API_BASE_URL}/api/music`)}}>All Audio</button>
 
         <button onClick={() => {
-        setReplist(privateFiles)
-        setBaseUrl(`${API_BASE_URL}/api/private/music`)}}>Private Files</button>
+          setReplist(privateFiles)
+          setBaseUrl(`${API_BASE_URL}/api/private/music`)}}>Private Files</button>
+
+        <button onClick={() => {
+          setReplist(allVideo);
+          setBaseUrl('');
+        }}>All Video</button>
 
       </div>
 
       <DataContext.Provider value={[replist, setReplist]}>
-        <Songs addToPlaylistRef={addToPlaylistRef}
+        <Files addToPlaylistRef={addToPlaylistRef}
                setAddToPlaylistSong={setAddToPlaylistSong} 
                playAudio={playAudio} 
                audRef={audioRef}
@@ -346,7 +390,7 @@ const SoundPage = () => {
       {/* <audio onEnded={() => {nextSong()}} preload="auto" controls  style={{display: 'none'}} ref={audioRef}> */}
       {/* </audio> */}
 
-      <UploadSongForm/>
+      <UploadForm/>
 
       <div ref={addToPlaylistRef} style={{display: 'none'}}>
         <h2>Add To Playlist:</h2>

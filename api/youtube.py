@@ -31,8 +31,7 @@ def youtube_get():
     url = request.args['url']
     ret_json = dict()
     streams = pytube.YouTube(url).streams
-    ret_json[0] = streams.get_highest_resolution().url # type: ignore
-    ret_json[1] = streams.get_audio_only().url # type: ignore
+    ret_json = [streams.get_highest_resolution().url] # type: ignore
     return ret_json
 
 # use youtube data api to retrieve the results from <search>

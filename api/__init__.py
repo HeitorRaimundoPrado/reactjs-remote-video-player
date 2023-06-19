@@ -34,8 +34,10 @@ def create_app(debug=False):
     private_dir = os.path.join(app.config["UPLOAD_DIRECTORY"], "private")
     music_dir = os.path.join(app.config["UPLOAD_DIRECTORY"], "music")
     playlist_dir = os.path.join(app.config["UPLOAD_DIRECTORY"], "playlists")
+    video_dir = os.path.join(app.config['UPLOAD_DIRECTORY'], 'video')
+    tmp_dir = os.path.join(app.config['UPLOAD_DIRECTORY'], 'temp')
 
-    dirs_to_create = [app.instance_path, app.config["UPLOAD_DIRECTORY"], private_dir, music_dir, playlist_dir]
+    dirs_to_create = [app.instance_path, app.config["UPLOAD_DIRECTORY"], private_dir, music_dir, playlist_dir, video_dir, tmp_dir]
 
     for dir in dirs_to_create:
         try:

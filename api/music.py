@@ -1,21 +1,21 @@
-from flask import Blueprint, Response, current_app, redirect, request, send_from_directory, jsonify, url_for
+from flask import Blueprint, Response, current_app, redirect, request, send_from_directory, jsonify, url_for, session
 from werkzeug.utils import secure_filename
 from flask_jwt_extended import jwt_required, get_jwt_identity
 import os
 import mimetypes
 
-ALLOWED_EXTENSIONS = ['mp3', 'wav', 'ogg', 'm3u', 'txt']
 CHANNELS = 2
 RATE = 44100
 CHUNK = 1024
 RECORD_SECONDS = 5
 
-
-bp = Blueprint('music', __name__)
+ALLOWED_EXTENSIONS = ['mp3', 'wav', 'ogg', 'm3u', 'txt', 'mp4']
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
+bp = Blueprint('music', __name__)
 
 @bp.route('/api/music/delete/<string:filename>', methods=["POST"])
 @jwt_required(True)
@@ -52,7 +52,6 @@ def delete_private_file(filename: str):
 @bp.route('/api/music')
 def get_all_music():
     return os.listdir(os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'music'))
-
 
 # returns an audio file as attachment
 @bp.route('/api/music/<string:filename>')
@@ -138,42 +137,45 @@ def upload_music_file():
 
     private = request.form.get('private')
     private = 0 if private is None else int(private)
-
-    if 'file' not in request.files:
-        return "No file Identified"
-
-    file = request.files['file']
-
-    if file.filename == '':
-        return "No file Identified"
-
-    if file and allowed_file(file.filename):
-        if file.filename is None:
-            return "NO file Identified"
-        filename = secure_filename(file.filename)
-
-        music_upload_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'music')
-        private_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'private')
+    filename = str(request.args.get('file_name'))
 
 
-        
-        try:
-            os.makedirs(music_upload_dir)
+    temp_dir = os.path.join(current_app.config['UPLOAD'], 'temp')
+    file = open(os.path.join(temp_dir, filename), 'rb')
 
-        except OSError:
-            pass
-        
-        if not private:
-            file.save(os.path.join(music_upload_dir, filename))
+    
+    if file.name is None:
+        return "No filename specified"
 
-        else:
-            from models import User
+    filename = secure_filename(file.name)
 
-            user_email = get_jwt_identity()
-            user = User.query.filter_by(email=user_email).first()
+    music_upload_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'music')
+    private_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'private')
 
-            user_dir = os.path.join(private_dir, str(user.id))
-            file.save(os.path.join(user_dir, filename))
+
+    
+    try:
+        os.makedirs(music_upload_dir)
+
+    except OSError:
+        pass
+    
+    if not private:
+        with open(os.path.join(music_upload_dir, filename), 'wb+') as f:
+            f.write(file.read())
+
+    else:
+        from models import User
+
+        user_email = get_jwt_identity()
+        user = User.query.filter_by(email=user_email).first()
+
+        user_dir = os.path.join(private_dir, str(user.id))
+        with open(os.path.join(user_dir, filename), 'wb+') as f:
+            f.write(file.read())
+    
+    if os.path.exists(os.path.join(temp_dir, filename)):
+        os.remove(os.path.join(temp_dir, filename))
 
     return {}
 

@@ -1,6 +1,6 @@
 import json
 import os
-from flask import Blueprint, request, jsonify, current_app
+from flask import Blueprint, request, jsonify, current_app, session
 from flask_jwt_extended import create_access_token, get_jwt_identity, unset_jwt_cookies, get_jwt, create_access_token
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timezone, timedelta
