@@ -1,4 +1,4 @@
-from flask import Blueprint, Response, current_app, request, send_from_directory, jsonify
+from flask import Blueprint, Response, current_app, redirect, request, send_from_directory, jsonify, url_for
 from werkzeug.utils import secure_filename
 from flask_jwt_extended import jwt_required, get_jwt_identity
 import os
@@ -25,9 +25,31 @@ def get_all_music():
 
 # returns an audio file as attachment
 @bp.route('/api/music/<string:filename>')
+@jwt_required(True)
 def get_music_file(filename: str):
+    private = request.args.get('private')
+    private = 0 if private is None else int(private)
+
     music_upload_dir = os.path.join(current_app.config["UPLOAD_DIRECTORY"], 'music')
-    file_path = os.path.join(music_upload_dir, filename)
+
+    if private:
+        private_upload_dir = os.path.join(current_app.config["UPLOAD_DIRECTORY"], 'private')
+
+        from models import User
+
+        user_email = get_jwt_identity()
+
+        if user_email is None:
+            return "unauthorized", 301
+
+        user = User.query.filter_by(email=user_email).first()
+        user_dir = os.path.join(private_upload_dir, str(user.id))
+
+        file_path = os.path.join(user_dir, filename)
+
+    else:
+        file_path = os.path.join(music_upload_dir, filename)
+
 
     def generate():
         with open(file_path, 'rb') as audio_file:
@@ -60,6 +82,11 @@ def get_music_file(filename: str):
 
     return generate()
 
+
+@bp.route('/api/private/music/<string:filename>')
+@jwt_required(False)
+def get_private_music(filename: str):
+    return redirect(url_for('music.get_music_file', filename=filename, private=1))
 # returns an array with all playlists in UPLOAD_DIRECTORY/playlists
 @bp.route('/api/playlists')
 def get_all_playlists():
@@ -116,7 +143,7 @@ def upload_music_file():
             user_dir = os.path.join(private_dir, str(user.id))
             file.save(os.path.join(user_dir, filename))
 
-    return ''
+    return {}
 
 # uploads a text playlist
 @bp.route('/api/upload/playlist/', methods=["POST"])

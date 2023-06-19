@@ -11,7 +11,7 @@ import jQuery from "jquery";
 const DataContext = createContext();
 
 const Songs = (props) => {
-  const{playAudio, handleAddToPlaylist, audRef, addToPlaylistRef, setAddToPlaylistSong, setRepIdx} = props;
+  const{playAudio, handleAddToPlaylist, audRef, addToPlaylistRef, setAddToPlaylistSong, setRepIdx, baseUrl} = props;
 
   const data = useContext(DataContext);
   console.log("data: " + data);
@@ -21,7 +21,8 @@ const Songs = (props) => {
     {data.map((item, idx) => {
       return (
       <li key={item}>
-        <button onClick={() => playAudio(`${API_BASE_URL}/api/music/${item}`, audRef, setRepIdx, idx)}>{item}</button>
+        {/* <button onClick={() => playAudio(`${API_BASE_URL}/api/music/${item}`, audRef, setRepIdx, idx)}>{item}</button> */}
+        <button onClick={() => playAudio(`${baseUrl}/${item}`, audRef, setRepIdx, idx)}>{item}</button>
         <button onClick={() => handleAddToPlaylist(item, addToPlaylistRef, setAddToPlaylistSong, setRepIdx, idx)}>Add To Playlist</button>
         </li>
       )
@@ -31,8 +32,19 @@ const Songs = (props) => {
 }
 
 const UploadSongForm = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let headers = {}
+    if (localStorage.getItem('token') != null) {
+      headers = {
+        Authorization: "Bearer " + localStorage.getItem('token'),
+      }
+    }
+    fetch(`${API_BASE_URL}/api/upload/music/`, { method: "POST", headers: headers, body: new FormData(e.target)})
+  }
+  
   return (
-    <form action={`${API_BASE_URL}/api/upload/music`} method="POST" encType="multipart/form-data">
+    <form onSubmit={handleSubmit}>
       <label htmlFor="file-input">Upload File</label>
       <br/>
       <input id="file-input" style={{display: 'none'}} type="file" name="file"/>
@@ -49,17 +61,38 @@ const UploadSongForm = () => {
 }
 
 const playAudio = (nsrc, aud, setRepIdx, songIdx = null) => {
+  console.log("called playAudio")
   
   if (songIdx !== null) {
     setRepIdx(songIdx);
   }
 
-  console.log("called playAudio")
-  aud.current.src = nsrc;
+  if (nsrc.includes('private')) {
+    const headers = {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      followRedirect: true,
+    }
 
+    fetch(nsrc, { headers })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`)
+        }
+        return response.arrayBuffer();
+      })
+      .then(arrayBuffer => {
+        const blob = new Blob([arrayBuffer], { type: 'audio/mpeg'});
+        const audioURL = URL.createObjectURL(blob);
+
+        aud.current.src = audioURL;
+      })
+  }
+
+  else {
+    aud.current.src = nsrc;
+  }
 
   // console.log('guessed mimetype: ' + mimeType);
-  aud.current.style.display = 'inline-block';
   // aud.current.querySelector('source').type = mimeType;
   aud.current.play();
 }
@@ -186,6 +219,7 @@ const SoundPage = () => {
   const [contextMenuSong, setContextMenuSong] = useState('');
   const [privateFiles, setPrivateFiles] = useState([])
 
+  const [baseUrl, setBaseUrl] = useState(`${API_BASE_URL}/api/music`)
 
   const { replist, setReplist } = useContext(HandleReplistContext);
   const { repIdx, setRepIdx } = useContext(RepIdxContext);
@@ -241,7 +275,9 @@ const SoundPage = () => {
         <br/>
         <a href="/create-playlist"><button>Create New Playlist</button></a>
         <button onClick={() => setReplist(allSongs)}>All Songs</button>
-        <button onClick={() => setReplist(privateFiles)}>Private Files</button>
+        <button onClick={() => {
+        setReplist(privateFiles)
+        setBaseUrl(`${API_BASE_URL}/api/private/music`)}}>Private Files</button>
 
       </div>
 
@@ -251,7 +287,10 @@ const SoundPage = () => {
                playAudio={playAudio} 
                audRef={audioRef}
                handleAddToPlaylist={handleAddToPlaylist}
-               setRepIdx={setRepIdx}/>
+               setRepIdx={setRepIdx}
+               baseUrl={baseUrl}
+        />
+
 
       </DataContext.Provider>
 
