@@ -10,10 +10,25 @@ import jQuery from "jquery";
 
 const DataContext = createContext();
 
+const handleDeleteSong = (songs, setSongs, baseUrl, idx) => {
+  const deleteSong = async () => {
+    let headers = {};
+    if (localStorage.getItem('token') != null) {
+      headers = { Authorization: 'Bearer ' + localStorage.getItem('token')};
+    }
+    await fetch(`${baseUrl}/delete/${songs[idx]}`, {method: 'POST', headers: headers});
+  }
+
+  deleteSong();
+
+  let songsCopy = [...songs];
+  songsCopy.splice(idx, 1);
+  setSongs(songsCopy);
+}
 const Songs = (props) => {
   const{playAudio, handleAddToPlaylist, audRef, addToPlaylistRef, setAddToPlaylistSong, setRepIdx, baseUrl} = props;
 
-  const data = useContext(DataContext);
+  const [data, setData] = useContext(DataContext);
   console.log("data: " + data);
 
   return (
@@ -23,8 +38,9 @@ const Songs = (props) => {
       <li key={item}>
         {/* <button onClick={() => playAudio(`${API_BASE_URL}/api/music/${item}`, audRef, setRepIdx, idx)}>{item}</button> */}
         <button onClick={() => playAudio(`${baseUrl}/${item}`, audRef, setRepIdx, idx)}>{item}</button>
+        <button onClick={() => handleDeleteSong(data, setData, baseUrl, idx)}>Delete</button>
         <button onClick={() => handleAddToPlaylist(item, addToPlaylistRef, setAddToPlaylistSong, setRepIdx, idx)}>Add To Playlist</button>
-        </li>
+      </li>
       )
     })}
     </ul>
@@ -285,7 +301,7 @@ const SoundPage = () => {
 
       </div>
 
-      <DataContext.Provider value={replist}>
+      <DataContext.Provider value={[replist, setReplist]}>
         <Songs addToPlaylistRef={addToPlaylistRef}
                setAddToPlaylistSong={setAddToPlaylistSong} 
                playAudio={playAudio} 

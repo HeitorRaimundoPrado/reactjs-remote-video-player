@@ -17,6 +17,37 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
+@bp.route('/api/music/delete/<string:filename>')
+@jwt_required(True)
+def delete_song(filename: str):
+    private = request.args.get('private')
+    private = 0 if private is None else int(private)
+
+    if private:
+        private_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'private')
+
+        from models import User
+        
+        user_email = get_jwt_identity()
+        user = User.query.filter_by(email=user_email).first()
+
+        user_dir = os.path.join(private_dir, str(user.id))
+
+        file_path = os.path.join(user_dir, filename)
+
+    else:
+        music_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'music')
+        file_path = os.path.join(music_dir, filename)
+
+    os.remove(file_path)
+
+    return {}
+
+@bp.route('/api/private/music/delete/<string:filename>', methods=["POST"])
+@jwt_required(False)
+def delete_private_file(filename: str):
+    return redirect(url_for('music.delete_song', filename=filename, private=1))
+
 # returns all music files in UPLOAD_DIRECTORY/music
 @bp.route('/api/music')
 def get_all_music():
@@ -87,6 +118,7 @@ def get_music_file(filename: str):
 @jwt_required(False)
 def get_private_music(filename: str):
     return redirect(url_for('music.get_music_file', filename=filename, private=1))
+
 # returns an array with all playlists in UPLOAD_DIRECTORY/playlists
 @bp.route('/api/playlists')
 def get_all_playlists():
