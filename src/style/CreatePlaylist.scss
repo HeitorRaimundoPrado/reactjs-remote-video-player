@@ -1,0 +1,19 @@
+.add-song-page {
+  form {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+    padding: 1rem;
+    input {
+      margin: 1rem;
+    }
+
+    ul {
+      list-style: none;
+    }
+    .all-songs {
+      display: flex;
+      flex-direction: row;
+    }
+  }
+}

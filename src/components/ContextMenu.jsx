@@ -10,7 +10,12 @@ const ContextMenu = (props) => {
   const [playlist, globalPlaylists, setGlobalPlaylists] = useContext(playlistContext)
 
   useEffect(() => {
-    document.addEventListener('mousedown', () => contextMenuRef.current.style.display = 'none');
+    document.addEventListener('mousedown', (e) => {
+      console.log(e.target);
+      if (contextMenuRef.current && !contextMenuRef.current.contains(e.target)) {
+        contextMenuRef.current.style.display = 'none';
+      }
+    })
   }, [contextMenuRef])
 
   const handleDeletePlaylist = () => {

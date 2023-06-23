@@ -1,5 +1,6 @@
 import json
-from flask import Blueprint, request, jsonify
+import os
+from flask import Blueprint, request, jsonify, current_app
 from flask_jwt_extended import create_access_token, get_jwt_identity, unset_jwt_cookies, get_jwt, create_access_token
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timezone, timedelta
@@ -25,6 +26,13 @@ def signup_user():
     db.session.add(new_user)
     db.session.commit()
 
+    try:
+        private_dir = os.path.join(current_app.config["UPLOAD_DIRECTORY"], "private")
+        os.makedirs(os.path.join(private_dir, str(new_user.id)))
+
+    except OSError:
+        pass
+
     return {'user': 'created'}
 
 @bp.route('/api/auth/token', methods=["POST"])
@@ -48,25 +56,20 @@ def create_token():
 
 @bp.route('/logout', methods=["POST"])
 def logout():
-    response = jsonify({'msg': 'sucess'})
+    response = jsonify({'msg': 'success'})
     unset_jwt_cookies(response)
     return response
 
+def refresh_token():
+    current_user = get_jwt_identity()
+    new_token = create_access_token(identity=current_user)
+    response = jsonify({'token': new_token})
+    response.set_cookie('token', new_token)  # Update the token in the client-side cookie
+    return response
+
 @bp.after_app_request
-def refresh_expriring_jwts(response):
-    try:
-        exp_timestamp = get_jwt()['exp']
-        now = datetime.now(timezone.utc)
-        target_timestamp = datetime.timestamp(now + timedelta(minutes=30)) # expiry time = 30min
-        if target_timestamp > exp_timestamp:
-            acess_token = create_access_token(identity=get_jwt_identity())
-            data = response.get_json()
-            if type(data) is dict:
-                data['acess_token'] = acess_token
-                response.data = json.dumps(data)
-
-        return response
-
-    except (RuntimeError, KeyError): # there is no valid JWT
-        return response
+def refresh_expring_jwt(response):
+    if response.status_code == 200 and 'token' in request.cookies:
+        refresh_token()
+    return response
 
