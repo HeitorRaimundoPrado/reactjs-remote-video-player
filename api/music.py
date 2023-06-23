@@ -132,7 +132,6 @@ def get_playlist(filename: str):
 
 # uploads an audio file
 @bp.route('/api/upload/music/', methods=["POST"])
-@jwt_required(True)
 def upload_music_file():
 
     private = request.form.get('private')
@@ -140,14 +139,13 @@ def upload_music_file():
     filename = str(request.args.get('file_name'))
 
 
-    temp_dir = os.path.join(current_app.config['UPLOAD'], 'temp')
+    temp_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'temp')
     file = open(os.path.join(temp_dir, filename), 'rb')
 
     
     if file.name is None:
         return "No filename specified"
 
-    filename = secure_filename(file.name)
 
     music_upload_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'music')
     private_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'private')

@@ -11,16 +11,17 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @bp.route('/api/upload', methods=["POST"])
-@jwt_required(True)
 def upload_file():
 
     private = request.form.get('private')
     private = 0 if private is None else int(private)
 
     access_token = None
+    print('private == ' + str(private))
 
-    if private:
+    if private != 0:
         auth_header = request.headers.get('Authorization')
+        print('entering if private != 0')
         if not auth_header:
             return 'Unauthorized', 401
 
@@ -42,10 +43,12 @@ def upload_file():
         return "No file Identified"
 
 
+
     filename = secure_filename(file.filename)
     
     temp_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'temp')
     file.save(os.path.join(temp_dir, filename))
+
 
 
     if filename.split('.')[1] == 'mp4':
@@ -54,7 +57,7 @@ def upload_file():
     else:
         response = redirect(url_for('music.upload_music_file', private=private, file_name=filename), code=307)
 
-    if access_token is not None:
+    if private != 0 and access_token is not None:
         response.headers['Authorization'] = 'Bearer ' + access_token
 
     return response
