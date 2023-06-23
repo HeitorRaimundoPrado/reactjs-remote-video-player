@@ -16,7 +16,6 @@ const AudioPlayer = ({ src, audRef, nextSong, previousSong}) => {
     };
 
     const handleEnded = () => {
-      setIsPlaying(false);
       setCurrentTime(0);
     };
 
@@ -63,12 +62,20 @@ const AudioPlayer = ({ src, audRef, nextSong, previousSong}) => {
   };
 
 
+  const isPlaying = () => {
+    if (audRef.current != null) {
+      return !audRef.current.paused;
+    }
+    return 0;
+  }
+
   return (
     <div>
       <audio src="" ref={audRef} onEnded={() => nextSong()} style={{display: 'none'}}></audio>
       <button onClick={togglePlay}>
-        Pause
+        {isPlaying() ? 'Play' : 'Pause'}
       </button>
+
       <button onClick={() => previousSong()}>Previous Song</button>
       <button onClick={() => nextSong()}>Next Song</button>
       <button onClick={toggleMute}>
