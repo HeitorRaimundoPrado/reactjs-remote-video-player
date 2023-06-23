@@ -41,9 +41,9 @@ const YouTubePage = () => {
         <span className="material-symbols-outlined">
           search
         </span>
-        <input type="text" placeholder="Search YouTube" className="form_youtube_search" value={inputText} onChange={(e) => setInputText(e.target.value)}/>
+        <input type="text" placeholder="Search YouTube" className="form__search" value={inputText} onChange={(e) => setInputText(e.target.value)}/>
 
-        <input type="submit" value="Go"/>
+        <input type="submit" value="Go" className="form__submit"/>
       </form>
 
       {/*<div className="search_results">

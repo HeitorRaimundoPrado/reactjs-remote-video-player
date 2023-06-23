@@ -340,11 +340,17 @@ const SoundPage = () => {
 
   return (
     <>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
       <h2>Uploads</h2>
 
       <form onSubmit={handleSearch}>
-        <input type="text" onChange={(e) => setSearchContent(e.target.value)}/>
-        <input type="submit" value="Search"/>
+        <span className="material-symbols-outlined">
+          search
+        </span>
+        <input type="text" onChange={(e) => setSearchContent(e.target.value)}
+        placeholder="Search Audio" className="form__search"/>
+
+        <input type="submit" value="Go" className="form__submit"/>
       </form>
       
       <div style={{display: 'inline-block'}}>

@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 import jQuery from "jquery";
 import { API_BASE_URL } from "../constants.js"
 import { useContext, useState, useEffect } from "react";
@@ -55,9 +56,13 @@ const CreatePlaylist = () => {
 
   return (
     <>
-      <div className="add-song-page">
+      <div className="add_song_page">
+        <h2>Playlists</h2>
+
         <form onSubmit={(e) => {handleSubmit(e, songsToSend)}}>
-          <input name="filename" type="text" placeholder="Name of Playlist"/>
+
+          <input name="filename" type="text" placeholder="Playlist Name" className="sound_playlist_name"/>
+
           <div className='all-songs'>
             <div className='songs-to-select'>
               <ul>
@@ -75,7 +80,7 @@ const CreatePlaylist = () => {
               </ul>
             </div>
           </div>
-          <input type="submit"/>
+          <input type="submit" value="Go" className="form__submit"/>
         </form>
       </div>
     </>

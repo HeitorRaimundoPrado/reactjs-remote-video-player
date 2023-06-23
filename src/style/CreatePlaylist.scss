@@ -1,13 +1,16 @@
-.add-song-page {
-  form {
-    display: flex;
-    flex-direction: column;
-    margin: 1rem;
-    padding: 1rem;
-    input {
-      margin: 1rem;
-    }
+@use '../style/var';
 
+.add_song_page {
+  form {
+    .sound_playlist_name {
+      height: 50px;
+      width: 70%;
+      padding-left: 20px;
+      outline: none;
+      border: none;
+      border-radius: 25px 0px 0px 25px;
+      background-color: var.$c2;
+    }
     ul {
       list-style: none;
     }
