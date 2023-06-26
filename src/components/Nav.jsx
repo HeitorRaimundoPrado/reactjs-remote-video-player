@@ -1,5 +1,5 @@
 import '../../src/style/Nav.scss'
-import { Outlet, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 /*import { FaHouse, FaPlay, FaArrowUpFromBracket } from "react-icons/fa6"*/
 
 function Nav() {
@@ -21,7 +21,7 @@ function Nav() {
         play_arrow
       </span>
     </Link>
-  </nav>*/
+    </nav>*/
     <nav>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
       <a href="/sound">

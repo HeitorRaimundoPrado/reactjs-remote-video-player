@@ -36,18 +36,26 @@ const Files = (props) => {
   console.log("data: " + data);
 
   return (
-    <ul>
-    {data.map((item, idx) => {
-      return (
-      <li key={item}>
-        {/* <button onClick={() => playAudio(`${API_BASE_URL}/api/music/${item}`, audRef, setRepIdx, idx)}>{item}</button> */}
-        <button onClick={() => playAudio(`${baseUrl}/${item}`, audRef, setRepIdx, idx)}>{item}</button>
-        <button onClick={() => handleDeleteSong(data, setData, baseUrl, idx)}>Delete</button>
-        <button onClick={() => handleAddToPlaylist(item, addToPlaylistRef, setAddToPlaylistSong, setRepIdx, idx)}>Add To Playlist</button>
-      </li>
-      )
-    })}
-    </ul>
+    <div className="music_list_container">
+      <ul>
+      {data.map((item, idx) => {
+        return (
+        <li key={item}>
+          {/* <button onClick={() => playAudio(`${API_BASE_URL}/api/music/${item}`, audRef, setRepIdx, idx)}>{item}</button> */}
+          <button onClick={() => playAudio(`${baseUrl}/${item}`, audRef, setRepIdx, idx)} className='music'>
+            {item}
+          </button>
+          <button onClick={() => handleDeleteSong(data, setData, baseUrl, idx)} className='delete_music'>
+            Delete
+          </button>
+          <button onClick={() => handleAddToPlaylist(item, addToPlaylistRef, setAddToPlaylistSong, setRepIdx, idx)} className='add_music_playlist'>
+            Add To Playlist
+          </button>
+        </li>
+        )
+      })}
+      </ul>
+    </div>
   )
 }
 
@@ -65,15 +73,22 @@ const UploadForm = () => {
   }
   
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="file-input">Upload File</label>
-      <br/>
+    <form onSubmit={handleSubmit} className='file_upload_form'>
+      <label htmlFor="file-input">
+        Upload File
+      </label>
+    
       <input id="file-input" style={{display: 'none'}} type="file" name="file"/>
 
-      <label htmlFor="input-private">Private</label>
+      <label htmlFor="input-private">
+        Private
+      </label>
+
       <input type="radio" name="private" value="1" id="input-private"/>
 
-      <label htmlFor="input-public">Public</label>
+      <label htmlFor="input-public">
+        Public
+      </label>
       <input type="radio" name="private" value="0" id="input-public"/>
 
       <input type="submit"/>
@@ -353,7 +368,7 @@ const SoundPage = () => {
         <input type="submit" value="Go" className="form__submit"/>
       </form>
       
-      <div style={{display: 'inline-block'}}>
+      <div>
         {globalPlaylists.map((playlist) => {
           return (
             <button onContextMenu={(e) => {
@@ -363,22 +378,35 @@ const SoundPage = () => {
             </button>
           )
         })}
+        
+        <div className='playlists_container'>
+          <h2>Playlists</h2>
+          <a href="/create-playlist">
+            <button className='new_playlist_button'>
+              New Playlist
+            </button>
+          </a>
+        </div>
 
-        <br/>
-        <a href="/create-playlist"><button>Create New Playlist</button></a>
+        <div className="file_selection">
+          <button onClick={() => {
+            setReplist(allSongs)
+            setBaseUrl(`${API_BASE_URL}/api/music`)}} className='selection_public secon-all'>Public
+          </button>
 
-        <button onClick={() => {
-          setReplist(allSongs)
-          setBaseUrl(`${API_BASE_URL}/api/music`)}}>All Audio</button>
+          <button onClick={() => {
+            setReplist(privateFiles)
+            setBaseUrl(`${API_BASE_URL}/api/private/music`)}} className='selection_private secon-all'>Private
+          </button>
 
-        <button onClick={() => {
-          setReplist(privateFiles)
-          setBaseUrl(`${API_BASE_URL}/api/private/music`)}}>Private Files</button>
+          <button onClick={() => {
+            setReplist(allVideo);
+            setBaseUrl('');
+            }} className='selection_video secon-all'>All Video
+          </button>
+        </div>
 
-        <button onClick={() => {
-          setReplist(allVideo);
-          setBaseUrl('');
-        }}>All Video</button>
+        <UploadForm/>
 
       </div>
 
@@ -392,7 +420,6 @@ const SoundPage = () => {
                baseUrl={baseUrl}
         />
 
-
       </DataContext.Provider>
 
       <AudioPlayer src={""}
@@ -401,8 +428,6 @@ const SoundPage = () => {
                    previousSong={previousSong}/>
       {/* <audio onEnded={() => {nextSong()}} preload="auto" controls  style={{display: 'none'}} ref={audioRef}> */}
       {/* </audio> */}
-
-      <UploadForm/>
 
       <div ref={addToPlaylistRef} style={{display: 'none'}}>
         <h2>Add To Playlist:</h2>

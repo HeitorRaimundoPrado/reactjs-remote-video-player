@@ -1,0 +1,106 @@
+@use './var';
+
+.playlists_container {
+    width: 80%;
+    margin-left: 12%;
+    h2 {
+        margin-left: 0px;
+    }
+    .new_playlist_button {
+        height: 90px;
+        width: 130px;
+        border: none;
+        cursor: pointer;
+        background-color: var.$c2;
+    }
+}
+
+.file_selection {
+    width: 76%;
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+    margin: 20px auto 0px auto;
+    .secon-all {
+        height: 90px;
+        width: 31%;
+        border: none;
+        outline: none;
+        cursor: pointer;
+    }
+    /*.selection_public {
+        height: 90px;
+        width: 31%;
+        border: none;
+        outline: none;
+        cursor: pointer;
+    }
+    .selection_private {
+        height: 90px;
+        width: 31%;
+        border: none;
+        outline: none;
+        cursor: pointer;
+    }
+    .selection_video {
+        height: 90px;
+        width: 31%;
+        border: none;
+        outline: none;
+        cursor: pointer;
+    }*/
+}
+
+.file_upload_form {
+    height: 50px;
+    width: 76%;
+    margin: 20px auto;
+    border-radius: 25px;
+    color: black;
+    background-color: var.$c2;
+}
+
+.music_list_container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin: 0px auto;
+    ul {
+        li {
+            list-style: none;
+            .music {
+                height: 50px;
+                border: none;
+                outline: none;
+                border-radius: 25px 0px 0px 25px;
+                padding: 0px 0px 0px 20px;
+                background-color: var.$transparent-music-c2;
+                color: var.$c2;
+                cursor: pointer;
+            }
+            .delete_music {
+                height: 50px;
+                border: none;
+                outline: none;
+                padding: 0px 20px;
+                background-color: var.$transparent-music-c2;
+                color: var.$c2;
+                cursor: pointer;
+            }
+            .add_music_playlist {
+                height: 50px;
+                border: none;
+                outline: none;
+                border-radius: 0px 25px 25px 0px;
+                padding: 0px 20px 0px 0px;
+                background-color: var.$transparent-music-c2;
+                color: var.$c2;
+                cursor: pointer;
+            }
+            li::last-child {
+                padding-bottom: 500px;
+            }
+        }
+    }
+}
