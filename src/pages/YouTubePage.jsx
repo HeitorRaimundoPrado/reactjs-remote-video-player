@@ -6,6 +6,7 @@ import "../style/Youtube.scss"
 
 const YouTubePage = () => {
   const [searchResults, setSearchResults] = useState([])
+  const [inputText, setInputText] = useState('')
   const [Loading, setLoading] = useState(false)
 
   /*const handleSubmit = async (e) => {
@@ -24,6 +25,7 @@ const YouTubePage = () => {
       const res = await fetch(`${API_BASE_URL}/api/youtube/search?` + new URLSearchParams({term: e.target[0].value}))
       const json = await res.json();
       setSearchResults(json);
+      setInputText('')
     } catch (error) {
       <p>Error</p>
     } finally {
@@ -39,9 +41,9 @@ const YouTubePage = () => {
         <span className="material-symbols-outlined">
           search
         </span>
-        <input type="text" placeholder="Search YouTube" className="form_youtube_search"/>
+        <input type="text" placeholder="Search YouTube" className="form__search" value={inputText} onChange={(e) => setInputText(e.target.value)}/>
 
-        <input type="submit" value="Go"/>
+        <input type="submit" value="Go" className="form__submit"/>
       </form>
 
       {/*<div className="search_results">

@@ -1,0 +1,98 @@
+@use './var';
+
+.container_music {
+    height: 60px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: fixed;
+    bottom: 7.4%;
+    background-color: #0f240e;
+    .music_control_display {
+        /*position: fixed;
+        left: 35%;
+        bottom: 10%;*/
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        margin-bottom: 15px;
+        .music_previous {
+            outline: none;
+            border: none;
+            background: none;
+            cursor: pointer;
+             span {
+                font-size: 2em;
+                color: var.$c2;
+            }
+        }
+        .music_pause {
+            outline: none;
+            border: none;
+            margin: 0px 25px;
+            background: none;
+            cursor: pointer;
+            span {
+                font-size: 2.5em;
+                color: var.$c2;
+            }
+        }
+        .music_next {
+            outline: none;
+            border: none;
+            background: none;
+            cursor: pointer;
+             span {
+                font-size: 2em;
+                color: var.$c2;
+            }
+        }
+        .music_mute {
+            display: none;
+        }
+    }
+    .music_tempo_display {
+        width: 100%;
+        position: fixed;
+        bottom: 7%;
+
+        /*margin-top: 30px;*/
+        .tempo_container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            padding: 0px 10px;
+            font-size: 0.8em;
+            margin-top: 0px;
+            color: var.$c2
+        }
+        .music_duration {
+            width: 97%;
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+            margin-left: 1.5%;
+            overflow: hidden;
+            outline: none;
+        }
+        .music_duration::-webkit-slider-runnable-track {
+            height: 3px;
+            /*border-radius: 25px;*/
+            background-color: var.$transparent-c2;
+        }
+        .music_duration::-webkit-slider-thumb {
+            height: 3px;
+            width: 10px;
+            -webkit-appearance: none;
+            appearance: none;
+            /*border-radius: 25px;*/
+            background-color: var.$c2;
+            box-shadow: -407px 0 0 400px var.$c2;
+        }
+    }
+    .music_volume {
+        display: none;
+    }
+}

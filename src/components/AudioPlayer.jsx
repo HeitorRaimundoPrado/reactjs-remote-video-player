@@ -1,4 +1,6 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect, useCallback } from 'react';
+import '../style/AudioPlayer.scss'
 
 const AudioPlayer = ({ src, audRef, nextSong, previousSong}) => {
   const [currentTime, setCurrentTime] = useState(0);
@@ -70,35 +72,54 @@ const AudioPlayer = ({ src, audRef, nextSong, previousSong}) => {
   }
 
   return (
-    <div>
+    <div className='container_music'>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
       <audio src="" ref={audRef} onEnded={() => nextSong()} style={{display: 'none'}}></audio>
-      <button onClick={togglePlay}>
-        {isPlaying() ? 'Play' : 'Pause'}
-      </button>
 
-      <button onClick={() => previousSong()}>Previous Song</button>
-      <button onClick={() => nextSong()}>Next Song</button>
-      <button onClick={toggleMute}>
-        {isMuted ? 'Unmute' : 'Mute'}
-      </button>
-      <input
-        type="range"
-        min={0}
-        max={duration}
-        value={currentTime}
-        onChange={handleTimeSeek}
-      />
-      <input
-        type="range"
-        min={0}
-        max={1}
-        step={0.1}
-        value={volume}
-        onChange={handleVolumeChange}
-      />
+      <div className='music_control_display'>
+        <button onClick={() => previousSong()} className='music_previous'>
+          <span className="material-symbols-outlined">
+            skip_previous
+          </span>
+        </button>
+        <button onClick={togglePlay} className='music_pause'>
+          {isPlaying() ?
+            <span className="material-symbols-outlined">pause</span> :
+            <span className="material-symbols-outlined">play_arrow</span>
+          }
+        </button>
+        <button onClick={() => nextSong()} className='music_next'>
+          <span className="material-symbols-outlined">
+            skip_next
+          </span>
+        </button>
+        <button onClick={toggleMute} className='music_mute'>
+          {isMuted ? 'Unmute' : 'Mute'}
+        </button>
+      </div>
 
-      <div>{formatTime(currentTime)}</div>
-      <div>{formatTime(duration)}</div>
+      <div className='music_tempo_display'>
+        <div className='tempo_container'>
+          <div>{formatTime(currentTime)}</div>
+          <div>{formatTime(duration)}</div>
+        </div>
+
+        <input className='music_duration'
+          type="range"
+          min={0}
+          max={duration}
+          value={currentTime}
+          onChange={handleTimeSeek}
+        />
+        <input className='music_volume'
+          type="range"
+          min={0}
+          max={1}
+          step={0.1}
+          value={volume}
+          onChange={handleVolumeChange}
+        />
+      </div>
     </div>
   );
 };
