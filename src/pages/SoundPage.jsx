@@ -6,7 +6,8 @@ import HandleReplistContext from "../contexts/HandlePlaylist.jsx"
 import RepIdxContext from "../contexts/RepIdx";
 import ContextMenu from '../components/ContextMenu.jsx'
 import AudioPlayer from "../components/AudioPlayer";
-import { useNavigate } from 'react-router-dom';
+import UploadForm from './UploadForm'
+import { useNavigate, Link, Route } from 'react-router-dom';
 import playlistContext from "../contexts/PlaylistContext";
 import '../style/SoundPage.scss'
 
@@ -59,7 +60,7 @@ const Files = (props) => {
   )
 }
 
-const UploadForm = () => {
+{/*const UploadForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     let headers = {}
@@ -94,7 +95,7 @@ const UploadForm = () => {
       <input type="submit" className='form_submit_file' value="Upload"/>
     </form>
   )
-}
+}*/}
 
 const playVideo = (nsrc) => {
   const url = new URL('/watch', window.location.href);
@@ -405,10 +406,12 @@ const SoundPage = () => {
               }} className='selection_video secon-all'>All Video
             </button>
           </div>
+          <div className='upload_audio_container'>
+              <Link to='/upload' element={<UploadForm/>} className='upload_page_link'>
+                Upload Audio
+              </Link>
+          </div>
         </div>
-
-        <UploadForm/>
-
       </div>
 
       <DataContext.Provider value={[replist, setReplist]}>

@@ -40,7 +40,7 @@
     }
 }
 
-.file_upload_form {
+/*.file_upload_form {
     height: 50px;
     width: 76%;
     margin: 20px auto;
@@ -75,7 +75,24 @@
     .form_submit_file:hover {
         background-color: var.$hover-c4;
     }
+}*/
+
+.upload_audio_container {
+    .upload_page_link {
+        height: 50px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px 0px 20px 0px;
+        border-radius: 3px;
+        text-decoration: none;
+        color: black;
+        background-color: var.$c2;
+    }
 }
+
+
 
 .music_list_container {
     width: 100%;
