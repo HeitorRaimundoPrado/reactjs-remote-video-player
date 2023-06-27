@@ -74,7 +74,7 @@ const UploadForm = () => {
   
   return (
     <form onSubmit={handleSubmit} className='file_upload_form'>
-      <label htmlFor="file-input">
+      <label htmlFor="file-input" className='form_label_upload'>
         Upload File
       </label>
     
@@ -84,14 +84,14 @@ const UploadForm = () => {
         Private
       </label>
 
-      <input type="radio" name="private" value="1" id="input-private"/>
+      <input type="radio" name="private" value="1" id="input-private" className='form_radio1'/>
 
       <label htmlFor="input-public">
         Public
       </label>
-      <input type="radio" name="private" value="0" id="input-public"/>
+      <input type="radio" name="private" value="0" id="input-public" className='form_radio2'/>
 
-      <input type="submit"/>
+      <input type="submit" className='form_submit_file' value="Upload"/>
     </form>
   )
 }
@@ -380,7 +380,7 @@ const SoundPage = () => {
         })}
         
         <div className='playlists_container'>
-          <h2>Playlists</h2>
+          <h3>Playlists</h3>
           <a href="/create-playlist">
             <button className='new_playlist_button'>
               New Playlist
@@ -389,21 +389,22 @@ const SoundPage = () => {
         </div>
 
         <div className="file_selection">
-          <button onClick={() => {
-            setReplist(allSongs)
-            setBaseUrl(`${API_BASE_URL}/api/music`)}} className='selection_public secon-all'>Public
-          </button>
-
-          <button onClick={() => {
-            setReplist(privateFiles)
-            setBaseUrl(`${API_BASE_URL}/api/private/music`)}} className='selection_private secon-all'>Private
-          </button>
-
-          <button onClick={() => {
-            setReplist(allVideo);
-            setBaseUrl('');
-            }} className='selection_video secon-all'>All Video
-          </button>
+          <h3>Files</h3>
+          <div>
+            <button onClick={() => {
+              setReplist(allSongs)
+              setBaseUrl(`${API_BASE_URL}/api/music`)}} className='selection_public secon-all'>Public
+            </button>
+            <button onClick={() => {
+              setReplist(privateFiles)
+              setBaseUrl(`${API_BASE_URL}/api/private/music`)}} className='selection_private secon-all'>Private
+            </button>
+            <button onClick={() => {
+              setReplist(allVideo);
+              setBaseUrl('');
+              }} className='selection_video secon-all'>All Video
+            </button>
+          </div>
         </div>
 
         <UploadForm/>
