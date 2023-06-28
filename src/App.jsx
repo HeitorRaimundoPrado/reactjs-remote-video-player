@@ -6,6 +6,8 @@ import TestSearch from './pages/TestSearch.jsx'
 import TestUpload from './pages/TestUpload.jsx'
 import TestAudio from './pages/TestAudio.jsx'
 import TestGetAllMusic from './pages/TestGetAllMusic.jsx'
+import UploadForm from './pages/UploadForm'
+
 
 import HomePage from './pages/HomePage.jsx'
 import SoundPage from './pages/SoundPage.jsx'
@@ -59,6 +61,7 @@ function App() {
               <Route path='/create-playlist' element={<CreatePlaylist/>}/>
 
               <Route path='/watch' element={<WatchVid/>}/>
+              <Route path='/upload-file' element={<UploadForm/>}/>
 
               <Route path='/signup' element={<SingUp/>}/>
               <Route path='/login' element={<LogIn setToken={setToken}/>}/>
