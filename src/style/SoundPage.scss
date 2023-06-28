@@ -1,8 +1,9 @@
 @use './var';
 
 .playlists_container {
-    width: 80%;
-    margin-left: 12%;
+    //width: 80%;
+    width: 90%;
+    margin-left: 5%;
     h3 {
         margin: 0px 0px 10px 0px;
     }
@@ -17,7 +18,8 @@
 }
 
 .file_selection {
-    width: 76%;
+
+    width: 89%;
     display: flex;
     flex-direction: column;
     margin: 20px auto 0px auto;
@@ -30,12 +32,13 @@
         justify-content: space-between;
         gap: 5px;
         .secon-all {
-            height: 90px;
+            height: 110px;
             width: 31%;
             border: none;
             outline: none;
             cursor: pointer;
             border-radius: 3px;
+            background-color: var.$c2;
         }
     }
 }
@@ -101,14 +104,14 @@
     flex-direction: column;
     margin: 0px auto;
     ul {
-        width: 76%;
+        width: 89%;
         li {
             width: 100%;
             list-style: none;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             .music {
                 height: 50px;
-                width: 50%;
+                width: 60%;
                 //width: 193px;
                 border: none;
                 outline: none;
@@ -120,7 +123,7 @@
             }
             .delete_music {
                 height: 50px;
-                width: 20%;
+                width: 10%;
                 //width: 70px;
                 border: none;
                 outline: none;
