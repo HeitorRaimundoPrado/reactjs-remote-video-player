@@ -61,7 +61,7 @@ function App() {
               <Route path='/create-playlist' element={<CreatePlaylist/>}/>
 
               <Route path='/watch' element={<WatchVid/>}/>
-              <Route path='/upload-file' element={<UploadForm/>}/>
+              <Route path='/upload' element={<UploadForm/>}/>
 
               <Route path='/signup' element={<SingUp/>}/>
               <Route path='/login' element={<LogIn setToken={setToken}/>}/>
