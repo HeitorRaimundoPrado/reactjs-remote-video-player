@@ -4,7 +4,6 @@ import { API_BASE_URL } from "../constants.js"
 import { useContext, useState, useEffect } from "react";
 import '../style/CreatePlaylist.scss'
 
-
 const handleSubmit = (e, songsToSend) => {
 
   e.preventDefault();
@@ -63,24 +62,30 @@ const CreatePlaylist = () => {
 
           <input name="filename" type="text" placeholder="Playlist Name" className="sound_playlist_name"/>
 
-          <div className='all-songs'>
-            <div className='songs-to-select'>
+          <div className='selection_songs_container'>
+            <div className='selection_songs'>
+              <h3>Select Audio</h3>
               <ul>
                 {songs.map((song) => {
-                  return <li><button type="button" onClick={() => handleAddSong(song, songsToSend, setSongsToSend)}>{song}</button></li>
+                  return <li>
+                      <button type="button" onClick={() => handleAddSong(song, songsToSend, setSongsToSend)} className='playlist_music'> 
+                        {song}
+                      </button>
+                    </li>
                 })}
               </ul>
             </div>
 
-            <div className='selected-songs'>
+            <div className='selected_songs'>
+              <h3>Playlist</h3>
               <ul>
                 {songsToSend.map((song, idx) => {
-                  return <li>{song}<button type="button" onClick={() => handleRemoveSong(idx)}>remove</button></li>
+                  return <li>{song}<button type="button" onClick={() => handleRemoveSong(idx)} className="remove_from_playlist">Remove</button></li>
                 })}
               </ul>
             </div>
           </div>
-          <input type="submit" value="Go" className="form__submit"/>
+          <input type="submit" value="Create" className="form_submit_playlist"/>
         </form>
       </div>
     </>

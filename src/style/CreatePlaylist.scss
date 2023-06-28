@@ -1,22 +1,93 @@
 @use '../style/var';
 
 .add_song_page {
-  form {
-    .sound_playlist_name {
-      height: 50px;
-      width: 70%;
-      padding-left: 20px;
-      outline: none;
-      border: none;
-      border-radius: 25px 0px 0px 25px;
-      background-color: var.$c2;
-    }
-    ul {
-      list-style: none;
-    }
-    .all-songs {
-      display: flex;
-      flex-direction: row;
-    }
-  }
+    form {
+		display: flex;
+		flex-direction: column;
+		.sound_playlist_name {
+			height: 50px;
+			width: calc(70% + 50px);
+			padding-left: 10px;
+			margin-bottom: 20px;
+			outline: none;
+			border: none;
+			border-radius: 25px;
+			background-color: var.$c2;
+		}
+		.selection_songs_container {
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			.selection_songs {
+				width: calc(70% + 50px);
+				h3 {
+					margin-bottom: 10px;
+				}
+				ul {
+					li {
+						margin: 0px auto;
+						list-style: none;
+						.playlist_music {
+							height: 50px;
+							width: 100%;
+							margin-bottom: 15px;
+							border: none;
+							outline: none;
+							border-radius: 25px;
+							padding: 0px 15px;
+							background-color: var.$transparent-music-c2;
+							color: var.$c2;
+							cursor: pointer;
+						}
+					}
+				}
+			}
+			.selected_songs {
+				width: calc(70% + 50px);
+				h3 {
+					margin-bottom: 10px;
+				}
+				ul {
+					li {
+						height: 50px;
+						width: 100%;
+						display: flex;
+						justify-content: space-between;
+						align-items: center;
+						margin-bottom: 15px;
+						border: none;
+						font-size: 0.8em;
+						outline: none;
+						border-radius: 25px;
+						padding: 0px 15px;
+						background-color: var.$transparent-music-c2;
+						color: var.$c2;
+						cursor: pointer;
+						list-style: none;
+						.remove_from_playlist {
+							height: 35px;
+							width: 70px;
+							border: none;
+							border-radius: 25px;
+							color: white;
+							background-color: var.$c4;
+							outline: none;
+						}
+					}
+				}
+			}
+		}
+		.form_submit_playlist {
+			height: 50px;
+			width: calc(70% + 50px);
+			margin-top: 20px;
+			border: none;
+			border-radius: 25px;
+			outline: none;
+			cursor: pointer;
+			font-size: 1.1em;
+			margin-bottom: 70px;
+		}
+	}
 }
