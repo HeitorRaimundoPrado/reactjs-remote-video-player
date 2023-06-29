@@ -1,13 +1,13 @@
 @use './var';
 
 .container_music {
-    height: 60px;
+    height: 65px;
     width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     position: fixed;
-    bottom: 7%;
+    bottom: 6%;
     background-color: #161144;
     .music_control_display {
         /*position: fixed;
