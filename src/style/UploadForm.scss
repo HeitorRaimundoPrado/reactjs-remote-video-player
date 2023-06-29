@@ -1,0 +1,73 @@
+@use './var';
+
+.file_upload_form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 25%;
+    .file_type {
+        height: 50px;
+        width: calc(70% + 50px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+        border-radius: 25px;
+        color: black;
+        background-color: var.$c2;
+        .form_label_upload {
+            height: 40px;
+            width: 30%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 25px;
+            margin-right: 33%;
+            font-size: 0.9em;
+            color: var.$c2;
+            background-color: var.$c4;
+            cursor: pointer;
+            transition: .3s;
+        }
+        .form_label_upload:hover {
+            background-color: var.$hover-c4;
+        }
+        .form_radio1 {
+            margin-right: 15px;
+        }
+    }
+    .file_name {
+        height: 50px;
+        width: calc(70% + 50px);
+        padding-left: 10px;
+        margin-bottom: 20px;
+        outline: none;
+        border: none;
+        border-radius: 25px;
+        background-color: var.$c2;
+    }
+    .file_artist {
+        height: 50px;
+        width: calc(70% + 50px);
+        padding-left: 10px;
+        margin-bottom: 20px;
+        outline: none;
+        border: none;
+        border-radius: 25px;
+        background-color: var.$c2;
+    }
+    .form_submit_file {
+        height: 50px;
+        width: calc(70% + 50px);
+        border-radius: 25px;
+        border: none;
+        outline: none;
+        background-color: var.$c4;
+        font-size: 0.9em;
+        color: var.$c3;
+        cursor: pointer;
+        transition: .3s;
+    }
+    .form_submit_file:hover {
+        background-color: var.$hover-c4;
+    }
+}
