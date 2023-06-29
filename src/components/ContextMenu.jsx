@@ -20,7 +20,7 @@ const ContextMenu = (props) => {
 
   const handleDeletePlaylist = () => {
     jQuery.ajax({
-      url:`${API_BASE_URL}/api/delete/playlist?playlist=${playlist}` , 
+      url:`${API_BASE_URL}/api/delete/playlist?playlist=${playlist.id}` , 
       type: "GET",
     })
     const playlistsCopy = globalPlaylists;

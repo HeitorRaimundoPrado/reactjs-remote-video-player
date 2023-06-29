@@ -2,6 +2,7 @@ import { useState, useEffect} from 'react';
 import { API_BASE_URL } from '../constants';
 import { useSearchParams } from 'react-router-dom'
 import '../style/WatchVid.scss'
+import VideoPlayer from '../components/VideoPlayer';
 
 const WatchVid = () => {
   const [realURL, setRealURL] = useState('');
@@ -55,7 +56,7 @@ const WatchVid = () => {
   useEffect(() => {
     setWatchDivHTML(
       <main className="main_video">
-        <video key={realURL} preload='auto' style={{display: vidDisplay}} controls src={realURL}></video>
+        <VideoPlayer url={realURL}/>
 
         <div className="video_div_download">
           {console.log(realURL)}
