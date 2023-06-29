@@ -129,12 +129,10 @@ const useFunctions = (audioRef) => {
   const { repIdx, setRepIdx } = useContext(RepIdxContext);
 
   const handlePlaylist = useCallback((playlist) => {
-    jQuery.get(`${API_BASE_URL}/api/playlists/${playlist}`, (songs) => {
-      console.log(songs);
-      setReplist(songs);
-      setRepIdx(0);
-      playAudio(`${API_BASE_URL}/api/music/${songs[0]}`, audioRef, setRepIdx);
-    })
+    console.log(playlist.files);
+    setReplist(playlist.files);
+    setRepIdx(0);
+    playAudio(`${API_BASE_URL}/api/music/${playlist.files[0].file}`, audioRef, setRepIdx);
   }, [audioRef])
   
   const nextSong = useCallback(() => {
