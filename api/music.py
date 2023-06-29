@@ -1,8 +1,9 @@
 from flask import Blueprint, Response, current_app, redirect, request, send_from_directory, jsonify, url_for, session
-from werkzeug.utils import secure_filename
 from flask_jwt_extended import jwt_required, get_jwt_identity
 import os
-import mimetypes
+import json
+
+import sqlalchemy
 
 CHANNELS = 2
 RATE = 44100
@@ -17,11 +18,14 @@ def allowed_file(filename):
 
 bp = Blueprint('music', __name__)
 
-@bp.route('/api/music/delete/<string:filename>', methods=["POST"])
+@bp.route('/api/music/delete/<int:id>', methods=["POST"])
 @jwt_required(True)
-def delete_song(filename: str):
+def delete_song(id: int):
     private = request.args.get('private')
     private = 0 if private is None else int(private)
+    filename = request.args.get('filename')
+    if filename is None:
+        return '', 404
 
     if private:
         private_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'private')
@@ -39,6 +43,15 @@ def delete_song(filename: str):
         music_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'music')
         file_path = os.path.join(music_dir, filename)
 
+        from models import File
+
+        f_to_del = File.query.filter_by(id=id).first()
+        
+        from __init__ import db
+
+        db.session.delete(f_to_del)
+        db.session.commit()
+
     os.remove(file_path)
 
     return {}
@@ -55,6 +68,7 @@ def get_all_music():
 
     all_songs = File.query.all()
     ret = list()
+    print("\nall songs: " + str(all_songs) + '\n\n')
 
     for song in all_songs:
         ret.append(dict({'name': song.name,'file': song.file,'artist': song.artist}))
@@ -129,14 +143,19 @@ def get_private_music(filename: str):
 # returns an array with all playlists in UPLOAD_DIRECTORY/playlists
 @bp.route('/api/playlists')
 def get_all_playlists():
-    return os.listdir(os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'playlists'))
+    from models import Playlist
+    from __init__ import db
 
-# returns the text file that corresponds to <filename> playlist
-@bp.route('/api/playlists/<string:filename>')
-def get_playlist(filename: str):
-    playlists_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'playlists')
-    with open(os.path.join(playlists_dir, filename)) as f:
-        return f.read().split('\n')
+    all_playlists = Playlist.query.all()
+    for play in all_playlists:
+        print('play.files:')
+        print(type(play.files))
+            # print(file)
+        print()
+
+    a = [{'id': playlist.id, 'name': playlist.name, 'files': [{'name': file.name, 'file': file.file, 'id': file.id, 'artist': file.artist} for file in playlist.files]} for playlist in all_playlists]
+    print(str(a))
+    return a
 
 # uploads an audio file
 @bp.route('/api/upload/music/', methods=["POST"])
@@ -189,50 +208,40 @@ def upload_music_file():
 # uploads a text playlist
 @bp.route('/api/upload/playlist/', methods=["POST"])
 def upload_text_playlis():
-    print()
-    print(request.files)
-    print(request.form)
-    print()
+    from models import Playlist
+    from __init__ import db
 
-    if 'file' not in request.files:
-        return "No file Identified"
+    name = request.form.get('name')
+    files = request.form.get('files')
+    
+    print('\n\nfiles = ' + str(files) + '\n\n')
+    if name is None or files is None:
+        return 'No name',404
 
-    file = request.files['file']
-    file_name = request.form['filename']
+    files = json.loads(files)
+    
+    from models import File
+    new_playlist = Playlist(name=name, files=[File.query.filter_by(file=file['file']).first() for file in files])
+    print('\n\nnew_playlist.files = ' + str(new_playlist.files) + '\n\n')
 
-    if file.filename == '':
-        return "No file Identified"
-
-    if file.filename == 'blob':
-        file.filename = file_name
-
-
-    if file and allowed_file(file.filename):
-        if file.filename is None:
-            return "NO file Identified"
-
-        filename = secure_filename(file.filename)
-
-        playlist_upload_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'playlists')
-        try:
-            os.makedirs(playlist_upload_dir)
-
-        except OSError:
-            pass
-
-        print()
-        print(os.path.join(playlist_upload_dir, filename))
-        print()
-        file.save(os.path.join(playlist_upload_dir, filename))
+    db.session.add(new_playlist)
+    db.session.commit()
 
     return 'saved'
 
 @bp.route('/api/delete/playlist')
 def delete_playlist():
-    playlist_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'playlists')
-    playlist_to_delete = os.path.join(playlist_dir, request.args['playlist'])
-    if os.path.exists(playlist_to_delete):
-        os.remove(playlist_to_delete)
+    play_to_del = request.args.get('playlist')
+    if play_to_del is None:
+        return 'no playlist', 404
+
+    from models import Playlist
+    from __init__ import db
+
+    play_del = Playlist.query.filter_by(id=play_to_del).first()
+    db.session.delete(play_del)
+    db.session.commit()
+
 
     return 'deleted'
 
