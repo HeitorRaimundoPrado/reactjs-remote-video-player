@@ -1,3 +1,5 @@
+import { API_BASE_URL } from "../constants";
+
 export default function UploadForm() {
     const handleSubmit = (e) => {
       e.preventDefault();
@@ -29,6 +31,16 @@ export default function UploadForm() {
           Public
         </label>
         <input type="radio" name="private" value="0" id="input-public" className='form_radio2'/>
+
+        <label htmlFor="song-name">
+          Song Name
+        </label>
+        <input type="text" id="song-name" name="song_name"/>
+
+        <label htmlFor="artist">
+          Artist
+        </label>
+        <input type="text" id="artist" name="artist"/>
   
         <input type="submit" className='form_submit_file' value="Upload"/>
       </form>

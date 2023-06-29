@@ -2,35 +2,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import '../style/AudioPlayer.scss'
 
-const AudioPlayer = ({ src, audRef, nextSong, previousSong}) => {
+const AudioPlayer = ({ src, audRef, nextSong, previousSong, curSong}) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(1);
 
-  useEffect(() => {
-    const handleLoadedData = () => {
-      setDuration(audRef.current.duration);
-    };
+  const handleLoadedData = () => {
+    setDuration(audRef.current.duration);
+  };
 
-    const handleTimeUpdate = () => {
-      setCurrentTime(audRef.current.currentTime);
-    };
-
-    const handleEnded = () => {
-      setCurrentTime(0);
-    };
-
-    audRef.current.addEventListener('loadeddata', handleLoadedData);
-    audRef.current.addEventListener('timeupdate', handleTimeUpdate);
-    audRef.current.addEventListener('ended', handleEnded);
-
-    return () => {
-      audRef.current.removeEventListener('loadeddata', handleLoadedData);
-      audRef.current.removeEventListener('timeupdate', handleTimeUpdate);
-      audRef.current.removeEventListener('ended', handleEnded);
-    };
-  }, [src]);
+  const handleTimeUpdate = () => {
+    setCurrentTime(audRef.current.currentTime);
+  };
 
   const togglePlay = () => {
     if (!audRef.current.paused) {
@@ -74,8 +58,11 @@ const AudioPlayer = ({ src, audRef, nextSong, previousSong}) => {
   return (
     <div className='container_music'>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-      <audio src="" ref={audRef} onEnded={() => nextSong()} style={{display: 'none'}}></audio>
+      <audio onLoadedData={handleLoadedData} onTimeUpdate={handleTimeUpdate} src="" ref={audRef} onEnded={() => {nextSong(); setCurrentTime(0)}} style={{display: 'none'}}></audio>
 
+      <div>
+        {curSong}
+      </div>
       <div className='music_control_display'>
         <button onClick={() => previousSong()} className='music_previous'>
           <span className="material-symbols-outlined">

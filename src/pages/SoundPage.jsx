@@ -41,10 +41,10 @@ const Files = (props) => {
       <ul>
       {data.map((item, idx) => {
         return (
-        <li key={item} className='li_border_color'>
+        <li key={item.file} className='li_border_color'>
           {/* <button onClick={() => playAudio(`${API_BASE_URL}/api/music/${item}`, audRef, setRepIdx, idx)}>{item}</button> */}
-          <button onClick={() => playAudio(`${baseUrl}/${item}`, audRef, setRepIdx, idx)} className='music'>
-            {item}
+          <button onClick={() => playAudio(`${baseUrl}/${item.file}`, audRef, setRepIdx, idx)} className='music'>
+            {item.artist} - {item.name}
           </button>
           <button onClick={() => handleDeleteSong(data, setData, baseUrl, idx)} className='delete_music'>
             Delete
@@ -60,42 +60,6 @@ const Files = (props) => {
   )
 }
 
-{/*const UploadForm = () => {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    let headers = {}
-    if (localStorage.getItem('token') != null) {
-      headers = {
-        Authorization: "Bearer " + localStorage.getItem('token'),
-      }
-    }
-    
-    fetch(`${API_BASE_URL}/api/upload`, { method: "POST", headers: headers, body: new FormData(e.target)})
-  }
-  
-  return (
-    <form onSubmit={handleSubmit} className='file_upload_form'>
-      <label htmlFor="file-input" className='form_label_upload'>
-        Upload File
-      </label>
-    
-      <input id="file-input" style={{display: 'none'}} type="file" name="file"/>
-
-      <label htmlFor="input-private">
-        Private
-      </label>
-
-      <input type="radio" name="private" value="1" id="input-private" className='form_radio1'/>
-
-      <label htmlFor="input-public">
-        Public
-      </label>
-      <input type="radio" name="private" value="0" id="input-public" className='form_radio2'/>
-
-      <input type="submit" className='form_submit_file' value="Upload"/>
-    </form>
-  )
-}*/}
 
 const playVideo = (nsrc) => {
   const url = new URL('/watch', window.location.href);
@@ -180,7 +144,7 @@ const useFunctions = (audioRef) => {
     console.log("replist.length = " + String(replist.length))
 
     if (repIdx + 1 < replist.length) {
-      playAudio(`${API_BASE_URL}/api/music/${replist[repIdx+1]}`, audioRef, setRepIdx);
+      playAudio(`${API_BASE_URL}/api/music/${replist[repIdx+1].file}`, audioRef, setRepIdx);
       setRepIdx(repIdx+1);
     } else {
       setRepIdx(0);
@@ -284,6 +248,7 @@ const SoundPage = () => {
   const [baseUrl, setBaseUrl] = useState(`${API_BASE_URL}/api/music`);
   const [searchContent, setSearchContent] = useState('');
   const [allVideo, setAllVideo] = useState([]);
+  const [curSong, setCurSong] = useState("Not Playing")
 
 
   const { replist, setReplist } = useContext(HandleReplistContext);
@@ -294,7 +259,13 @@ const SoundPage = () => {
 
   useEffect(() => { // when the results change
     setRepIdx(0);
-  }, [replist])
+  }, [replist]);
+
+  useEffect(() => { // change current song for the player
+    if (replist[repIdx] !== null && replist[repIdx] !== undefined) {
+      setCurSong(replist[repIdx].name);
+    }
+  }, [replist, repIdx]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -370,18 +341,19 @@ const SoundPage = () => {
       </form>
       
       <div>
-        {globalPlaylists.map((playlist) => {
-          return (
-            <button onContextMenu={(e) => {
-              handlePlaylistContextMenu(e, playlist, contextMenuRef, setContextMenuSong)}}
-              onClick={() => handlePlaylist(playlist)}>
-              {playlist}
-            </button>
-          )
-        })}
         
         <div className='playlists_container'>
           <h3>Playlists</h3>
+
+          {globalPlaylists.map((playlist) => {
+            return (
+              <button onContextMenu={(e) => {
+                handlePlaylistContextMenu(e, playlist, contextMenuRef, setContextMenuSong)}}
+                onClick={() => handlePlaylist(playlist)}>
+                {playlist}
+              </button>
+            )
+          })}
           <a href="/create-playlist">
             <button className='new_playlist_button'>
               New Playlist
@@ -429,9 +401,9 @@ const SoundPage = () => {
       <AudioPlayer src={""}
                    audRef={audioRef}
                    nextSong={nextSong}
-                   previousSong={previousSong}/>
-      {/* <audio onEnded={() => {nextSong()}} preload="auto" controls  style={{display: 'none'}} ref={audioRef}> */}
-      {/* </audio> */}
+                   previousSong={previousSong}
+                   curSong={curSong}/>
+
 
       <div ref={addToPlaylistRef} style={{display: 'none'}}>
         <h2>Add To Playlist:</h2>

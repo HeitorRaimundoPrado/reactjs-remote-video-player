@@ -16,6 +16,9 @@ def upload_file():
     private = request.form.get('private')
     private = 0 if private is None else int(private)
 
+    song_name = str(request.form.get('song_name'))
+    artist = str(request.form.get('artist'))
+
     access_token = None
     print('private == ' + str(private))
 
@@ -48,7 +51,13 @@ def upload_file():
     
     temp_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'temp')
     file.save(os.path.join(temp_dir, filename))
+            
 
+    from models import File
+    n_file = File(name=song_name, file=filename, artist=artist)
+    from __init__ import db
+    db.session.add(n_file)
+    db.session.commit()
 
 
     if filename.split('.')[1] == 'mp4':

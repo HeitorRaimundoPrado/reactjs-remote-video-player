@@ -51,7 +51,15 @@ def delete_private_file(filename: str):
 # returns all music files in UPLOAD_DIRECTORY/music
 @bp.route('/api/music')
 def get_all_music():
-    return os.listdir(os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'music'))
+    from models import File
+
+    all_songs = File.query.all()
+    ret = list()
+
+    for song in all_songs:
+        ret.append(dict({'name': song.name,'file': song.file,'artist': song.artist}))
+
+    return ret
 
 # returns an audio file as attachment
 @bp.route('/api/music/<string:filename>')
@@ -171,6 +179,7 @@ def upload_music_file():
         user_dir = os.path.join(private_dir, str(user.id))
         with open(os.path.join(user_dir, filename), 'wb+') as f:
             f.write(file.read())
+
     
     if os.path.exists(os.path.join(temp_dir, filename)):
         os.remove(os.path.join(temp_dir, filename))
