@@ -2,33 +2,37 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import '../style/AudioPlayer.scss'
 
-const AudioPlayer = ({ src, audRef, nextSong, previousSong}) => {
+const AudioPlayer = ({ src, audRef, nextSong, previousSong, curSong}) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(1);
 
   useEffect(() => {
-    const handleLoadedData = () => {
-      setDuration(audRef.current.duration);
-    };
+    if (audRef.current != null) {
+      const handleLoadedData = () => {
+        setDuration(audRef.current.duration);
+      };
 
-    const handleTimeUpdate = () => {
-      setCurrentTime(audRef.current.currentTime);
-    };
+      const handleTimeUpdate = () => {
+        setCurrentTime(audRef.current.currentTime);
+      };
 
-    const handleEnded = () => {
-      setCurrentTime(0);
-    };
+      const handleEnded = () => {
+        setCurrentTime(0);
+      };
 
-    audRef.current.addEventListener('loadeddata', handleLoadedData);
-    audRef.current.addEventListener('timeupdate', handleTimeUpdate);
-    audRef.current.addEventListener('ended', handleEnded);
+      audRef.current.addEventListener('loadeddata', handleLoadedData);
+      audRef.current.addEventListener('timeupdate', handleTimeUpdate);
+      audRef.current.addEventListener('ended', handleEnded);
+    }
 
     return () => {
-      audRef.current.removeEventListener('loadeddata', handleLoadedData);
-      audRef.current.removeEventListener('timeupdate', handleTimeUpdate);
-      audRef.current.removeEventListener('ended', handleEnded);
+      if (audRef.current != null) {
+        audRef.current.removeEventListener('loadeddata', handleLoadedData);
+        audRef.current.removeEventListener('timeupdate', handleTimeUpdate);
+        audRef.current.removeEventListener('ended', handleEnded);
+      }
     };
   }, [src]);
 
@@ -76,6 +80,9 @@ const AudioPlayer = ({ src, audRef, nextSong, previousSong}) => {
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
       <audio src="" ref={audRef} onEnded={() => nextSong()} style={{display: 'none'}}></audio>
 
+      <div>
+        {curSong}
+      </div>
       <div className='music_control_display'>
         <button onClick={() => previousSong()} className='music_previous'>
           <span className="material-symbols-outlined">
