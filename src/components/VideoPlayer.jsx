@@ -7,6 +7,7 @@ const VideoPlayer = (props) => {
             const url = props.url;
             console.log(`url: ${url}`);
             const init = await CapacitorVideoPlayer.initPlayer({
+                mode: "embedded",
                 url: url,
                 playerId: "fullscreen",
                 componentTag: "div"
