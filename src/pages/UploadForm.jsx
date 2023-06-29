@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "../constants";
+import '../style/UploadForm.scss'
 
 export default function UploadForm() {
     const handleSubmit = (e) => {
@@ -14,35 +15,38 @@ export default function UploadForm() {
     }
     
     return (
-      <form onSubmit={handleSubmit} className='file_upload_form'>
-        <label htmlFor="file-input" className='form_label_upload'>
+      <>
+        <h2>
           Upload File
-        </label>
-      
-        <input id="file-input" style={{display: 'none'}} type="file" name="file"/>
-  
-        <label htmlFor="input-private">
-          Private
-        </label>
-  
-        <input type="radio" name="private" value="1" id="input-private" className='form_radio1'/>
-  
-        <label htmlFor="input-public">
-          Public
-        </label>
-        <input type="radio" name="private" value="0" id="input-public" className='form_radio2'/>
+        </h2>
+        <form onSubmit={handleSubmit} className='file_upload_form'>
+          <div className="file_type">
+            <label htmlFor="file-input" className='form_label_upload'>
+              Upload File
+            </label>
+            <input id="file-input" style={{display: 'none'}} type="file" name="file"/>
+            <label htmlFor="input-private">
+              Private
+            </label>
+            <input type="radio" name="private" value="1" id="input-private" className='form_radio1'/>
+            <label htmlFor="input-public">
+              Public
+            </label>
+            <input type="radio" name="private" value="0" id="input-public" className='form_radio2'/>
+          </div>
 
-        <label htmlFor="song-name">
-          Song Name
-        </label>
-        <input type="text" id="song-name" name="song_name"/>
+          {/*<label htmlFor="song-name">
+            Song Name
+          </label>*/}
+          <input type="text" className="file_name" name="song_name" placeholder="Song Name"/>
 
-        <label htmlFor="artist">
-          Artist
-        </label>
-        <input type="text" id="artist" name="artist"/>
-  
-        <input type="submit" className='form_submit_file' value="Upload"/>
-      </form>
+          {/*<label htmlFor="artist">
+            Artist
+          </label>*/}
+          <input type="text" className="file_artist" name="artist" placeholder="Artist"/>
+    
+          <input type="submit" className='form_submit_file' value="Upload"/>
+        </form>
+      </>
     )
   }
