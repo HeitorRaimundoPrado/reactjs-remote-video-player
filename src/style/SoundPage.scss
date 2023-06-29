@@ -95,8 +95,6 @@
     }
 }
 
-
-
 .music_list_container {
     width: 100%;
     display: flex;
@@ -105,10 +103,12 @@
     margin: 0px auto;
     ul {
         width: 89%;
-        li {
+        .li_border_color {
             width: 100%;
             list-style: none;
             margin-bottom: 15px;
+            border: solid 1px var.$c4;
+            border-radius: 25px;
             .music {
                 height: 50px;
                 width: 60%;
@@ -146,7 +146,8 @@
             }
         }
         li:last-child {
-            padding-bottom: 100px;
+            //padding-bottom: 100px;
+            margin-bottom: 120px;
         }
     }
 }

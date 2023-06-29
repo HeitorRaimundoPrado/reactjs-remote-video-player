@@ -41,7 +41,7 @@ const Files = (props) => {
       <ul>
       {data.map((item, idx) => {
         return (
-        <li key={item}>
+        <li key={item} className='li_border_color'>
           {/* <button onClick={() => playAudio(`${API_BASE_URL}/api/music/${item}`, audRef, setRepIdx, idx)}>{item}</button> */}
           <button onClick={() => playAudio(`${baseUrl}/${item}`, audRef, setRepIdx, idx)} className='music'>
             {item}
