@@ -56,7 +56,7 @@ const WatchVid = () => {
   useEffect(() => {
     setWatchDivHTML(
       <main className="main_video">
-        <VideoPlayer url={realURL}/>
+        {realURL !== '' && <VideoPlayer url={realURL}/>}
 
         <div className="video_div_download">
           {console.log(realURL)}
