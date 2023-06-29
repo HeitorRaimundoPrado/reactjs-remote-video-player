@@ -350,7 +350,7 @@ const SoundPage = () => {
               <button onContextMenu={(e) => {
                 handlePlaylistContextMenu(e, playlist, contextMenuRef, setContextMenuSong)}}
                 onClick={() => handlePlaylist(playlist)}>
-                {playlist}
+                {playlist.name}
               </button>
             )
           })}
@@ -408,7 +408,7 @@ const SoundPage = () => {
       <div ref={addToPlaylistRef} style={{display: 'none'}}>
         <h2>Add To Playlist:</h2>
         { globalPlaylists.map((playlist) => {
-          return <button onClick={() => handleChangePlaylist(playlist, addToPlaylistSong, addToPlaylistRef)}>{playlist}</button>
+          return <button onClick={() => handleChangePlaylist(playlist, addToPlaylistSong, addToPlaylistRef)}>{playlist.name}</button>
         })}
       </div>
 
