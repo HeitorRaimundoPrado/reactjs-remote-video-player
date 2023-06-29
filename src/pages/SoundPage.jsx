@@ -341,18 +341,19 @@ const SoundPage = () => {
       </form>
       
       <div>
-        {globalPlaylists.map((playlist) => {
-          return (
-            <button onContextMenu={(e) => {
-              handlePlaylistContextMenu(e, playlist, contextMenuRef, setContextMenuSong)}}
-              onClick={() => handlePlaylist(playlist)}>
-              {playlist}
-            </button>
-          )
-        })}
         
         <div className='playlists_container'>
           <h3>Playlists</h3>
+
+          {globalPlaylists.map((playlist) => {
+            return (
+              <button onContextMenu={(e) => {
+                handlePlaylistContextMenu(e, playlist, contextMenuRef, setContextMenuSong)}}
+                onClick={() => handlePlaylist(playlist)}>
+                {playlist}
+              </button>
+            )
+          })}
           <a href="/create-playlist">
             <button className='new_playlist_button'>
               New Playlist
