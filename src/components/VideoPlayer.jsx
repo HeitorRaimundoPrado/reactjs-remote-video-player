@@ -1,26 +1,102 @@
-import React, {useEffect} from 'react';
-import {CapacitorVideoPlayer} from 'capacitor-video-player';
+import React, { useEffect, useRef, useState } from 'react';
 
-const VideoPlayer = (props) => {
-    useEffect( () => {
-        const playVideo = async () => {
-            const url = props.url;
-            console.log(`url: ${url}`);
-            const init = await CapacitorVideoPlayer.initPlayer({
-                mode: "embedded",
-                url: url,
-                playerId: "fullscreen",
-                componentTag: "div"
-            })
-            console.log(`init ${JSON.stringify(init)}`)
-        }
-        playVideo(() => {
-            console.log('in playing video')
-        })
-    });
-    return (
-        <div id="fullscreen" slot="fixed">
-        </div>
-    )
-}
-export default VideoPlayer
+const VideoPlayer = ({ videoUrl, audioUrl }) => {
+  const videoRef = useRef(null);
+  const audioRef = useRef(null);
+  const [isPlaying, setPlaying] = useState(false);
+  const [isFullscreen, setFullscreen] = useState(false);
+  const [volume, setVolume] = useState(1);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+
+  useEffect(() => {
+    if (videoRef.current !== null) {
+      videoRef.current.volume = 0;
+    }
+  }, [videoRef.current]);
+
+  useEffect(() => {
+    const videoElement = videoRef.current;
+
+    const handleLoadedData = () => {
+      setDuration(videoElement.duration);
+    };
+
+    videoElement.addEventListener('timeupdate', handleTimeUpdate);
+    videoElement.addEventListener('loadeddata', handleLoadedData);
+
+    return () => {
+      videoElement.removeEventListener('timeupdate', handleTimeUpdate);
+      videoElement.removeEventListener('loadeddata', handleLoadedData);
+    };
+  }, []);
+
+  const handleSeek = (e) => {
+    const seekTime = parseFloat(e.target.value);
+    videoRef.current.currentTime = seekTime;
+    audioRef.current.currentTime = seekTime;
+    setCurrentTime(seekTime);
+  };
+
+  const handleTimeUpdate = () => {
+    setCurrentTime(videoRef.current.currentTime);
+  };
+
+  const handlePlayPause = () => {
+    if (isPlaying) {
+      videoRef.current.pause();
+      audioRef.current.pause();
+    } else {
+      videoRef.current.play();
+      audioRef.current.play();
+    }
+    setPlaying(!isPlaying);
+  };
+
+  const handleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      videoRef.current.requestFullscreen();
+      setFullscreen(true);
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+      setFullscreen(false);
+    }
+  };
+
+  const handleVolumeChange = (e) => {
+    const newVolume = parseFloat(e.target.value);
+    setVolume(newVolume);
+    audioRef.current.volume = newVolume;
+  };
+
+  return (
+    <div>
+      <video ref={videoRef} src={videoUrl}></video>
+      <audio ref={audioRef} src={audioUrl}></audio>
+      <button onClick={handlePlayPause}>{isPlaying ? 'Pause' : 'Play'}</button>
+      <button onClick={handleFullscreen}>{isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}</button>
+      <input
+        type="range"
+        min="0"
+        max={duration}
+        step="0.1"
+        value={currentTime}
+        onChange={handleSeek}
+      />
+
+      <input
+        type="range"
+        min="0"
+        max="1"
+        step="0.1"
+        value={volume}
+        onChange={handleVolumeChange}
+      />
+    </div>
+  );
+};
+
+export default VideoPlayer;
+

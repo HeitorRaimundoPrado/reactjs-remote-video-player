@@ -13,7 +13,6 @@
     "@capacitor/android": "^5.0.4",
     "@capacitor/cli": "^5.0.4",
     "@capacitor/core": "^5.0.4",
-    "capacitor-video-player": "^5.0.1",
     "dotenv": "^16.1.4",
     "jquery": "^3.7.0",
     "react": "^18.2.0",
