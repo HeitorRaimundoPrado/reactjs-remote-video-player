@@ -144,7 +144,7 @@ const useFunctions = (audioRef) => {
     console.log("replist.length = " + String(replist.length))
 
     if (repIdx + 1 < replist.length) {
-      playAudio(`${API_BASE_URL}/api/music/${replist[repIdx+1]}`, audioRef, setRepIdx);
+      playAudio(`${API_BASE_URL}/api/music/${replist[repIdx+1].file}`, audioRef, setRepIdx);
       setRepIdx(repIdx+1);
     } else {
       setRepIdx(0);
