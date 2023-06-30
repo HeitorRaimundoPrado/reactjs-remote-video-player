@@ -2,14 +2,29 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import '../style/AudioPlayer.scss'
 
+import { CapacitorMusicControls } from 'capacitor-music-controls-plugin-v3'
+
+
 const AudioPlayer = ({ src, audRef, nextSong, previousSong, curSong}) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(1);
 
+  useEffect(() => {
+    document.addEventListener('controlsNotification', (event) => {
+      console.log('controlsNotification was fired');
+      console.log(event);
+      const info = { message : event.message, position: 0 };
+      handleControlsEvent(info);
+    });
+  }, [])
+
   const handleLoadedData = () => {
     setDuration(audRef.current.duration);
+    CapacitorMusicControls.create({
+      track: curSong,
+    });
   };
 
   const handleTimeUpdate = () => {
