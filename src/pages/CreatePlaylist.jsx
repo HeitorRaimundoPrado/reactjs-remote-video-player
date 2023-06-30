@@ -4,20 +4,14 @@ import { API_BASE_URL } from "../constants.js"
 import { useContext, useState, useEffect } from "react";
 import '../style/CreatePlaylist.scss'
 
-const handleSubmit = (e, songsToSend) => {
+const handleSubmit = async (e, songsToSend) => {
 
   e.preventDefault();
 
-  let str = '';
-  for (let i = 0; i < songsToSend.length; i++) {
-    str += songsToSend[i] + '\n';
-  }
+  let fd = new FormData();
 
-  const file = new Blob([str], {type: "text/plain"});
-  var fd = new FormData();
-
-  fd.append('file', file);
-  fd.append('filename', e.target.filename.value);
+  fd.append('files', JSON.stringify(songsToSend));
+  fd.append('name', e.target.name.value);
 
   jQuery.ajax({
     type: "POST",
@@ -60,7 +54,7 @@ const CreatePlaylist = () => {
 
         <form onSubmit={(e) => {handleSubmit(e, songsToSend)}}>
 
-          <input name="filename" type="text" placeholder="Playlist Name" className="sound_playlist_name"/>
+          <input name="name" type="text" placeholder="Playlist Name" className="sound_playlist_name"/>
 
           <div className='selection_songs_container'>
             <div className='selection_songs'>
@@ -69,7 +63,7 @@ const CreatePlaylist = () => {
                 {songs.map((song) => {
                   return <li>
                       <button type="button" onClick={() => handleAddSong(song, songsToSend, setSongsToSend)} className='playlist_music'> 
-                        {song}
+                        {song.name}
                       </button>
                     </li>
                 })}
@@ -80,7 +74,7 @@ const CreatePlaylist = () => {
               <h3>Playlist</h3>
               <ul>
                 {songsToSend.map((song, idx) => {
-                  return <li>{song}<button type="button" onClick={() => handleRemoveSong(idx)} className="remove_from_playlist">Remove</button></li>
+                  return <li>{song.name}<button type="button" onClick={() => handleRemoveSong(idx)} className="remove_from_playlist">Remove</button></li>
                 })}
               </ul>
             </div>

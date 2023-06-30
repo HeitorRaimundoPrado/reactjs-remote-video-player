@@ -21,7 +21,7 @@ const handleDeleteSong = (songs, setSongs, baseUrl, idx) => {
     if (localStorage.getItem('token') != null) {
       headers = { Authorization: 'Bearer ' + localStorage.getItem('token')};
     }
-    await fetch(`${baseUrl}/delete/${songs[idx]}`, {method: 'POST', headers: headers});
+    await fetch(`${baseUrl}/delete/${songs[idx].id}`, {method: 'POST', headers: headers});
   }
 
   deleteSong();
@@ -186,37 +186,28 @@ const handleAddToPlaylist = (song, addToPlaylistDiv, setAddToPlaylistSong) => {
   addToPlaylistDiv.current.style.display = 'inline-block';
   setAddToPlaylistSong(song);
 }
-const handleChangePlaylist = (playlist, addToPlaylistSong, addToPlaylistRef) => {
-  jQuery.get(`${API_BASE_URL}/api/playlists/${playlist}`, (songs) => {
-    songs.pop()
-    songs.push(addToPlaylistSong);
+const handleChangePlaylist = async (playlist, addToPlaylistSong, addToPlaylistRef) => {
+  let songs = playlist.files;
 
+  await fetch(`${API_BASE_URL}/api/delete/playlist?` + new URLSearchParams({playlist: playlist.id}))
+  songs.push(addToPlaylistSong);
 
-    let str = ''
-    for (let i = 0; i < songs.length; i++) {
-      str += songs[i] + '\n';
-    }
+  var fd = new FormData();
 
-    const file = new Blob([str], {filename: 'n-playlist.txt', type: 'text/plain'});
+  fd.append('name', `${playlist.name}`);
+  fd.append('files', JSON.stringify(songs));
 
-    var fd = new FormData();
+  jQuery.ajax({
+    type: "POST",
+    url: `${API_BASE_URL}/api/upload/playlist`,
+    data: fd, 
+    processData: false,
+    contentType: false
+  }).done(function(data) {
+      console.log(data);
+  }) 
 
-    fd.append('filename', `${playlist}`);
-    fd.append('file', file);
-
-    jQuery.ajax({
-      type: "POST",
-      url: `${API_BASE_URL}/api/upload/playlist`,
-      data: fd, 
-      processData: false,
-      contentType: false
-    }).done(function(data) {
-        console.log(data);
-    }) 
-
-    addToPlaylistRef.current.style.display = 'none'
-
-  })
+  addToPlaylistRef.current.style.display = 'none'
 }
 
 const handlePlaylistContextMenu = (e, playlist, contextMenuRef, setContextMenuSong) => {
@@ -403,7 +394,7 @@ const SoundPage = () => {
                    curSong={curSong}/>
 
 
-      <div ref={addToPlaylistRef} style={{display: 'none'}}>
+      <div ref={addToPlaylistRef} style={{display: 'none', marginBottom: '200px'}} className="add_to_playlist_container">
         <h2>Add To Playlist:</h2>
         { globalPlaylists.map((playlist) => {
           return <button onClick={() => handleChangePlaylist(playlist, addToPlaylistSong, addToPlaylistRef)}>{playlist.name}</button>
