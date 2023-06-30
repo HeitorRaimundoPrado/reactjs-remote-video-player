@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { App } from '@capacitor/app'
+import { Capacitor } from '@capacitor/core';
 
 const VideoPlayer = ({ videoUrl, audioUrl }) => {
   const videoRef = useRef(null);
@@ -8,6 +10,24 @@ const VideoPlayer = ({ videoUrl, audioUrl }) => {
   const [volume, setVolume] = useState(1);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+
+  useEffect(() => {
+    if (Capacitor.getPlatform == "android") {
+      const handleAppStateChange = (state) => {
+        if (state.active) {
+          videoRef.current.play()
+          audioRef.current.play();
+        }
+
+        else {
+          videoRef.current.pause();
+          audioRef.current.play()
+        }
+      }
+
+      App.addListener('appStateChange', handleAppStateChange);
+    }
+  }, []);
 
   useEffect(() => {
     if (videoRef.current !== null) {
