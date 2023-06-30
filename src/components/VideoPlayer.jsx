@@ -2,14 +2,36 @@ import React, { useEffect, useRef, useState } from 'react';
 import { App } from '@capacitor/app'
 import { Capacitor } from '@capacitor/core';
 
-const VideoPlayer = ({ videoUrl, audioUrl }) => {
+const ResolutionSelector = ({allResRef, allVideo, setVideoUrl, videoRef, audioRef}) => {
+  const handleSelectResolution = (res) => {
+    setVideoUrl(res.url);
+    audioRef.current.pause();
+    videoRef.current.addEventListener('loadeddata', () => {
+      audioRef.current.play();
+      videoRef.current.play();
+    }, { once: true})
+
+  }
+
+  return <div ref={allResRef} style={{display: "none"}}>
+    {console.log("inside resolution selector")}
+    {allVideo.map((res) => {
+      return <button key={res.url} onClick={() => handleSelectResolution(res)}>{res.resolution}</button>
+    })}
+  </div>
+}
+
+const VideoPlayer = ({ allVideo, audioUrl }) => {
+
   const videoRef = useRef(null);
   const audioRef = useRef(null);
-  const [isPlaying, setPlaying] = useState(false);
-  const [isFullscreen, setFullscreen] = useState(false);
+  const [videoUrl, setVideoUrl] = useState(allVideo[0].url);
   const [volume, setVolume] = useState(1);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+
+  const allResRef = useRef();
+
 
   useEffect(() => {
     if (Capacitor.getPlatform() == "android") {
@@ -42,8 +64,11 @@ const VideoPlayer = ({ videoUrl, audioUrl }) => {
     const videoElement = videoRef.current;
 
     const handleLoadedData = () => {
+      videoRef.current.currentTime = audioRef.current.currentTime;
+      setCurrentTime(videoRef.current.currentTime);
       setDuration(videoElement.duration);
     };
+
 
     videoElement.addEventListener('timeupdate', handleTimeUpdate);
     videoElement.addEventListener('loadeddata', handleLoadedData);
@@ -66,25 +91,22 @@ const VideoPlayer = ({ videoUrl, audioUrl }) => {
   };
 
   const handlePlayPause = () => {
-    if (isPlaying) {
+    if (isPlaying()) {
       videoRef.current.pause();
       audioRef.current.pause();
     } else {
       videoRef.current.play();
       audioRef.current.play();
     }
-    setPlaying(!isPlaying);
   };
 
   const handleFullscreen = () => {
     if (!document.fullscreenElement) {
       videoRef.current.requestFullscreen();
-      setFullscreen(true);
     } else {
       if (document.exitFullscreen) {
         document.exitFullscreen();
       }
-      setFullscreen(false);
     }
   };
 
@@ -94,12 +116,25 @@ const VideoPlayer = ({ videoUrl, audioUrl }) => {
     audioRef.current.volume = newVolume;
   };
 
+  const isPlaying = () => {
+    if (audioRef.current !== null && audioRef.current !== undefined) {
+      return !audioRef.current.paused;
+    }
+    return 0;
+  }
+
+
+  const isFullscreen = () => {
+    return document.fullscreenElement;
+  }
+
   return (
     <div>
       <video ref={videoRef} src={videoUrl}></video>
       <audio ref={audioRef} src={audioUrl}></audio>
-      <button onClick={handlePlayPause}>{isPlaying ? 'Pause' : 'Play'}</button>
-      <button onClick={handleFullscreen}>{isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}</button>
+      <button onClick={handlePlayPause}>{isPlaying() ? 'Pause' : 'Play'}</button>
+      <button onClick={handleFullscreen}>{isFullscreen() ? 'Exit Fullscreen' : 'Fullscreen'}</button>
+      <button type="button" onClick={() => allResRef.current.style.display = 'flex'}>Resolutions</button>
       <input
         type="range"
         min="0"
@@ -117,6 +152,14 @@ const VideoPlayer = ({ videoUrl, audioUrl }) => {
         value={volume}
         onChange={handleVolumeChange}
       />
+      <ResolutionSelector 
+        allVideo={allVideo} 
+        allResRef={allResRef}
+        setVideoUrl={setVideoUrl}
+        audioRef={audioRef}
+        videoRef={videoRef}
+        setCurrentTime={setCurrentTime}
+        />
     </div>
   );
 };

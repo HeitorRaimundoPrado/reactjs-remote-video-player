@@ -31,7 +31,14 @@ def youtube_get():
     url = request.args['url']
     ret_json = dict()
     streams = pytube.YouTube(url).streams
-    ret_json = [streams.get_highest_resolution().url] # type: ignore
+    video_resolutions = []
+    res_set = set()
+    for stream in streams.filter(type='video', progressive=False).order_by('resolution').desc():
+        if stream.resolution not in res_set:
+            video_resolutions.append({'url': stream.url, 'resolution': stream.resolution})
+            res_set.add(stream.resolution)
+
+    ret_json = [video_resolutions, streams.filter(type="audio").order_by('abr').desc().first().url] # type: ignore
     return ret_json
 
 # use youtube data api to retrieve the results from <search>

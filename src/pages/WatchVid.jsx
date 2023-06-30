@@ -5,7 +5,8 @@ import '../style/WatchVid.scss'
 import VideoPlayer from '../components/VideoPlayer';
 
 const WatchVid = () => {
-  const [realURL, setRealURL] = useState('');
+  const [allVideo, setAllVideo] = useState('');
+  const [audioURL, setAudioURL] = useState('');
   const [watchDivHTML, setWatchDivHTML] = useState('');
 
   const [searchParams] = useSearchParams();
@@ -35,7 +36,11 @@ const WatchVid = () => {
     const fetchYoutube = async () => {
       await fetch(url)
         .then(res => res.json())
-        .then(data => setRealURL(data))
+        .then(data => {
+          setAllVideo(data[0]);
+          console.log(data[0]);
+          setAudioURL(data[1]);
+        })
     }
 
     if (local !== 1) {
@@ -51,15 +56,14 @@ const WatchVid = () => {
 
   useEffect(() => {
     setVidDisplay('inline-block')
-  }, [realURL])
+  }, [audioURL])
 
   useEffect(() => {
     setWatchDivHTML(
       <main className="main_video">
-        {realURL !== '' && <VideoPlayer videoUrl={realURL} audioUrl={realURL}/>}
+        {audioURL !== '' && <VideoPlayer allVideo={allVideo} audioUrl={audioURL}/>}
 
         <div className="video_div_download">
-          {console.log(realURL)}
           <a download href={`${API_BASE_URL}/api/youtube/download?url=${vid}`}>
             <input type="button" value="Download Video" className="form_download"/>
           </a>
@@ -69,7 +73,7 @@ const WatchVid = () => {
         </div>
       </main>
     )
-  },[realURL])
+  },[audioURL])
 
   return (
     <>
