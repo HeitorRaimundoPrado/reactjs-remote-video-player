@@ -12,17 +12,20 @@ const VideoPlayer = ({ videoUrl, audioUrl }) => {
   const [duration, setDuration] = useState(0);
 
   useEffect(() => {
-    if (Capacitor.getPlatform == "android") {
+    if (Capacitor.getPlatform() == "android") {
       const handleAppStateChange = (state) => {
-        if (state.active) {
-          videoRef.current.play()
-          audioRef.current.play();
-        }
+        if (videoRef.current !== null && videoRef.current !== undefined && audioRef.current !== null && audioRef.current != undefined) {
+          if (state.isActive) {
+            videoRef.current.play()
+            audioRef.current.play();
+          }
 
-        else {
-          videoRef.current.pause();
-          audioRef.current.play()
+          else {
+            videoRef.current.pause();
+            audioRef.current.play()
+          }
         }
+        console.log('state.isActive = ' + String(state.isActive))
       }
 
       App.addListener('appStateChange', handleAppStateChange);
