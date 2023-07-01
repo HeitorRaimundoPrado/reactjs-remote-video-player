@@ -1,5 +1,7 @@
 import { useState } from "react"
+import { Link } from "react-router-dom"
 import { API_BASE_URL } from "../constants"
+import '../style/LogIn.scss'
 
 const LogIn = (props) => {
   const [loginForm, setLoginForm] = useState({
@@ -35,22 +37,32 @@ const LogIn = (props) => {
   }
   return (
     <>
-      <form onSubmit={handleLogin}>
+    <h2>Login</h2>
+
+      <form onSubmit={handleLogin} className='login_form'>
+
         <input type="email"
                onChange={handleChange}
                text={loginForm.email}
                name="email"
-               placeholder="email"
-               value={loginForm.email}/> 
+               placeholder="Email"
+               value={loginForm.email} className='form_all_login'/> 
 
         <input type="password"
                onChange={handleChange}
                text={loginForm.password}
                name="password"
-               placeholder="password"
-               value={loginForm.password}/>  
+               placeholder="Password"
+               value={loginForm.password}
+               className="form_all_login"/>  
 
-        <button onClick={handleLogin}>Log In</button>
+        <button onClick={handleLogin} className="form_login">
+          Log In
+        </button>
+
+        <Link to='/signup' className='form_link_register'>
+          Don't have an account yet?
+        </Link>
       </form>
     </>
   )
