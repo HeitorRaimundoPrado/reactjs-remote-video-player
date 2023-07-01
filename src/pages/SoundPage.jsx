@@ -131,19 +131,18 @@ const playAudio = (nsrc, aud, setRepIdx, songIdx = null) => {
         const audioURL = URL.createObjectURL(blob);
 
         aud.current.src = audioURL;
+        aud.current.play();
       })
   }
 
   else {
     aud.current.src = nsrc;
+    aud.current.play();
   }
 
-  // console.log('guessed mimetype: ' + mimeType);
-  // aud.current.querySelector('source').type = mimeType;
-  aud.current.play();
 }
 
-const useFunctions = (audioRef) => {
+const useFunctions = (audioRef, baseUrl) => {
   const { replist, setReplist } = useContext(HandleReplistContext);
   const { repIdx, setRepIdx } = useContext(RepIdxContext);
 
@@ -151,7 +150,7 @@ const useFunctions = (audioRef) => {
     console.log(playlist.files);
     setReplist(playlist.files);
     setRepIdx(0);
-    playAudio(`${API_BASE_URL}/api/music/${playlist.files[0].file}`, audioRef, setRepIdx);
+    playAudio(`${baseUrl}/${playlist.files[0].file}`, audioRef, setRepIdx);
   }, [audioRef])
   
   const nextSong = useCallback(() => {
@@ -161,7 +160,8 @@ const useFunctions = (audioRef) => {
     console.log("replist.length = " + String(replist.length))
 
     if (repIdx + 1 < replist.length) {
-      playAudio(`${API_BASE_URL}/api/music/${replist[repIdx+1].file}`, audioRef, setRepIdx);
+      console.log(`${baseUrl}/${replist[repIdx+1].file}`)
+      playAudio(`${baseUrl}/${replist[repIdx+1].file}`, audioRef, setRepIdx);
       setRepIdx(repIdx+1);
     } else {
       setRepIdx(0);
@@ -170,12 +170,12 @@ const useFunctions = (audioRef) => {
 
   const previousSong = useCallback(() => {
     if (repIdx - 1 >= 0) {
-      playAudio(`${API_BASE_URL}/api/music/${replist[repIdx-1]}`, audioRef, setRepIdx);
+      playAudio(`${baseUrl}/${replist[repIdx-1].file}`, audioRef, repIdx, setRepIdx);
       setRepIdx(repIdx-1);
     } else {
       setRepIdx(0);
     }
-  }, [audioRef, replist, repIdx])
+  }, [audioRef, replist, repIdx, baseUrl])
 
   return {
     handlePlaylist, 
@@ -305,7 +305,7 @@ const SoundPage = () => {
   const addToPlaylistRef = useRef();
   const contextMenuRef = useRef();
 
-  const { handlePlaylist, nextSong, previousSong } = useFunctions(audioRef);
+  const { handlePlaylist, nextSong, previousSong } = useFunctions(audioRef, baseUrl);
 
   useEffect(() => {
     jQuery.get(`${API_BASE_URL}/api/playlists`, (playlists) => {
