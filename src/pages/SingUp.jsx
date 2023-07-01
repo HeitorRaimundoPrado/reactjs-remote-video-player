@@ -1,6 +1,8 @@
 import { API_BASE_URL } from '../constants.js'
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import jQuery from 'jquery';
+import '../style/SignUp.scss'
 
 
 const SingUp = () => {
@@ -32,11 +34,21 @@ const SingUp = () => {
   }
   return (
     <>
-      <form onSubmit={handleSignUpUser} id='login-form'>
-        <input type="text" placeholder="email" name="email" onChange={(e) => setEmail(e.target.value)}/* onChange={handleChange} *//>
-        <input type="text" name="name" placeholder="username" onChange={(e) => setUsername(e.target.value)}/* onChange={handleChange} *//>
-        <input type="password" name="password" onChange={(e) => setPassword(e.target.value)}/* onChange={handleChange} *//>
-        <input type="submit"/>
+      <h2>Register</h2>
+
+      <form onSubmit={handleSignUpUser} id='login-form' className='register_form'>
+
+        <input type="text" placeholder="Email" name="Email" onChange={(e) => setEmail(e.target.value)}/* onChange={handleChange} */ className='form_email form_all'/>
+
+        <input type="text" name="name" placeholder="Username" onChange={(e) => setUsername(e.target.value)}/* onChange={handleChange} */ className='form_user form_all'/>
+
+        <input type="password" name="password" placeholder='Password' onChange={(e) => setPassword(e.target.value)}/* onChange={handleChange} */ className='form_password form_all'/>
+
+        <input type="submit" className='form_signup'/>
+
+        <Link to='/login' className='form_link_login'>
+          Already have an account?
+        </Link>
       </form>
     </>
   )
