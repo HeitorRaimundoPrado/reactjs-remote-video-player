@@ -1,0 +1,12 @@
+.auth_container {
+  display: flex;
+  width: fit-content;
+  position: absolute;
+  right: 0;
+  margin-top: 20px;
+  a {
+    text-decoration: none;
+    margin-right: 10px;
+    color: #fff;
+  }
+}

@@ -256,7 +256,8 @@ const SoundPage = () => {
   const [baseUrl, setBaseUrl] = useState(`${API_BASE_URL}/api/music`);
   const [searchContent, setSearchContent] = useState('');
   const [allVideo, setAllVideo] = useState([]);
-  const [curSong, setCurSong] = useState("Not Playing")
+  const [curSong, setCurSong] = useState("Not Playing");
+  const [rendered, setRendered] = useState(false);
 
 
   const { replist, setReplist } = useContext(HandleReplistContext);
@@ -334,13 +335,15 @@ const SoundPage = () => {
   }, [])
 
   useEffect(() => {
-    let playlistsButtons = document.querySelectorAll('.playlist_button');
-    for (let i = 0; i < playlistsButtons.length; ++i) {
-      let randomColor = generateRandomColor();
-      let fgColor = getContrastingColor(randomColor);
-      playlistsButtons[i].style.backgroundColor = randomColor;
-      playlistsButtons[i].style.color = fgColor;
-    }
+    window.addEventListener('load', () => {
+      let playlistsButtons = document.querySelectorAll('.playlist_button');
+      for (let i = 0; i < playlistsButtons.length; ++i) {
+        let randomColor = generateRandomColor();
+        let fgColor = getContrastingColor(randomColor);
+        playlistsButtons[i].style.backgroundColor = randomColor;
+        playlistsButtons[i].style.color = fgColor;
+      }
+    })
   }, [])
   return (
     <>
@@ -434,6 +437,7 @@ const SoundPage = () => {
       <playlistContext.Provider value={[contextMenuSong, globalPlaylists, setGlobalPlaylists]}>
         <ContextMenu contextMenuRef={contextMenuRef}/>
       </playlistContext.Provider>
+      {setRendered}
     </>
   );
 }
