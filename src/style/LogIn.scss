@@ -1,0 +1,41 @@
+@use '../style/var';
+
+.login_form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20%;
+    .form_all_login {
+        height: 50px;
+        width: calc(70% + 50px);
+        padding-left: 10px;
+        margin-bottom: 20px;
+        outline: none;
+        border: none;
+        border-radius: 25px;
+        background-color: var.$c2;
+    }
+    .form_login {
+        height: 50px;
+        width: calc(70% + 50px);
+        border: none;
+        border-radius: 25px;
+        outline: none;
+        cursor: pointer;
+        font-size: 1.1em;
+        margin-bottom: 30px;
+        color: var.$c2;
+        background-color: var.$c4;
+        transition: .3s;
+    }
+    .form_login:hover {
+        background-color: var.$hover-c4;
+    }
+    .form_link_register {
+        font-size: 1.2em;
+        color: var.$c2;
+        transition: .3s;
+    }
+    .form_link_register:hover {
+        color: #fdfffccc;
+    }
+}
