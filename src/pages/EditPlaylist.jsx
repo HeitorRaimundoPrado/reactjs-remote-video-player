@@ -5,33 +5,34 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import jQuery from "jquery";
 
 const EditPlaylist = () => {
-  const [playlist, setPlaylist] = useState([]);
+  const [playlistSongs, setPlaylistSongs] = useState([]);
+  const [playlistName, setPlaylistName] = useState('');
   const [searchParams] = useSearchParams();
-  const playlistFile = searchParams.get('playlist')
+  const playlistId = searchParams.get('playlist')
 
   const handleOnDragEnd = (result) => {
     if (!result.destination) {
       return;
     }
 
-    const items = Array.from(playlist);
+    const items = Array.from(playlistSongs);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
-    setPlaylist(items);
+    setPlaylistSongs(items);
   }
 
-  const items = Array.from(playlist)
   useEffect(() => {
     const fetchPlaylist = async () => {
-      fetch(`${API_BASE_URL}/api/playlists/${playlistFile}`)
+      fetch(`${API_BASE_URL}/api/playlists/${playlistId}`)
         .then(resp => resp.json())
         .then(data => {
-          let ndata = [];
-          for (let i = 0; i < data.length; ++i) {
-            if (data[i] != '')
-            ndata.push([data[i], String(i)]);
+          let songs = [];
+          for (let i = 0; i < data.files.length; ++i) {
+            songs.push(data.files[i]);
           }
-          setPlaylist(ndata);
+
+          setPlaylistSongs(songs);
+          setPlaylistName(data.name);
         });
     }
     fetchPlaylist();
@@ -39,31 +40,29 @@ const EditPlaylist = () => {
   }, [])
 
   const handleDeleteSong = (songIdx) => {
-    const playlistCopy = Array.from(playlist);
+    const playlistCopy = Array.from(playlistSongs);
 
     const idxToRemove = playlistCopy.findIndex((element) => {
-      return element[1] === songIdx;
+      return element.id === songIdx;
     })
     
     console.log(idxToRemove);
-    console.log(playlist);
+    console.log(playlistSongs);
     playlistCopy.splice(idxToRemove, 1);
-    setPlaylist(playlistCopy);
+    setPlaylistSongs(playlistCopy);
 
   }
   
   const handleSubmit = (e) => {
     e.preventDefault();
-    let str = '';
-    for (let i = 0; i < playlist.length; i++) {
-      str += playlist[i][0] + '\n';
-    }
 
-    const file = new Blob([str], {type: "text/plain"});
     var fd = new FormData();
 
-    fd.append('file', file);
-    fd.append('filename', playlistFile);
+    fd.append('files', JSON.stringify(playlistSongs));
+    fd.append('name', playlistName);
+
+    fetch(`${API_BASE_URL}/api/delete/playlist?` + new URLSearchParams({playlist: playlistId}))
+      .then(data => console.log(data));
 
     jQuery.ajax({
       type: "POST",
@@ -78,17 +77,18 @@ const EditPlaylist = () => {
   
   return (
     <>
-      <h1>{playlistFile}</h1>
+      <h1>{playlistName}</h1>
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <Droppable droppableId="playlist">
           {(provided) => (
             <ul className="playlist" id="playlist" {...provided.droppableProps} ref={provided.innerRef}>
-              {playlist.map(([song, idx], index) => {
+              {playlistSongs.map((song, index) => {
                 return (
-                  <Draggable draggableId={idx} key={idx} index={index}>
+                  <Draggable draggableId={String(song.id)} key={song.id} index={index}>
                     {(providedDraggable) => (
-                      <li ref={providedDraggable.innerRef} {...providedDraggable.draggableProps} {...providedDraggable.dragHandleProps}>{song} 
-                        <button type="button" onClick={() => handleDeleteSong(String(idx))}>delete</button>
+                      <li ref={providedDraggable.innerRef} {...providedDraggable.draggableProps} {...providedDraggable.dragHandleProps} key={song.id}> 
+                        {song.name}
+                        <button type="button" onClick={() => handleDeleteSong(String(song.id))}>delete</button>
                       </li>
                     )}
                   </Draggable>

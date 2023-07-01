@@ -36,7 +36,7 @@ const ContextMenu = (props) => {
   
   return (
     <div ref={contextMenuRef} style={{display: "none", flexDirection: "column", width: "90px"}}>
-      <a href={`/edit-playlist?playlist=${playlist}`}><button type="button">Edit Playlist</button></a>
+      <a href={`/edit-playlist?playlist=${playlist.id}`}><button type="button">Edit Playlist</button></a>
       <button onClick={handleDeletePlaylist}>Delete Playlist</button>
     </div>
   )

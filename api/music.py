@@ -147,14 +147,8 @@ def get_all_playlists():
     from __init__ import db
 
     all_playlists = Playlist.query.all()
-    for play in all_playlists:
-        print('play.files:')
-        print(type(play.files))
-            # print(file)
-        print()
 
     a = [{'id': playlist.id, 'name': playlist.name, 'files': [{'name': file.name, 'file': file.file, 'id': file.id, 'artist': file.artist} for file in playlist.files]} for playlist in all_playlists]
-    print(str(a))
     return a
 
 # uploads an audio file
@@ -204,6 +198,14 @@ def upload_music_file():
         os.remove(os.path.join(temp_dir, filename))
 
     return {}
+@bp.route('/api/playlists/<int:id>')
+def get_playlist(id: int):
+    from models import Playlist
+
+    play = Playlist.query.filter_by(id=id).first()
+
+    a = {'id': play.id, 'name': play.name, 'files': [{'name': file.name, 'file': file.file, 'id': file.id, 'artist': file.artist} for file in play.files]}
+    return a
 
 # uploads a text playlist
 @bp.route('/api/upload/playlist/', methods=["POST"])
