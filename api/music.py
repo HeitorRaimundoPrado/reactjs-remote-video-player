@@ -30,7 +30,7 @@ def delete_song(id: int):
     if private:
         private_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'private')
 
-        from models import User
+        from models import User, File
         
         user_email = get_jwt_identity()
         user = User.query.filter_by(email=user_email).first()
@@ -38,6 +38,15 @@ def delete_song(id: int):
         user_dir = os.path.join(private_dir, str(user.id))
 
         file_path = os.path.join(user_dir, filename)
+
+        f_to_del = File.query.filter_by(id=id).first()
+        if f_to_del.user_own != user:
+            return {}, 401
+
+        from __init__ import db
+
+        db.session.delete(f_to_del)
+        db.session.commit()
 
     else:
         music_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'music')
@@ -66,7 +75,7 @@ def delete_private_file(filename: str):
 def get_all_music():
     from models import File
 
-    all_songs = File.query.all()
+    all_songs = File.query.filter_by(user_own=None).all()
     ret = list()
     print("\nall songs: " + str(all_songs) + '\n\n')
 
@@ -153,6 +162,7 @@ def get_all_playlists():
 
 # uploads an audio file
 @bp.route('/api/upload/music/', methods=["POST"])
+@jwt_required(True)
 def upload_music_file():
 
     private = request.form.get('private')
@@ -198,6 +208,7 @@ def upload_music_file():
         os.remove(os.path.join(temp_dir, filename))
 
     return {}
+
 @bp.route('/api/playlists/<int:id>')
 def get_playlist(id: int):
     from models import Playlist
@@ -254,10 +265,5 @@ def get_private_files():
 
     from models import User
     user = User.query.filter_by(email=user_email).first()
-
-    all_private_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'private') 
-    user_dir = os.path.join(all_private_dir, str(user.id))
-
-    print("\n\nuser_dir = " + str(os.listdir(user_dir)) + "\n\n")
-
-    return jsonify(os.listdir(user_dir)), 200
+    
+    return [{'name': file.name, 'id':file.id, 'artist': file.artist, 'file': file.file} for file in user.private_files]

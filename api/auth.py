@@ -37,9 +37,9 @@ def signup_user():
 
 @bp.route('/api/auth/token', methods=["POST"])
 def create_token():
+    print(request.get_json())
     email = request.get_json().get('email', None)
     password = request.get_json().get('password', None)
-    print(request.form)
 
     if email is None or password is None:
         return {}
@@ -47,6 +47,10 @@ def create_token():
     access_token = create_access_token(identity=email)
 
     user = User.query.filter_by(email=email).first()
+    all_users = User.query.all()
+    print(all_users)
+    print(all_users[0].email)
+    print(user)
 
     if not user or not check_password_hash(user.password, password):
         return ['denied']

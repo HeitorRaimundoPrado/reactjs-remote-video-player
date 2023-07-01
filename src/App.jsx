@@ -47,7 +47,7 @@ function App() {
 
   return (
     <>
-      <AuthLinks/>
+      <AuthLinks removeToken={removeToken}/>
       
       <HandleReplistContext.Provider value={{ replist, setReplist }}>
         <RepIdxContext.Provider value={{ repIdx, setRepIdx }}>

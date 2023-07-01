@@ -15,7 +15,7 @@ def create_app(debug=False):
         UPLOAD_DIRECTORY=os.path.join(app.instance_path, UPLOAD_DIRECTORY),
         JWT_SECRET_KEY='change-in-deployment',
         # JWT_TOKEN_LOCATION=['cookies'],
-        JWT_ACESS_TOKEN_EXPIRES=False,
+        JWT_ACESS_TOKEN_EXPIRES=timedelta(hours=24),
         SQLALCHEMY_DATABASE_URI='sqlite:///db.sqlite'
         )
 

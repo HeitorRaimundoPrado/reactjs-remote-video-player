@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, url_for, request, session, current_app
 import os
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import get_jwt_identity, jwt_required
 from werkzeug.utils import secure_filename
 
 bp = Blueprint('upload', __name__)
@@ -11,24 +11,13 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @bp.route('/api/upload', methods=["POST"])
+@jwt_required(True)
 def upload_file():
-
     private = request.form.get('private')
     private = 0 if private is None else int(private)
 
     song_name = str(request.form.get('song_name'))
     artist = str(request.form.get('artist'))
-
-    access_token = None
-    print('private == ' + str(private))
-
-    if private != 0:
-        auth_header = request.headers.get('Authorization')
-        print('entering if private != 0')
-        if not auth_header:
-            return 'Unauthorized', 401
-
-        access_token = auth_header.split()[1]
 
 
     if 'file' not in request.files:
@@ -52,9 +41,21 @@ def upload_file():
     temp_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'temp')
     file.save(os.path.join(temp_dir, filename))
             
+    from models import User, File
+    user_email = get_jwt_identity()
+    print('user_email = ')
+    print(user_email)
 
-    from models import File
-    n_file = File(name=song_name, file=filename, artist=artist)
+    cur_user = User.query.filter_by(email=user_email).first()
+
+    print('cur user = ')
+    print(cur_user)
+    if cur_user is None:
+        return {}, 401
+
+    n_file = File(name=song_name, file=filename, artist=artist, private=private, user_own=cur_user.id)
+    cur_user.private_files.append(n_file)
+
     from __init__ import db
     db.session.add(n_file)
     db.session.commit()
@@ -66,8 +67,8 @@ def upload_file():
     else:
         response = redirect(url_for('music.upload_music_file', private=private, file_name=filename), code=307)
 
-    if private != 0 and access_token is not None:
-        response.headers['Authorization'] = 'Bearer ' + access_token
+    if 'Authorization' in request.headers:
+        response.headers['Authorization'] = str(request.headers.get('Authorization'))
 
     return response
 
