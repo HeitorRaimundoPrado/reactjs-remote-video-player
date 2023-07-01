@@ -257,7 +257,6 @@ const SoundPage = () => {
   const [searchContent, setSearchContent] = useState('');
   const [allVideo, setAllVideo] = useState([]);
   const [curSong, setCurSong] = useState("Not Playing");
-  const [rendered, setRendered] = useState(false);
 
 
   const { replist, setReplist } = useContext(HandleReplistContext);
@@ -437,7 +436,6 @@ const SoundPage = () => {
       <playlistContext.Provider value={[contextMenuSong, globalPlaylists, setGlobalPlaylists]}>
         <ContextMenu contextMenuRef={contextMenuRef}/>
       </playlistContext.Provider>
-      {setRendered}
     </>
   );
 }
