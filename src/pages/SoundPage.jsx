@@ -14,6 +14,23 @@ import '../style/SoundPage.scss'
 import jQuery from "jquery";
 
 const DataContext = createContext();
+const generateRandomColor = () => {
+  const color = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+  return color;
+};
+
+const getContrastingColor = (color) => {
+  // Convert the color to RGB
+  const r = parseInt(color.substr(1, 2), 16);
+  const g = parseInt(color.substr(3, 2), 16);
+  const b = parseInt(color.substr(5, 2), 16);
+
+  // Calculate the relative luminance
+  const relativeLuminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+
+  // Return either black or white based on the luminance
+  return relativeLuminance > 0.5 ? '#000000' : '#ffffff';
+};
 
 const handleDeleteSong = (songs, setSongs, baseUrl, idx) => {
   const deleteSong = async () => {
@@ -49,9 +66,11 @@ const Files = (props) => {
           <button onClick={() => handleDeleteSong(data, setData, baseUrl, idx)} className='delete_music'>
             Delete
           </button>
-          <button onClick={() => handleAddToPlaylist(item, addToPlaylistRef, setAddToPlaylistSong, setRepIdx, idx)} className='add_music_playlist'>
-            Add To Playlist
-          </button>
+          <a href="#add_to_playlist_container" className='add_music_playlist'>
+            <button onClick={() => handleAddToPlaylist(item, addToPlaylistRef, setAddToPlaylistSong, setRepIdx, idx)} >
+              Add To Playlist
+            </button>
+          </a>
         </li>
         )
       })}
@@ -314,6 +333,15 @@ const SoundPage = () => {
       .then(data => setAllVideo(data))
   }, [])
 
+  useEffect(() => {
+    let playlistsButtons = document.querySelectorAll('.playlist_button');
+    for (let i = 0; i < playlistsButtons.length; ++i) {
+      let randomColor = generateRandomColor();
+      let fgColor = getContrastingColor(randomColor);
+      playlistsButtons[i].style.backgroundColor = randomColor;
+      playlistsButtons[i].style.color = fgColor;
+    }
+  }, [])
   return (
     <>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
@@ -336,7 +364,7 @@ const SoundPage = () => {
 
           {globalPlaylists.map((playlist) => {
             return (
-              <button onContextMenu={(e) => {
+              <button className="playlist_button" onContextMenu={(e) => {
                 handlePlaylistContextMenu(e, playlist, contextMenuRef, setContextMenuSong)}}
                 onClick={() => handlePlaylist(playlist)}>
                 {playlist.name}
@@ -394,11 +422,13 @@ const SoundPage = () => {
                    curSong={curSong}/>
 
 
-      <div ref={addToPlaylistRef} style={{display: 'none', marginBottom: '200px'}} className="add_to_playlist_container">
+      <div id="add_to_playlist_container" ref={addToPlaylistRef} style={{display: 'none', marginBottom: '200px'}} className="add_to_playlist_container">
         <h2>Add To Playlist:</h2>
-        { globalPlaylists.map((playlist) => {
-          return <button onClick={() => handleChangePlaylist(playlist, addToPlaylistSong, addToPlaylistRef)}>{playlist.name}</button>
-        })}
+        <ul>
+          { globalPlaylists.map((playlist) => {
+            return <li><button onClick={() => handleChangePlaylist(playlist, addToPlaylistSong, addToPlaylistRef)} className="playlist_button">{playlist.name}</button></li>
+          })}
+        </ul>
       </div>
 
       <playlistContext.Provider value={[contextMenuSong, globalPlaylists, setGlobalPlaylists]}>
