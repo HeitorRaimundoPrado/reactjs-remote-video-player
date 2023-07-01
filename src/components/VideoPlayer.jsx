@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { App } from '@capacitor/app'
 import { Capacitor } from '@capacitor/core';
+import '../style/VideoPlayer.scss'
 
 const ResolutionSelector = ({allResRef, allVideo, setVideoUrl, videoRef, audioRef}) => {
   const handleSelectResolution = (res) => {
@@ -31,6 +32,7 @@ const VideoPlayer = ({ allVideo, audioUrl }) => {
   const [duration, setDuration] = useState(0);
 
   const allResRef = useRef();
+  const videoContainerRef = useRef();
 
 
   useEffect(() => {
@@ -102,7 +104,7 @@ const VideoPlayer = ({ allVideo, audioUrl }) => {
 
   const handleFullscreen = () => {
     if (!document.fullscreenElement) {
-      videoRef.current.requestFullscreen();
+      videoContainerRef.current.requestFullscreen();
     } else {
       if (document.exitFullscreen) {
         document.exitFullscreen();
@@ -129,37 +131,39 @@ const VideoPlayer = ({ allVideo, audioUrl }) => {
   }
 
   return (
-    <div>
+    <div className="video-player-container" ref={videoContainerRef}>
       <video ref={videoRef} src={videoUrl}></video>
-      <audio ref={audioRef} src={audioUrl}></audio>
-      <button onClick={handlePlayPause}>{isPlaying() ? 'Pause' : 'Play'}</button>
-      <button onClick={handleFullscreen}>{isFullscreen() ? 'Exit Fullscreen' : 'Fullscreen'}</button>
-      <button type="button" onClick={() => allResRef.current.style.display = 'flex'}>Resolutions</button>
-      <input
-        type="range"
-        min="0"
-        max={duration}
-        step="0.1"
-        value={currentTime}
-        onChange={handleSeek}
-      />
-
-      <input
-        type="range"
-        min="0"
-        max="1"
-        step="0.1"
-        value={volume}
-        onChange={handleVolumeChange}
-      />
-      <ResolutionSelector 
-        allVideo={allVideo} 
-        allResRef={allResRef}
-        setVideoUrl={setVideoUrl}
-        audioRef={audioRef}
-        videoRef={videoRef}
-        setCurrentTime={setCurrentTime}
+      <div className="video-controls">
+        <audio ref={audioRef} src={audioUrl}></audio>
+        <button onClick={handlePlayPause}>{isPlaying() ? 'Pause' : 'Play'}</button>
+        <button onClick={handleFullscreen}>{isFullscreen() ? 'Exit Fullscreen' : 'Fullscreen'}</button>
+        <button type="button" onClick={() => allResRef.current.style.display = 'flex'}>Resolutions</button>
+        <input
+          type="range"
+          min="0"
+          max={duration}
+          step="0.1"
+          value={currentTime}
+          onChange={handleSeek}
         />
+
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.1"
+          value={volume}
+          onChange={handleVolumeChange}
+        />
+        <ResolutionSelector 
+          allVideo={allVideo} 
+          allResRef={allResRef}
+          setVideoUrl={setVideoUrl}
+          audioRef={audioRef}
+          videoRef={videoRef}
+          setCurrentTime={setCurrentTime}
+          />
+      </div>
     </div>
   );
 };

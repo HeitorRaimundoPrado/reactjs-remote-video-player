@@ -1,0 +1,18 @@
+.video-player-container {
+  position: relative;
+  display: flex;
+  video {
+    position: relative;
+    z-index: 1;
+  }
+
+  .video-controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+    z-index: 2;
+  }
+}
