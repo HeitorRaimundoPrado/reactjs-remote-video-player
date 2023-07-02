@@ -11,7 +11,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @bp.route('/api/upload', methods=["POST"])
-@jwt_required(True)
+@jwt_required(optional=True)
 def upload_file():
     private = request.form.get('private')
     private = 0 if private is None else int(private)
@@ -41,20 +41,24 @@ def upload_file():
     temp_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'temp')
     file.save(os.path.join(temp_dir, filename))
             
-    from models import User, File
-    user_email = get_jwt_identity()
-    print('user_email = ')
-    print(user_email)
+    if private:
+        from models import User, File
+        user_email = get_jwt_identity()
+        print('user_email = ')
+        print(user_email)
 
-    cur_user = User.query.filter_by(email=user_email).first()
+        cur_user = User.query.filter_by(email=user_email).first()
 
-    print('cur user = ')
-    print(cur_user)
-    if cur_user is None:
-        return {}, 401
+        print('cur user = ')
+        print(cur_user)
 
-    n_file = File(name=song_name, file=filename, artist=artist, private=private, user_own=cur_user.id)
-    cur_user.private_files.append(n_file)
+        n_file = File(name=song_name, file=filename, artist=artist, private=private, user_own=cur_user.id)
+
+        cur_user.private_files.append(n_file)
+
+    else:
+        from models import File
+        n_file = File(name=song_name, file=filename, artist=artist, private=private, user_own=None)
 
     from __init__ import db
     db.session.add(n_file)
