@@ -304,6 +304,7 @@ const SoundPage = () => {
   const audioRef = useRef();
   const addToPlaylistRef = useRef();
   const contextMenuRef = useRef();
+  const playlistsButtonsRef = useRef([]);
 
   const { handlePlaylist, nextSong, previousSong } = useFunctions(audioRef, baseUrl);
 
@@ -334,16 +335,20 @@ const SoundPage = () => {
   }, [])
 
   useEffect(() => {
-    window.addEventListener('load', () => {
-      let playlistsButtons = document.querySelectorAll('.playlist_button');
-      for (let i = 0; i < playlistsButtons.length; ++i) {
-        let randomColor = generateRandomColor();
-        let fgColor = getContrastingColor(randomColor);
-        playlistsButtons[i].style.backgroundColor = randomColor;
-        playlistsButtons[i].style.color = fgColor;
-      }
+    console.log('buttonsRef -> ' + playlistsButtonsRef.current + '\nbuttonRef.length - > ' + playlistsButtonsRef.current.length);
+    for (let i = 0; i < playlistsButtonsRef.current.length; ++i) {
+      const buttonRef = playlistsButtonsRef.current[i];
+      let randomColor = generateRandomColor();
+      let fgColor = getContrastingColor(randomColor);
+      buttonRef.style.backgroundColor = randomColor;
+      buttonRef.style.color = fgColor;
+    }
+    playlistsButtonsRef.current.forEach((buttonRef, index) => {
+      console.log(index)
     })
-  }, [])
+    console.log('inside useEffect')
+  }, [playlistsButtonsRef.current.length])
+   
   return (
     <>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
@@ -364,11 +369,12 @@ const SoundPage = () => {
         <div className='playlists_container'>
           <h3>Playlists</h3>
 
-          {globalPlaylists.map((playlist) => {
+          {globalPlaylists.map((playlist, index) => {
             return (
               <button className="playlist_button" onContextMenu={(e) => {
                 handlePlaylistContextMenu(e, playlist, contextMenuRef, setContextMenuSong)}}
-                onClick={() => handlePlaylist(playlist)}>
+                onClick={() => handlePlaylist(playlist)}
+                ref={(ref) => (playlistsButtonsRef.current[index] = ref) }>
                 {playlist.name}
               </button>
             )
@@ -427,8 +433,12 @@ const SoundPage = () => {
       <div id="add_to_playlist_container" ref={addToPlaylistRef} style={{display: 'none', marginBottom: '200px'}} className="add_to_playlist_container">
         <h2>Add To Playlist:</h2>
         <ul>
-          { globalPlaylists.map((playlist) => {
-            return <li><button onClick={() => handleChangePlaylist(playlist, addToPlaylistSong, addToPlaylistRef)} className="playlist_button">{playlist.name}</button></li>
+          { globalPlaylists.map((playlist, index) => {
+            return <li>
+              <button ref={(ref) => (playlistsButtonsRef.current[globalPlaylists.length + index] = ref)}onClick={() => handleChangePlaylist(playlist, addToPlaylistSong, addToPlaylistRef)} className="playlist_button">
+                {playlist.name}
+              </button>
+            </li>
           })}
         </ul>
       </div>
