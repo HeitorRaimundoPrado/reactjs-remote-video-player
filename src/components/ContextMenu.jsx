@@ -2,6 +2,7 @@ import { useContext, useEffect } from "react";
 import playlistContext from '../contexts/PlaylistContext.jsx'
 import jQuery from "jquery"
 import { API_BASE_URL } from "../constants.js";
+import '../style/ContextMenu.scss'
 
 const ContextMenu = (props) => {
 
@@ -35,9 +36,9 @@ const ContextMenu = (props) => {
   }
   
   return (
-    <div ref={contextMenuRef} style={{display: "none", flexDirection: "column", width: "90px"}}>
-      <a href={`/edit-playlist?playlist=${playlist.id}`}><button type="button">Edit Playlist</button></a>
-      <button onClick={handleDeletePlaylist}>Delete Playlist</button>
+    <div className="playlist-context-menu" ref={contextMenuRef} style={{display: "none", flexDirection: "column", width: "90px"}}>
+      <a href={`/edit-playlist?playlist=${playlist.id}`}><button className="edit-playlist-button" type="button">Edit Playlist</button></a>
+      <button className="delete-playlist-button" onClick={handleDeletePlaylist}>Delete Playlist</button>
     </div>
   )
 }

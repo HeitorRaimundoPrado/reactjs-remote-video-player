@@ -1,0 +1,25 @@
+.playlist-context-menu {
+  background-color: #000;
+  width: calc(fit-content + 5px);
+  height: fit-content;
+  border: solid 1px #747575;
+
+  button {
+    padding: 2px;
+    background-color: #000;
+    border: none;
+    color: #fff;
+    margin: none;
+  }
+
+  .delete-playlist-button {
+    border-top-width: 1px;
+    border-color: #747575;
+    border-style: solid;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+  }
+
+
+}
