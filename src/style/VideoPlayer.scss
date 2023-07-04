@@ -1,3 +1,5 @@
+@use './var';
+
 .video-player-container {
   position: relative;
   display: flex;
@@ -8,11 +10,100 @@
 
   .video-controls {
     position: absolute;
+    display: flex;
     bottom: 0;
     left: 0;
     width: 100%;
+    height: fit-content;
     background-color: rgba(0, 0, 0, 0.5);
     box-sizing: border-box;
     z-index: 2;
+    justify-content: space-between;
+    align-items: center;
+    
+    .video_pause {
+      outline: none;
+      border: none;
+      margin: 0px 25px;
+      background: none;
+      cursor: pointer;
+      span {
+          font-size: 2.5em;
+          color: var.$c2;
+      }
+    }
+
+    .video_resolution_show {
+      outline: none;
+      border: none;
+      margin: 0px 25px;
+      background: none;
+      cursor: pointer;
+      span {
+          font-size: 2.5em;
+          color: var.$c2;
+      }
+    }
+
+    .video_fullscreen {
+      outline: none;
+      border: none;
+      margin: 0px 25px;
+      background: none;
+      cursor: pointer;
+      span {
+          font-size: 2.5em;
+          color: var.$c2;
+      }
+    }
+
+    .video_seek {
+      width: 97%;
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+      margin-left: 1.5%;
+      overflow: hidden;
+      outline: none;
+      position: absolute;
+      top: -10px;
+      margin-bottom: 3px;
+    }
+    .video_seek::-webkit-slider-runnable-track {
+      height: 3px;
+      /*border-radius: 25px;*/
+      background-color: var.$transparent-c2;
+    }
+    .video_seek::-webkit-slider-thumb {
+      height: 3px;
+      width: 10px;
+      -webkit-appearance: none;
+      appearance: none;
+      /*border-radius: 25px;*/
+      background-color: var.$c2;
+      box-shadow: -407px 0 0 400px var.$c2;
+    }
+
+    .controls_right {
+      display: flex;
+      align-items: center;
+      justify-content: right;
+    }
+
+    .resolution_selector {
+      position: absolute;
+      right: 100px;
+      bottom: 40px;
+      width: 50px;
+      display: flex;
+      flex-direction: column;
+      button {
+        background-color: rgba(0, 0, 0, 0.75);
+        border: none;
+        color: #fff; 
+        height: 1.5rem;
+      }
+    }
   }
 }
