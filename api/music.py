@@ -23,9 +23,8 @@ bp = Blueprint('music', __name__)
 def delete_song(id: int):
     private = request.args.get('private')
     private = 0 if private is None else int(private)
-    filename = request.args.get('filename')
-    if filename is None:
-        return '', 404
+    from models import File
+    filename = File.query.filter_by(id=id).first().file
 
     if private:
         private_dir = os.path.join(current_app.config['UPLOAD_DIRECTORY'], 'private')
@@ -80,7 +79,7 @@ def get_all_music():
     print("\nall songs: " + str(all_songs) + '\n\n')
 
     for song in all_songs:
-        ret.append(dict({'name': song.name,'file': song.file,'artist': song.artist}))
+        ret.append(dict({'id': song.id, 'name': song.name,'file': song.file,'artist': song.artist}))
 
     return ret
 
