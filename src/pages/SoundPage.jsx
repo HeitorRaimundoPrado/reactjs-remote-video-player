@@ -348,6 +348,12 @@ const SoundPage = () => {
     })
     console.log('inside useEffect')
   }, [playlistsButtonsRef.current.length])
+
+  const addToPlaylistsButtonsRef = (node) => {
+    if (node && !playlistsButtonsRef.current.includes(node)) {
+      playlistsButtonsRef.current.push(node);
+    }
+  }
    
   return (
     <>
@@ -374,7 +380,7 @@ const SoundPage = () => {
               <button className="playlist_button" onContextMenu={(e) => {
                 handlePlaylistContextMenu(e, playlist, contextMenuRef, setContextMenuSong)}}
                 onClick={() => handlePlaylist(playlist)}
-                ref={(ref) => (playlistsButtonsRef.current[index] = ref) }>
+                ref={addToPlaylistsButtonsRef}>
                 {playlist.name}
               </button>
             )
@@ -435,7 +441,7 @@ const SoundPage = () => {
         <ul>
           { globalPlaylists.map((playlist, index) => {
             return <li>
-              <button ref={(ref) => (playlistsButtonsRef.current[globalPlaylists.length + index] = ref)}onClick={() => handleChangePlaylist(playlist, addToPlaylistSong, addToPlaylistRef)} className="playlist_button">
+              <button ref={addToPlaylistsButtonsRef}onClick={() => handleChangePlaylist(playlist, addToPlaylistSong, addToPlaylistRef)} className="playlist_button">
                 {playlist.name}
               </button>
             </li>
