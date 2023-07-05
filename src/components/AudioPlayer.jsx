@@ -24,7 +24,11 @@ const AudioPlayer = ({ src, audRef, nextSong, previousSong, curSong}) => {
     setDuration(audRef.current.duration);
     CapacitorMusicControls.create({
       track: curSong,
-    });
+      hasSkipForward: true,
+      hasSkipBackward: true,
+    })
+    .then()
+    .catch();
   };
 
   const handleTimeUpdate = () => {

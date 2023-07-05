@@ -15,7 +15,7 @@ const ResolutionSelector = ({allResRef, allVideo, setVideoUrl, videoRef, audioRe
 
   }
 
-  return <div ref={allResRef} style={{display: "none"}}>
+  return <div className="resolution_selector" ref={allResRef} style={{display: "none"}}>
     {console.log("inside resolution selector")}
     {allVideo.map((res) => {
       return <button key={res.url} onClick={() => handleSelectResolution(res)}>{res.resolution}</button>
@@ -139,19 +139,10 @@ const VideoPlayer = ({ allVideo, audioUrl }) => {
       <div className="video-controls">
         <audio ref={audioRef} src={audioUrl}></audio>
 
-        <button onClick={handlePlayPause}>
-          {isPlaying() ? 'Pause' : 'Play'}
+        <button className="video_pause" onClick={handlePlayPause}>
+          {isPlaying() ? <span className="material-symbols-outlined">pause</span> : <span className="material-symbols-outlined">play_arrow</span>}
         </button>
-
-        <button onClick={handleFullscreen}>
-          {isFullscreen() ? 'Exit Fullscreen' : 'Fullscreen'}
-        </button>
-
-        <button type="button" onClick={() => allResRef.current.style.display = 'flex'}>
-          Resolutions
-        </button>
-        
-        <input
+        <input className="video_seek"
           type="range"
           min="0"
           max={duration}
@@ -160,14 +151,27 @@ const VideoPlayer = ({ allVideo, audioUrl }) => {
           onChange={handleSeek}
         />
 
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.1"
-          value={volume}
-          onChange={handleVolumeChange}
-        />
+        <div className="controls_right">
+          <button className="video_resolution_show" type="button" 
+            onClick={() => {
+            allResRef.current.style.display === 'flex' ? allResRef.current.style.display = 'none' : allResRef.current.style.display = 'flex';
+            }}>
+            <span className="material-symbols-outlined">settings</span>
+          </button>
+
+          <button className="video_fullscreen" onClick={handleFullscreen}>
+            {isFullscreen() ? <span className="material-symbols-outlined">fullscreen_exit</span> : <span className="material-symbols-outlined">fullscreen</span>}
+          </button>
+        </div>
+
+        {/* <input */}
+        {/*   type="range" */}
+        {/*   min="0" */}
+        {/*   max="1" */}
+        {/*   step="0.1" */}
+        {/*   value={volume} */}
+        {/*   onChange={handleVolumeChange} */}
+        {/* /> */}
         <ResolutionSelector 
           allVideo={allVideo} 
           allResRef={allResRef}
