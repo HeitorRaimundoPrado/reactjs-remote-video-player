@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useEffect, useRef, useState } from 'react';
 import { App } from '@capacitor/app'
 import { Capacitor } from '@capacitor/core';
@@ -132,9 +133,12 @@ const VideoPlayer = ({ allVideo, audioUrl }) => {
 
   return (
     <div className="video-player-container" ref={videoContainerRef}>
+
       <video ref={videoRef} src={videoUrl}></video>
+
       <div className="video-controls">
         <audio ref={audioRef} src={audioUrl}></audio>
+
         <button className="video_pause" onClick={handlePlayPause}>
           {isPlaying() ? <span className="material-symbols-outlined">pause</span> : <span className="material-symbols-outlined">play_arrow</span>}
         </button>

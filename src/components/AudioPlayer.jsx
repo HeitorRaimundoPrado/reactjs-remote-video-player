@@ -76,10 +76,12 @@ const AudioPlayer = ({ src, audRef, nextSong, previousSong, curSong}) => {
 
   return (
     <div className='container_music'>
+
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
       <audio onLoadedData={handleLoadedData} onTimeUpdate={handleTimeUpdate} src="" ref={audRef} onEnded={() => {nextSong(); setCurrentTime(0)}} style={{display: 'none'}}></audio>
 
-      <div>
+      <div className='music_name'>
         {curSong}
       </div>
       <div className='music_control_display'>
