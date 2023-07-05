@@ -1,0 +1,47 @@
+@use './var';
+
+.edit_container {
+    .edit_container_ul {
+        width: 100%;
+        margin-top: 20%;
+        .container_li {
+            height: 50px;
+            width: calc(70% + 50px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0px auto 15px auto;
+            border: none;
+            font-size: 0.8em;
+            outline: none;
+            border-radius: 25px;
+            padding: 0px 10px 0px 15px;
+            background-color: var.$transparent-music-c2;
+            color: var.$c2;
+            cursor: pointer;
+            list-style: none;
+            .button_remove_song {
+                height: 35px;
+                width: 70px;
+                border: none;
+                border-radius: 25px;
+                color: white;
+                background-color: var.$c4;
+                outline: none;
+            }
+        }
+    }
+    .save_edit_form {
+        button {
+            height: 50px;
+			width: calc(70% + 50px);
+			margin-top: 20px;
+			border: none;
+			border-radius: 25px;
+			outline: none;
+			cursor: pointer;
+			font-size: 1.1em;
+			margin-bottom: 70px;
+        }
+    }
+}

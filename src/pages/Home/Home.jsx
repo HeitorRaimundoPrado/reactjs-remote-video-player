@@ -6,6 +6,9 @@ import '../../style/_global.scss';
 export default function Home() {
     return (
         <>
+            <header>
+                
+            </header>
             <main>
                 <header>
                     <h2>About</h2>

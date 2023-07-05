@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useEffect, useRef, useState } from 'react';
 import { App } from '@capacitor/app'
 import { Capacitor } from '@capacitor/core';
@@ -132,12 +133,24 @@ const VideoPlayer = ({ allVideo, audioUrl }) => {
 
   return (
     <div className="video-player-container" ref={videoContainerRef}>
+
       <video ref={videoRef} src={videoUrl}></video>
+
       <div className="video-controls">
         <audio ref={audioRef} src={audioUrl}></audio>
-        <button onClick={handlePlayPause}>{isPlaying() ? 'Pause' : 'Play'}</button>
-        <button onClick={handleFullscreen}>{isFullscreen() ? 'Exit Fullscreen' : 'Fullscreen'}</button>
-        <button type="button" onClick={() => allResRef.current.style.display = 'flex'}>Resolutions</button>
+
+        <button onClick={handlePlayPause}>
+          {isPlaying() ? 'Pause' : 'Play'}
+        </button>
+
+        <button onClick={handleFullscreen}>
+          {isFullscreen() ? 'Exit Fullscreen' : 'Fullscreen'}
+        </button>
+
+        <button type="button" onClick={() => allResRef.current.style.display = 'flex'}>
+          Resolutions
+        </button>
+        
         <input
           type="range"
           min="0"

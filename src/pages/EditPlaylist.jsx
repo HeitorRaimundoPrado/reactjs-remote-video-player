@@ -3,6 +3,7 @@ import { API_BASE_URL } from "../constants";
 import { useState, useEffect } from 'react'
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import jQuery from "jquery";
+import '../style/EditPlaylist.scss'
 
 const EditPlaylist = () => {
   const [playlistSongs, setPlaylistSongs] = useState([]);
@@ -76,19 +77,28 @@ const EditPlaylist = () => {
   }
   
   return (
-    <>
-      <h1>{playlistName}</h1>
+    <div className="edit_container">
+      <h2>Edit {playlistName}</h2>
       <DragDropContext onDragEnd={handleOnDragEnd}>
+
         <Droppable droppableId="playlist">
+
           {(provided) => (
-            <ul className="playlist" id="playlist" {...provided.droppableProps} ref={provided.innerRef}>
+            <ul className="edit_container_ul" id="playlist" {...provided.droppableProps} ref={provided.innerRef}>
+
               {playlistSongs.map((song, index) => {
                 return (
                   <Draggable draggableId={String(song.id)} key={song.id} index={index}>
+
                     {(providedDraggable) => (
-                      <li ref={providedDraggable.innerRef} {...providedDraggable.draggableProps} {...providedDraggable.dragHandleProps} key={song.id}> 
+                      <li ref={providedDraggable.innerRef} {...providedDraggable.draggableProps} {...providedDraggable.dragHandleProps} key={song.id} className="container_li">
+
                         {song.name}
-                        <button type="button" onClick={() => handleDeleteSong(String(song.id))}>delete</button>
+
+                        <button type="button" onClick={() => handleDeleteSong(String(song.id))} className="button_remove_song">
+                          Remove
+                        </button>
+
                       </li>
                     )}
                   </Draggable>
@@ -100,10 +110,10 @@ const EditPlaylist = () => {
         </Droppable>
       </DragDropContext>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="save_edit_form">
         <button type="submit">Save Changes</button>
       </form>
-    </>
+    </div>
   )
 }
 
