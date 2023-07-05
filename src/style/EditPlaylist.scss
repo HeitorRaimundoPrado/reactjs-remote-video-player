@@ -2,11 +2,12 @@
 
 .edit_container {
     .edit_container_ul {
-        width: 100%;
+        width: calc(70% + 50px);
         margin-top: 20%;
+        margin-inline: auto;
         .container_li {
             height: 50px;
-            width: calc(70% + 50px);
+            width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -34,14 +35,14 @@
     .save_edit_form {
         button {
             height: 50px;
-			width: calc(70% + 50px);
-			margin-top: 20px;
-			border: none;
-			border-radius: 25px;
-			outline: none;
-			cursor: pointer;
-			font-size: 1.1em;
-			margin-bottom: 70px;
+            width: calc(70% + 50px);
+            margin-top: 20px;
+            border: none;
+            border-radius: 25px;
+            outline: none;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-bottom: 70px;
         }
     }
 }
