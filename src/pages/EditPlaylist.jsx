@@ -84,14 +84,22 @@ const EditPlaylist = () => {
         <Droppable droppableId="playlist">
 
           {(provided) => (
-            <ul className="edit_container_ul" id="playlist" {...provided.droppableProps} ref={provided.innerRef}>
+            <ul className='edit_container_ul'
+              id="playlist" 
+              {...provided.droppableProps}
+              ref={provided.innerRef}>
 
               {playlistSongs.map((song, index) => {
                 return (
                   <Draggable draggableId={String(song.id)} key={song.id} index={index}>
 
                     {(providedDraggable) => (
-                      <li ref={providedDraggable.innerRef} {...providedDraggable.draggableProps} {...providedDraggable.dragHandleProps} key={song.id} className="container_li">
+                      <li 
+                        ref={providedDraggable.innerRef}
+                        {...providedDraggable.draggableProps} 
+                        {...providedDraggable.dragHandleProps} 
+                        key={song.id}
+                        className="container_li">
 
                         {song.name}
 

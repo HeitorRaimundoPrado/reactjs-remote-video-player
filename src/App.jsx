@@ -22,7 +22,6 @@ import LogIn from './pages/LogIn'
 
 import UseToken from './components/UseToken.jsx'
 
-import AuthLinks from './components/AuthLinks.jsx'
 
 import Nav from './components/Nav.jsx'
 import { API_BASE_URL } from './constants.js'
@@ -47,7 +46,6 @@ function App() {
 
   return (
     <>
-      <AuthLinks removeToken={removeToken}/>
       
       <HandleReplistContext.Provider value={{ replist, setReplist }}>
         <RepIdxContext.Provider value={{ repIdx, setRepIdx }}>
