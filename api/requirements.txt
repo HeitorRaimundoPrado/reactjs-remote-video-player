@@ -1,6 +1,6 @@
 flask
 flask-cors
-pytube
+pytube @ git+https://github.com/oncename/pytube.git
 beautifulsoup4
 requests
 scipy
