@@ -9,6 +9,7 @@ const SingUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleSignUpUser = (e) => {
     e.preventDefault();
@@ -23,7 +24,16 @@ const SingUp = () => {
         'Content-Type': 'application/json'
       }
     }).then(resp => resp.json())
-      .then(data => console.log(data))
+      .then(data => {
+        console.log(data)
+        if (data.user == "created") {
+          window.location.href = "/login?success_signup=1";
+        }
+        
+        else if (data.user == "exists") {
+          setErrorMsg("User already exists");
+        }
+    })
   }
 
   const handleChange = (e) => {
@@ -49,6 +59,8 @@ const SingUp = () => {
         <Link to='/login' className='form_link_login'>
           Already have an account?
         </Link>
+
+        <p> {errorMsg} </p>
       </form>
     </>
   )

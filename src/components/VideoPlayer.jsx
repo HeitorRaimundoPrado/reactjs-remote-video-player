@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { App } from '@capacitor/app'
 import { Capacitor } from '@capacitor/core';
 import '../style/VideoPlayer.scss'
@@ -31,6 +31,7 @@ const VideoPlayer = ({ allVideo, audioUrl }) => {
   const [volume, setVolume] = useState(1);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [shouldPlay, setShouldPlay] = useState(false);
 
   const allResRef = useRef();
   const videoContainerRef = useRef();
@@ -97,9 +98,11 @@ const VideoPlayer = ({ allVideo, audioUrl }) => {
     if (isPlaying()) {
       videoRef.current.pause();
       audioRef.current.pause();
+      setShouldPlay(false);
     } else {
       videoRef.current.play();
       audioRef.current.play();
+      setShouldPlay(true);
     }
   };
 
@@ -131,13 +134,25 @@ const VideoPlayer = ({ allVideo, audioUrl }) => {
     return document.fullscreenElement;
   }
 
+  const handleWaiting = () => {
+    audioRef.current.pause();
+    videoRef.current.pause();
+  }
+
+  const handleCanPlay = useCallback(() => {
+    if (shouldPlay) {
+      audioRef.current.play();
+      videoRef.current.play();
+    }
+  }, [shouldPlay])
+
   return (
     <div className="video-player-container" ref={videoContainerRef}>
 
-      <video ref={videoRef} src={videoUrl}></video>
+      <video ref={videoRef} src={videoUrl} onWaiting={handleWaiting} onCanPlay={handleCanPlay}></video>
 
       <div className="video-controls">
-        <audio ref={audioRef} src={audioUrl}></audio>
+        <audio ref={audioRef} src={audioUrl} preload="auto"></audio>
 
         <button className="video_pause" onClick={handlePlayPause}>
           {isPlaying() ? <span className="material-symbols-outlined">pause</span> : <span className="material-symbols-outlined">play_arrow</span>}
