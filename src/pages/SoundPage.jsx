@@ -354,6 +354,32 @@ const SoundPage = () => {
       playlistsButtonsRef.current.push(node);
     }
   }
+
+  useEffect(() => {
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: replist[repIdx].name,
+        artist: replist[repIdx].artist
+      })
+    }
+
+    navigator.mediaSession.setActionHandler('play', () => {
+      audioRef.current.play();
+    })
+
+    navigator.mediaSession.setActionHandler('pause', () => {
+      audioRef.current.pause();
+    })
+
+    navigator.mediaSession.setActionHandler('previoustrack', () => {
+      previousSong();
+    })
+
+    navigator.mediaSession.setActionHandler('nexttrack', () => {
+      nextSong();
+    })
+
+  }, [repIdx])
    
   return (
     <>
