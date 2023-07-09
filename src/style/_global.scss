@@ -1,5 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+.app_container {
+  height: 100%;
+  width: 100%;
+}
 * {
     margin: 0px;
     padding: 0px;

@@ -8,6 +8,7 @@ import TestAudio from './pages/TestAudio.jsx'
 import TestGetAllMusic from './pages/TestGetAllMusic.jsx'
 import UploadForm from './pages/UploadForm'
 
+import { useSwipeable } from 'react-swipeable'
 
 import HomePage from './pages/HomePage.jsx'
 import SoundPage from './pages/SoundPage.jsx'
@@ -36,6 +37,8 @@ function App() {
   const [replist, setReplist] = useState([]);
   const [repIdx, setRepIdx] = useState(0);
 
+  const pagesSlide = ['/sound', '/', '/youtube'];
+
   useEffect(()=> {
     fetch(`${API_BASE_URL}/hello`)
       .then((res) => res.json()
@@ -44,8 +47,30 @@ function App() {
 
   const { token, removeToken, setToken } = UseToken();
 
+  const handlers = useSwipeable({
+    onSwipedRight: (eventData) => {
+      const curPage = pagesSlide.findIndex((page, idx, arr) => window.location.href.replace(window.location.origin, '') == page);
+      console.log('curPage -> ' + String(curPage))
+      console.log('window.location.href -> ' + String(window.location.href))
+      if (curPage > 0) {
+        window.location.href = pagesSlide[curPage-1];
+      }
+    },
+
+    onSwipedLeft: (eventData) => {
+      const curPage = pagesSlide.findIndex((page, idx, arr) => window.location.href.replace(window.location.origin, '') == page);
+      console.log('curPage -> ' + String(curPage))
+      console.log('window.location.href -> ' + String(window.location.href))
+      if (curPage < 2) {
+        window.location.href = pagesSlide[curPage+1];
+      }
+    },
+
+    trackMouse: true,
+  })
+
   return (
-    <>
+    <div className="app_container" {...handlers}>
       
       <HandleReplistContext.Provider value={{ replist, setReplist }}>
         <RepIdxContext.Provider value={{ repIdx, setRepIdx }}>
@@ -77,7 +102,7 @@ function App() {
           <Nav/>
         </RepIdxContext.Provider>
       </HandleReplistContext.Provider>
-    </>
+    </div>
   )
 }
 
