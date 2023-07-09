@@ -170,7 +170,7 @@ const useFunctions = (audioRef, baseUrl) => {
 
   const previousSong = useCallback(() => {
     if (repIdx - 1 >= 0) {
-      playAudio(`${baseUrl}/${replist[repIdx-1].file}`, audioRef, repIdx, setRepIdx);
+      playAudio(`${baseUrl}/${replist[repIdx-1].file}`, audioRef, setRepIdx);
       setRepIdx(repIdx-1);
     } else {
       setRepIdx(0);
@@ -356,30 +356,26 @@ const SoundPage = () => {
   }
 
   useEffect(() => {
-    if ('mediaSession' in navigator) {
-      navigator.mediaSession.metadata = new MediaMetadata({
-        title: replist[repIdx].name,
-        artist: replist[repIdx].artist
+    if (replist !== undefined && replist[repIdx] !== undefined) {
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: replist[repIdx].name,
+          artist: replist[repIdx].artist
+        })
+      }
+
+      navigator.mediaSession.setActionHandler('play', () => {
+        audioRef.current.play();
       })
+
+      navigator.mediaSession.setActionHandler('pause', () => {
+        audioRef.current.pause();
+      })
+
+      navigator.mediaSession.setActionHandler('previoustrack', previousSong);
+      navigator.mediaSession.setActionHandler('nexttrack', nextSong);
     }
-
-    navigator.mediaSession.setActionHandler('play', () => {
-      audioRef.current.play();
-    })
-
-    navigator.mediaSession.setActionHandler('pause', () => {
-      audioRef.current.pause();
-    })
-
-    navigator.mediaSession.setActionHandler('previoustrack', () => {
-      previousSong();
-    })
-
-    navigator.mediaSession.setActionHandler('nexttrack', () => {
-      nextSong();
-    })
-
-  }, [repIdx])
+  }, [repIdx, replist])
    
   return (
     <>
