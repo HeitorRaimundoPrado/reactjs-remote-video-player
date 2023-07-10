@@ -48,9 +48,11 @@ const handleDeleteSong = (songs, setSongs, baseUrl, idx) => {
   setSongs(songsCopy);
 }
 const Files = (props) => {
-  const{playAudio, handleAddToPlaylist, audRef, addToPlaylistRef, setAddToPlaylistSong, setRepIdx, baseUrl} = props;
+  const{playAudio, handleAddToPlaylist, audRef, addToPlaylistRef, setAddToPlaylistSong, baseUrl} = props;
 
   const [data, setData] = useContext(DataContext);
+  const {repIdx, setRepIdx} = useContext(RepIdxContext);
+
   console.log("data: " + data);
 
   return (
@@ -58,7 +60,7 @@ const Files = (props) => {
       <ul>
       {data.map((item, idx) => {
         return (
-        <li key={item.file} className='li_border_color'>
+        <li key={item.file} className={repIdx == idx ? 'li_border_color current_song' : 'li_border_color'}>
           {/* <button onClick={() => playAudio(`${API_BASE_URL}/api/music/${item}`, audRef, setRepIdx, idx)}>{item}</button> */}
           <button onClick={() => playAudio(`${baseUrl}/${item.file}`, audRef, setRepIdx, idx)} className='music'>
             {item.artist} - {item.name}
@@ -445,7 +447,6 @@ const SoundPage = () => {
                playAudio={playAudio} 
                audRef={audioRef}
                handleAddToPlaylist={handleAddToPlaylist}
-               setRepIdx={setRepIdx}
                baseUrl={baseUrl}
         />
 

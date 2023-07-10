@@ -122,8 +122,8 @@
         .li_border_color {
             width: 100%;
             list-style: none;
+            border: none;
             margin-bottom: 15px;
-            border: solid 1px var.$c4;
             border-radius: 25px;
             display: flex;
             .music {
@@ -173,6 +173,9 @@
                   color: var.$c2;
                 }
             }
+        }
+        .current_song {
+            border: solid 1px var.$c4;
         }
         li:last-child {
             //padding-bottom: 100px;

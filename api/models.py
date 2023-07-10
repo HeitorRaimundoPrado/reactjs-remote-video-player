@@ -16,7 +16,7 @@ class Playlist(db.Model):
 
 class File(db.Model):
     id = db.Column(db.Integer, autoincrement=True, unique=True, primary_key=True)
-    file = db.Column(db.String(100), unique=True)
+    file = db.Column(db.String(100))
     name = db.Column(db.String(100))
     artist = db.Column(db.String(100))
     private = db.Column(db.Integer);
