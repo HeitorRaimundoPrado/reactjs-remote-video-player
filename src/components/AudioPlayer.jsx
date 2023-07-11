@@ -87,8 +87,8 @@ const AudioPlayer = ({ src, audRef, nextSong, previousSong, curSong}) => {
         </button>
         <button onClick={togglePlay} className='music_pause'>
           {isPlaying() ?
-            <img src="play-solid.svg" className="svg-white" alt="Play Song" width="20px" height="20px"/> :
-            <img src="pause-solid.svg" className="svg-white" alt="Pause Song" width="20px" height="20px"/>
+            <img src="pause-solid.svg" className="svg-white" alt="Pause Song" width="20px" height="20px"/> :
+            <img src="play-solid.svg" className="svg-white" alt="Play Song" width="20px" height="20px"/>
           }
         </button>
         <button onClick={() => nextSong()} className='music_next'>
