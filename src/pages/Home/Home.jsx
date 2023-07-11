@@ -16,8 +16,12 @@ export default function Home() {
                 <header>
                     <h2>About</h2>
                     <p>
-                        This is a cutting-edge web application that seamlessly integrates the power of the YouTube API for video playback while offering the convenience of uploading and reproducing your own audio content.
+                        This application works both as a YouTube client ( go to page on the right ) and as a music player ( page on the left )
                     </p>
+                    <p>
+                        Any usage of this application to violate copyright laws are not of responsibility of the creators, and any public file that violates them will be removed by the moderators
+                    </p>
+                    <a href="https://github.com/HeitorRaimundoPrado/reactjs-remote-video-player"><img src='github.svg' height='20px' width='20x'/>GitHub</a>
                 </header>
                 <AuthLinks removeToken={useToken.removeToken}/>
             </main>
