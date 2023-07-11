@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useSearchParams } from "react-router-dom"
 import { API_BASE_URL } from "../constants"
 import '../style/LogIn.scss'
 
@@ -8,6 +8,13 @@ const LogIn = (props) => {
     email: '',
     password: ''
   })
+
+  const [searchParams] = useSearchParams();
+
+  let from_signup = searchParams.get('success_signup');
+  if (from_signup == null) {
+    from_signup = 0;
+  }
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -40,6 +47,9 @@ const LogIn = (props) => {
     <h2>Login</h2>
 
       <form onSubmit={handleLogin} className='login_form'>
+        { from_signup && <div className="success-signup-msg">
+          Successful Sign Up, login to continue
+        </div>}
 
         <input type="email"
                onChange={handleChange}

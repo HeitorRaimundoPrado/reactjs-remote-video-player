@@ -4,53 +4,17 @@ import { Link } from 'react-router-dom'
 
 function Nav() {
   return (
-    /*<nav>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <Link to="/sound">
-      <span className="material-symbols-outlined">
-        library_music
-      </span>
-    </Link>
-    <Link to="/">
-      <span className="material-symbols-outlined">
-        home
-      </span>
-    </Link>
-    <Link to="/youtube">
-      <span className="material-symbols-outlined">
-        play_arrow
-      </span>
-    </Link>
-    </nav>*/
     <nav>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
       <a href="/sound">
-        <span className="material-symbols-outlined">
-          library_music
-        </span>
+        <img src="music-solid.svg" className="svg-white" alt="Music Page" width="30px" height="30px"/>
       </a>
       <a href="/">
-        <span className="material-symbols-outlined">
-          home
-        </span>
+        <img src="house-solid.svg" className="svg-white" alt="Home Page" width="30px" height="30px"/>
       </a>
       <a href="/youtube">
-        <span className="material-symbols-outlined">
-          play_arrow
-        </span>
+        <img src="circle-play-regular.svg" className="svg-white" alt="YouTube page" width="30px" height="30px"/>
       </a>
     </nav>
-    /*<nav>
-      <a href="/sound">
-        <FaArrowUpFromBracket />
-      </a>
-      <a href="/">
-        <FaHouse />
-      </a>
-      <a href="/youtube">
-        <FaPlay />
-      </a>
-    </nav>*/
   );
 }
 

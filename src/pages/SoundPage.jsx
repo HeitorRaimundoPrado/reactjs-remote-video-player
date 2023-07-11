@@ -48,9 +48,11 @@ const handleDeleteSong = (songs, setSongs, baseUrl, idx) => {
   setSongs(songsCopy);
 }
 const Files = (props) => {
-  const{playAudio, handleAddToPlaylist, audRef, addToPlaylistRef, setAddToPlaylistSong, setRepIdx, baseUrl} = props;
+  const{playAudio, handleAddToPlaylist, audRef, addToPlaylistRef, setAddToPlaylistSong, baseUrl} = props;
 
   const [data, setData] = useContext(DataContext);
+  const {repIdx, setRepIdx} = useContext(RepIdxContext);
+
   console.log("data: " + data);
 
   return (
@@ -58,7 +60,7 @@ const Files = (props) => {
       <ul>
       {data.map((item, idx) => {
         return (
-        <li key={item.file} className='li_border_color'>
+        <li key={item.file} className={repIdx == idx ? 'li_border_color current_song' : 'li_border_color'}>
           {/* <button onClick={() => playAudio(`${API_BASE_URL}/api/music/${item}`, audRef, setRepIdx, idx)}>{item}</button> */}
           <button onClick={() => playAudio(`${baseUrl}/${item.file}`, audRef, setRepIdx, idx)} className='music'>
             {item.artist} - {item.name}
@@ -170,7 +172,7 @@ const useFunctions = (audioRef, baseUrl) => {
 
   const previousSong = useCallback(() => {
     if (repIdx - 1 >= 0) {
-      playAudio(`${baseUrl}/${replist[repIdx-1].file}`, audioRef, repIdx, setRepIdx);
+      playAudio(`${baseUrl}/${replist[repIdx-1].file}`, audioRef, setRepIdx);
       setRepIdx(repIdx-1);
     } else {
       setRepIdx(0);
@@ -354,16 +356,39 @@ const SoundPage = () => {
       playlistsButtonsRef.current.push(node);
     }
   }
+
+  useEffect(() => {
+    if (replist !== undefined && replist[repIdx] !== undefined) {
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: replist[repIdx].name,
+          artist: replist[repIdx].artist
+        })
+      }
+
+      navigator.mediaSession.setActionHandler('play', () => {
+        audioRef.current.play();
+      })
+
+      navigator.mediaSession.setActionHandler('pause', () => {
+        audioRef.current.pause();
+      })
+
+      navigator.mediaSession.setActionHandler('previoustrack', previousSong);
+      navigator.mediaSession.setActionHandler('nexttrack', nextSong);
+    }
+  }, [repIdx, replist])
    
   return (
     <>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
       <h2>Uploads</h2>
 
-      <form onSubmit={handleSearch}>
-        <span className="material-symbols-outlined">
-          search
-        </span>
+      <form onSubmit={handleSearch} className="sound-page-search">
+        <div className="search-icon-div">
+          <img src="magnifying-glass-solid.svg" alt="search" width="25px" height="25px"/>
+        </div>
+        <input type="text" onChange={(e) => setSearchContent(e.target.value)}
+        placeholder="Search Audio" className="form__search"/>
         <input type="text" onChange={(e) => setSearchContent(e.target.value)}
         placeholder="Search Audio" className="form__search"/>
 
@@ -423,7 +448,6 @@ const SoundPage = () => {
                playAudio={playAudio} 
                audRef={audioRef}
                handleAddToPlaylist={handleAddToPlaylist}
-               setRepIdx={setRepIdx}
                baseUrl={baseUrl}
         />
 

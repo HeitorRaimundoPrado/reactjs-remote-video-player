@@ -24,6 +24,7 @@
     "react-icons": "^4.9.0",
     "react-loader-spinner": "^5.3.4",
     "react-router-dom": "^6.11.2",
+    "react-swipeable": "^7.0.1",
     "sass": "^1.62.1"
   },
   "devDependencies": {
