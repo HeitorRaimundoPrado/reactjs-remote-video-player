@@ -1,5 +1,11 @@
 @use '../style/var';
 
+.success-signup-msg {
+  display: flex;
+  margin-right: 2rem;
+  margin-block: auto;
+  height: 2rem;
+}
 .login_form {
     display: flex;
     flex-direction: column;

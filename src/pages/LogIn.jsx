@@ -45,11 +45,11 @@ const LogIn = (props) => {
   return (
     <>
     <h2>Login</h2>
-      { from_signup && <div>
-        Successful Sign Up, login to continue
-      </div>}
 
       <form onSubmit={handleLogin} className='login_form'>
+        { from_signup && <div className="success-signup-msg">
+          Successful Sign Up, login to continue
+        </div>}
 
         <input type="email"
                onChange={handleChange}
