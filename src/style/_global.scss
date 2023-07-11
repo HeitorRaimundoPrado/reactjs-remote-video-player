@@ -9,6 +9,10 @@
   height: 100%;
   width: 100%;
 }
+
+.svg-white {
+  filter: invert(100%) sepia(0%) saturate(7483%) hue-rotate(5deg) brightness(90%) contrast(104%);
+}
 * {
     margin: 0px;
     padding: 0px;

@@ -155,7 +155,10 @@ const VideoPlayer = ({ allVideo, audioUrl }) => {
         <audio ref={audioRef} src={audioUrl} preload="auto"></audio>
 
         <button className="video_pause" onClick={handlePlayPause}>
-          {isPlaying() ? <span className="material-symbols-outlined">pause</span> : <span className="material-symbols-outlined">play_arrow</span>}
+          {isPlaying() ? 
+            <img src="play-solid.svg" className="svg-white" alt="play" width="30px" height="30px"/> :
+            <img src="pause-solid.svg" className="svg-white" alt="pause" width="30px" height="30px"/>
+          }
         </button>
         <input className="video_seek"
           type="range"
@@ -171,11 +174,13 @@ const VideoPlayer = ({ allVideo, audioUrl }) => {
             onClick={() => {
             allResRef.current.style.display === 'flex' ? allResRef.current.style.display = 'none' : allResRef.current.style.display = 'flex';
             }}>
-            <span className="material-symbols-outlined">settings</span>
+            <img src="gear-solid.svg" className="svg-white" alt="settings" width="30px" height="30px"/>
           </button>
 
           <button className="video_fullscreen" onClick={handleFullscreen}>
-            {isFullscreen() ? <span className="material-symbols-outlined">fullscreen_exit</span> : <span className="material-symbols-outlined">fullscreen</span>}
+            {isFullscreen() ? <img src="compress-solid.svg" className="svg-white" alt="exit fullscreen" width="30px" height="30px"/> : 
+                              <img src="expand-solid.svg" className="svg-white" alt="fullscreen" width="30px" height="30px"/>
+            }
           </button>
         </div>
 

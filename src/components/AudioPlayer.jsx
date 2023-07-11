@@ -76,9 +76,6 @@ const AudioPlayer = ({ src, audRef, nextSong, previousSong, curSong}) => {
 
   return (
     <div className='container_music'>
-
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-
       <audio onLoadedData={handleLoadedData} onTimeUpdate={handleTimeUpdate} src="" ref={audRef} onEnded={() => {nextSong(); setCurrentTime(0)}} style={{display: 'none'}}></audio>
 
       <div className='music_name'>
@@ -86,20 +83,16 @@ const AudioPlayer = ({ src, audRef, nextSong, previousSong, curSong}) => {
       </div>
       <div className='music_control_display'>
         <button onClick={() => previousSong()} className='music_previous'>
-          <span className="material-symbols-outlined">
-            skip_previous
-          </span>
+          <img src="backward-step-solid.svg" className="svg-white" alt="Previous Song" width="20px" height="20px"/>
         </button>
         <button onClick={togglePlay} className='music_pause'>
           {isPlaying() ?
-            <span className="material-symbols-outlined">pause</span> :
-            <span className="material-symbols-outlined">play_arrow</span>
+            <img src="play-solid.svg" className="svg-white" alt="Play Song" width="20px" height="20px"/> :
+            <img src="pause-solid.svg" className="svg-white" alt="Pause Song" width="20px" height="20px"/>
           }
         </button>
         <button onClick={() => nextSong()} className='music_next'>
-          <span className="material-symbols-outlined">
-            skip_next
-          </span>
+          <img src="forward-step-solid.svg" className="svg-white" alt="Next Song" width="20px" height="20px"/>
         </button>
         <button onClick={toggleMute} className='music_mute'>
           {isMuted ? 'Unmute' : 'Mute'}
