@@ -9,6 +9,8 @@ const LogIn = (props) => {
     password: ''
   })
 
+  const [errorMsg, setErrorMsg] = useState('');
+
   const [searchParams] = useSearchParams();
 
   let from_signup = searchParams.get('success_signup');
@@ -30,8 +32,13 @@ const LogIn = (props) => {
       })
     }).then(response => response.json())
       .then(data => {
-      props.setToken(data.access_token);
-      console.log(data);
+        if (data.denied !== undefined || data.access_token === undefined || data.access_token === null) {
+          setErrorMsg('Wrong Login Credentials!');
+          return;
+        }
+        props.setToken(data.access_token);
+        console.log(data);
+        window.location.href = "/"
       })
 
   }
@@ -47,7 +54,7 @@ const LogIn = (props) => {
     <h2>Login</h2>
 
       <form onSubmit={handleLogin} className='login_form'>
-        { from_signup && <div className="success-signup-msg">
+        { from_signup == 1 && <div className="success-signup-msg">
           Successful Sign Up, login to continue
         </div>}
 
@@ -70,6 +77,9 @@ const LogIn = (props) => {
           Log In
         </button>
 
+        <div className="errorContainer">
+          <p>{errorMsg}</p>
+        </div>  
         <Link to='/signup' className='form_link_register'>
           Don't have an account yet?
         </Link>

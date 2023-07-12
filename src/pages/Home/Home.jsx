@@ -4,9 +4,10 @@ import '../../style/Home.scss';
 import '../../style/_global.scss';
 import AuthLinks from '../../components/AuthLinks.jsx'
 
-import useToken from "../../components/UseToken.jsx"
+import UseToken from "../../components/UseToken.jsx"
 
 export default function Home() {
+    const { token, removeToken, setToken } = UseToken();
     return (
         <>
             <header>
@@ -26,7 +27,7 @@ export default function Home() {
                 <p className="centralized-white-p">
                   ** IT IS NOT NECESSARY TO LOGIN TO USE THE APPLICATION ** 
                 </p>    
-                <AuthLinks removeToken={useToken.removeToken}/>
+                <AuthLinks removeToken={removeToken}/>
             </main>
         </>
     )
