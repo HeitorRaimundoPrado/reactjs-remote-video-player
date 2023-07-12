@@ -1,3 +1,8 @@
+# Using the application
+
+Use the player at: [MediaStreamr](https://mediastreamr.web.app/)
+It currently is in development and the backend server is unstable because it is a free istance, if you want to see this project with a better infraestructure, please contribute with any monetary quantity to our [Stripe](https://buy.stripe.com/cN27tl9oUeEvf7i3cc)
+
 # Video Player with YouTube Client
 
 This is a video player application with a front-end written in React and a back-end written in Flask. The application allows users to play remote audio files saved on a server and search for, play and download YouTube videos using Python's pytube library.
