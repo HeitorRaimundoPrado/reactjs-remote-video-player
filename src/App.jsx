@@ -10,7 +10,6 @@ import UploadForm from './pages/UploadForm'
 
 import { useSwipeable } from 'react-swipeable'
 
-import HomePage from './pages/HomePage.jsx'
 import SoundPage from './pages/SoundPage.jsx'
 import YouTubePage from './pages/YouTubePage.jsx'
 import CreatePlaylist from './pages/CreatePlaylist.jsx'
@@ -77,13 +76,7 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route path='/' element={<Home/>}/>
-              <Route path='/test-watch' element={<TestWatch/>}/>
-              <Route path='/test-search' element={<TestSearch/>}/>
-              <Route path='/test-upload' element={<TestUpload/>}/>
-              <Route path='/test-audio' element={<TestAudio/>}/>
-              <Route path='/test-get-music' element={<TestGetAllMusic/>}/>
 
-              <Route path='/' element={<HomePage/>}/>
               <Route path='/sound' element={<SoundPage/>}/>
               <Route path='/youtube' element={<YouTubePage/>}/>
 

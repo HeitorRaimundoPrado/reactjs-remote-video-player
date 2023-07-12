@@ -23,6 +23,9 @@ export default function Home() {
                     </p>
                     <a href="https://github.com/HeitorRaimundoPrado/reactjs-remote-video-player"><img src='github.svg' height='20px' width='20x'/>GitHub</a>
                 </header>
+                <p className="centralized-white-p">
+                  ** IT IS NOT NECESSARY TO LOGIN TO USE THE APPLICATION ** 
+                </p>    
                 <AuthLinks removeToken={useToken.removeToken}/>
             </main>
         </>
