@@ -48,9 +48,6 @@ def create_token():
 
     user = User.query.filter_by(email=email).first()
     all_users = User.query.all()
-    print(all_users)
-    print(all_users[0].email)
-    print(user)
 
     if not user or not check_password_hash(user.password, password):
         return ['denied']

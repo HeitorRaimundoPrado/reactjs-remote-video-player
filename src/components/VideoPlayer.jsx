@@ -116,18 +116,12 @@ const VideoPlayer = ({ allVideo, audioUrl }) => {
     }
   };
 
-  const handleVolumeChange = (e) => {
-    const newVolume = parseFloat(e.target.value);
-    setVolume(newVolume);
-    audioRef.current.volume = newVolume;
-  };
-
-  const isPlaying = () => {
+  const isPlaying = useCallback(() => {
     if (audioRef.current !== null && audioRef.current !== undefined) {
       return !audioRef.current.paused;
     }
     return 0;
-  }
+  }, [audioRef.current]);
 
 
   const isFullscreen = () => {
@@ -156,8 +150,8 @@ const VideoPlayer = ({ allVideo, audioUrl }) => {
 
         <button className="video_pause" onClick={handlePlayPause}>
           {isPlaying() ? 
-            <img src="play-solid.svg" className="svg-white" alt="play" width="30px" height="30px"/> :
-            <img src="pause-solid.svg" className="svg-white" alt="pause" width="30px" height="30px"/>
+            <img src="pause-solid.svg" className="svg-white" alt="pause" width="30px" height="30px"/> :
+            <img src="play-solid.svg" className="svg-white" alt="play" width="30px" height="30px"/>
           }
         </button>
         <input className="video_seek"
@@ -184,14 +178,6 @@ const VideoPlayer = ({ allVideo, audioUrl }) => {
           </button>
         </div>
 
-        {/* <input */}
-        {/*   type="range" */}
-        {/*   min="0" */}
-        {/*   max="1" */}
-        {/*   step="0.1" */}
-        {/*   value={volume} */}
-        {/*   onChange={handleVolumeChange} */}
-        {/* /> */}
         <ResolutionSelector 
           allVideo={allVideo} 
           allResRef={allResRef}
