@@ -2,6 +2,7 @@
 
 Use the player at: [MediaStreamr](https://mediastreamr.web.app/)
 It currently is in development and the backend server is unstable because it is a free istance, if you want to see this project with a better infraestructure, please contribute with any monetary quantity to our [Stripe](https://buy.stripe.com/cN27tl9oUeEvf7i3cc)
+If you want to be updated about the app, dont forget to follow us on [Twitter](https://twitter.com/MediaStreamr23)
 
 # Video Player with YouTube Client
 
