@@ -4,19 +4,11 @@ import { API_BASE_URL } from '../constants';
 import Loader from '../components/Loader'
 import "../style/Youtube.scss"
 
-const YouTubePage = () => {
+const YouTubePage = (props) => {
   const [searchResults, setSearchResults] = useState([])
   const [inputText, setInputText] = useState('')
   const [Loading, setLoading] = useState(false)
 
-  /*const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const res = await fetch(`${API_BASE_URL}/api/youtube/search?` + new URLSearchParams({term: e.target[0].value}))
-
-    const json = await res.json();
-    setSearchResults(json);
-  }*/
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,38 +33,11 @@ const YouTubePage = () => {
         <span className="material-symbols-outlined">
           search
         </span>
-        <input type="text" placeholder="Search YouTube" className="form__search" value={inputText} onChange={(e) => setInputText(e.target.value)}/>
+        <input type="text" placeholder={props.t("youtubePage.searchYoutube")} className="form__search" value={inputText} onChange={(e) => setInputText(e.target.value)}/>
 
         <input type="submit" value="Go" className="form__submit"/>
       </form>
 
-      {/*<div className="search_results">
-        <ul>
-          {searchResults.map((item) => {
-            return (
-            <li className="list">
-              <div className="list_thumb">
-                <a href={`/watch?vid=${item.url}`}>
-                  <img src={item.thumbnail}/>
-                </a>
-              </div>
-              <div className="list_channel">
-                <img src={item.pfp}/>
-                <div>
-                  <a href={`/watch?vid=${item.url}`}>
-                    {item.title}
-                  </a>
-                  <p>{item.channel}</p>
-                </div>
-              </div>
-            </li>
-            )
-          })}
-        </ul>
-        <div className="youtube_loader">
-          {Loading && (<p>Is loading</p>)}
-        </div>
-        </div>*/}
         {
           Loading ?
           <Loader/> :

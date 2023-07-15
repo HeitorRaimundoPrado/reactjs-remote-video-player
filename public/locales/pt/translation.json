@@ -20,5 +20,8 @@
   "createPlaylistPage": {
     "selectAudio": "Selecionar Áudio",
     "create": "Criar"
+  },
+  "youtubePage": {
+    "searchYoutube": "Pesquisar no YouTube"
   }
 }
