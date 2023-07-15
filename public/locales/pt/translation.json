@@ -31,5 +31,9 @@
     "songName": "Nome da Música",
     "artist": "Artista",
     "upload": "Subir"
+  },
+  "signupPage": {
+    "username": "Nome de Usuário",
+    "password": "Senha"
   }
 }

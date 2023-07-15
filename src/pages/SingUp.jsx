@@ -5,7 +5,7 @@ import jQuery from 'jquery';
 import '../style/SignUp.scss'
 
 
-const SingUp = () => {
+const SingUp = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
@@ -50,9 +50,9 @@ const SingUp = () => {
 
         <input type="text" placeholder="Email" name="Email" onChange={(e) => setEmail(e.target.value)}/* onChange={handleChange} */ className='form_email form_all'/>
 
-        <input type="text" name="name" placeholder="Username" onChange={(e) => setUsername(e.target.value)}/* onChange={handleChange} */ className='form_user form_all'/>
+        <input type="text" name="name" placeholder={props.t("signupPage.username")} onChange={(e) => setUsername(e.target.value)}/* onChange={handleChange} */ className='form_user form_all'/>
 
-        <input type="password" name="password" placeholder='Password' onChange={(e) => setPassword(e.target.value)}/* onChange={handleChange} */ className='form_password form_all'/>
+        <input type="password" name="password" placeholder={ props.t("signupPage.passwod")} onChange={(e) => setPassword(e.target.value)}/* onChange={handleChange} */ className='form_password form_all'/>
 
         <input type="submit" className='form_signup'/>
 

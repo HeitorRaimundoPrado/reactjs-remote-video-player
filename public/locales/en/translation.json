@@ -31,5 +31,9 @@
     "songName": "Song Name",
     "artist": "Artist",
     "upload": "Upload"
+  },
+  "signupPage": {
+    "username": "Username",
+    "password": "Password"
   }
 }
