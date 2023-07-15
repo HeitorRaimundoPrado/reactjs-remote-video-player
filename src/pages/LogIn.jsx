@@ -69,7 +69,7 @@ const LogIn = (props) => {
                onChange={handleChange}
                text={loginForm.password}
                name="password"
-               placeholder="Password"
+               placeholder={props.t("signupPage.password")}
                value={loginForm.password}
                className="form_all_login"/>  
 
@@ -81,7 +81,7 @@ const LogIn = (props) => {
           <p>{errorMsg}</p>
         </div>  
         <Link to='/signup' className='form_link_register'>
-          Don't have an account yet?
+          {props.t('signupPage.noAccount')}
         </Link>
       </form>
     </>

@@ -52,12 +52,12 @@ const SingUp = (props) => {
 
         <input type="text" name="name" placeholder={props.t("signupPage.username")} onChange={(e) => setUsername(e.target.value)}/* onChange={handleChange} */ className='form_user form_all'/>
 
-        <input type="password" name="password" placeholder={ props.t("signupPage.passwod")} onChange={(e) => setPassword(e.target.value)}/* onChange={handleChange} */ className='form_password form_all'/>
+        <input type="password" name="password" placeholder={ props.t("signupPage.password")} onChange={(e) => setPassword(e.target.value)}/* onChange={handleChange} */ className='form_password form_all'/>
 
         <input type="submit" className='form_signup'/>
 
         <Link to='/login' className='form_link_login'>
-          Already have an account?
+          {props.t("signupPage.alreadyAccount")}
         </Link>
 
         <p> {errorMsg} </p>

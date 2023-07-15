@@ -34,6 +34,13 @@
   },
   "signupPage": {
     "username": "Username",
-    "password": "Password"
+    "password": "Password",
+    "noAccount": "Don't have an account yet?",
+    "alreadyAccount": "Already have an account?"
+  },
+  "editPlaylist": {
+    "saveChanges": "Save Changes",
+    "edit": "Edit",
+    "remove": "Remove"
   }
 }
