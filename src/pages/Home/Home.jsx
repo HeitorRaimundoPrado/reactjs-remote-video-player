@@ -6,26 +6,19 @@ import AuthLinks from '../../components/AuthLinks.jsx'
 
 import UseToken from "../../components/UseToken.jsx"
 
-export default function Home() {
+export default function Home(props) {
     const { token, removeToken, setToken } = UseToken();
     return (
         <>
-            <header>
-                
-            </header>
             <main>
                 <header>
-                    <h2>About</h2>
-                    <p>
-                        This application works both as a YouTube client ( go to page on the right ) and as a music player ( page on the left )
-                    </p>
-                    <p>
-                        Any usage of this application to violate copyright laws are not of responsibility of the creators, and any public file that violates them will be removed by the moderators
-                    </p>
+                    <h2> {props.t('home.header.title')} </h2>
+                    <p> {props.t('home.header.firstParagraph')} </p>
+                    <p> {props.t('home.header.secondParagraph')} </p>
                     <a href="https://github.com/HeitorRaimundoPrado/reactjs-remote-video-player"><img src='github.svg' height='20px' width='20x'/>GitHub</a>
                 </header>
                 <p className="centralized-white-p">
-                  ** IT IS NOT NECESSARY TO LOGIN TO USE THE APPLICATION ** 
+                  ** {props.t('home.noLoginNeeded')} ** 
                 </p>    
                 <AuthLinks removeToken={removeToken}/>
             </main>
