@@ -23,5 +23,13 @@
   },
   "youtubePage": {
     "searchYoutube": "Search Youtube"
+  },
+  "uploadForm": {
+    "uploadFile": "Upload File",
+    "private": "Private",
+    "public": "Public",
+    "songName": "Song Name",
+    "artist": "Artist",
+    "upload": "Upload"
   }
 }

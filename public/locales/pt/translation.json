@@ -23,5 +23,13 @@
   },
   "youtubePage": {
     "searchYoutube": "Pesquisar no YouTube"
+  },
+  "uploadForm": {
+    "uploadFile": "Subir Arquivo",
+    "private": "Privado",
+    "public": "Público",
+    "songName": "Nome da Música",
+    "artist": "Artista",
+    "upload": "Subir"
   }
 }
