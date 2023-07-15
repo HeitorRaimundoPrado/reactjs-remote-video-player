@@ -1,0 +1,20 @@
+{
+  "home": {
+    "header": {
+      "title": "About",
+      "firstParagraph": "This application works both as a YouTube client ( go to page on the right ) and as a music player ( page on the left )",
+      "secondParagraph": "Any usage of this application to violate copyright laws are not of responsibility of the creators, and any public file that violates them will be removed by the moderators"
+    },
+    "noLoginNeeded": "IT IS NOT NECESSARY TO LOGIN TO USE THE APPLICATION"
+  },
+  "soundPage": {
+    "delete": "Delete",
+    "addToPlaylist": "Add To Playlist",
+    "uploadAudio": "Upload Audio",
+    "newPlaylist": "New Playlist",
+    "publicFiles": "Public Files",
+    "privateFiles": "Private Files",
+    "allVideo": "All Video",
+    "searchAudio": "Search Audio"
+  }
+}

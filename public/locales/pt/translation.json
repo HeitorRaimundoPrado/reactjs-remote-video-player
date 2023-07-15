@@ -1,0 +1,20 @@
+{
+  "home": {
+    "header": {
+      "title": "Sobre o App",
+      "firstParagraph": "Esse aplicativo funciona tanto como uma alternativa ao YouTube ( página à direita ) quanto um reprodutor de áudio ( página à esquerda )",
+      "secondParagraph": "Qualquer uso desse aplicativo para violar leis de direitos autorais não é de responsabilidade dos criadores e qualquer arquivo público que viole as mesmas serão removidos pelos moderadores"
+    },
+    "noLoginNeeded": "NÃO É NECESSÁRIO FAZER LOGIN PARA USAR O APLICATIVO"
+  },
+  "soundPage": {
+    "delete": "Remover",
+    "addToPlaylist": "Adicionar a Playlist",
+    "uploadAudio": "Adicionar Música",
+    "newPlaylist": "Criar Playlist",
+    "publicFiles": "Arquivos Públicos",
+    "privateFiles": "Arquivos Privados",
+    "allVideo": "Todos os Vídeos",
+    "searchAudio": "Pesquisar Áudio"
+  }
+}
