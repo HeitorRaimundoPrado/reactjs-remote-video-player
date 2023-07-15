@@ -1,18 +1,29 @@
+import { useState } from "react";
 import { API_BASE_URL } from "../constants";
 import '../style/UploadForm.scss'
+import Loader from "../components/Loader";
 
 export default function UploadForm(props) {
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      let headers = {}
-      if (localStorage.getItem('token') != null) {
-        headers = {
-          Authorization: "Bearer " + localStorage.getItem('token'),
-        }
+  const [loading, setLoading] = useState(false);
+  const [uploadSuccessful, setUploadSuccessful] = useState(false);
+
+  const handleSubmit = (e) => {
+    setLoading(true);
+    e.preventDefault();
+    let headers = {}
+    if (localStorage.getItem('token') != null) {
+      headers = {
+        Authorization: "Bearer " + localStorage.getItem('token'),
       }
-      
-      fetch(`${API_BASE_URL}/api/upload`, { method: "POST", headers: headers, body: new FormData(e.target)})
     }
+    
+    fetch(`${API_BASE_URL}/api/upload`, { method: "POST", headers: headers, body: new FormData(e.target)})
+      .then(resp => resp.json())
+      .then(data => {
+        setLoading(false);
+        setUploadSuccessful(true);
+    })
+  }
     
     return (
       <>
@@ -38,6 +49,11 @@ export default function UploadForm(props) {
           <input type="text" className="file_artist" name="artist" placeholder={ props.t("uploadForm.artist") }/>
     
           <input type="submit" className='form_submit_file' value={props.t("uploadForm.upload")}/>
+
+          <div className="upload_successful">
+            {loading ? <Loader/> : ""}
+            {(!loading && uploadSuccessful) && props.t("uploadForm.uploadSuccessful") }
+          </div>
         </form>
       </>
     )

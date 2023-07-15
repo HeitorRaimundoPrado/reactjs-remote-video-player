@@ -30,7 +30,8 @@
     "public": "Public",
     "songName": "Song Name",
     "artist": "Artist",
-    "upload": "Upload"
+    "upload": "Upload",
+    "uploadSuccessful": "Upload Successful"
   },
   "signupPage": {
     "username": "Username",

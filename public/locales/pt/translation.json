@@ -30,7 +30,8 @@
     "public": "Público",
     "songName": "Nome da Música",
     "artist": "Artista",
-    "upload": "Subir"
+    "upload": "Subir",
+    "uploadSuccessful": "Upload bem-sucedido"
   },
   "signupPage": {
     "username": "Nome de Usuário",
