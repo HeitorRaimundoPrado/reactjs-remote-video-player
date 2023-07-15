@@ -3,6 +3,7 @@ import { API_BASE_URL } from '../constants';
 import { useSearchParams } from 'react-router-dom'
 import '../style/WatchVid.scss'
 import VideoPlayer from '../components/VideoPlayer';
+import Loader from '../components/Loader';
 
 const WatchVid = () => {
   const [allVideo, setAllVideo] = useState('');
@@ -61,7 +62,7 @@ const WatchVid = () => {
   useEffect(() => {
     setWatchDivHTML(
       <main className="main_video">
-        {audioURL !== '' && <VideoPlayer allVideo={allVideo} audioUrl={audioURL}/>}
+        {audioURL === '' ? <Loader/> : <VideoPlayer allVideo={allVideo} audioUrl={audioURL}/>}
 
         <div className="video_div_download">
           <a download href={`${API_BASE_URL}/api/youtube/download?url=${vid}`}>
