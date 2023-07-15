@@ -16,5 +16,9 @@
     "privateFiles": "Arquivos Privados",
     "allVideo": "Todos os Vídeos",
     "searchAudio": "Pesquisar Áudio"
+  },
+  "createPlaylistPage": {
+    "selectAudio": "Selecionar Áudio",
+    "create": "Criar"
   }
 }
