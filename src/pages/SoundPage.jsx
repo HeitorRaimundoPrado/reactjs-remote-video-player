@@ -385,12 +385,13 @@ const SoundPage = () => {
 
       <form onSubmit={handleSearch} className="sound-page-search">
         <div className="search-icon-div">
-          <img src="magnifying-glass-solid.svg" alt="search" width="25px" height="25px"/>
+          <img src="magnifying-glass-solid.svg" alt="search" width="20px" height="20px"/>
         </div>
         <input type="text" onChange={(e) => setSearchContent(e.target.value)}
         placeholder="Search Audio" className="form__search"/>
-        <input type="text" onChange={(e) => setSearchContent(e.target.value)}
-        placeholder="Search Audio" className="form__search"/>
+
+        {/*<input type="text" onChange={(e) => setSearchContent(e.target.value)}
+        placeholder="Search Audio" className="form__search"/>*/}
 
         <input type="submit" value="Go" className="form__submit"/>
       </form>
@@ -400,21 +401,24 @@ const SoundPage = () => {
         <div className='playlists_container'>
           <h3>Playlists</h3>
 
-          {globalPlaylists.map((playlist, index) => {
-            return (
-              <button className="playlist_button" onContextMenu={(e) => {
-                handlePlaylistContextMenu(e, playlist, contextMenuRef, setContextMenuSong)}}
-                onClick={() => handlePlaylist(playlist)}
-                ref={addToPlaylistsButtonsRef}>
-                {playlist.name}
+          <div className="all_playlists">
+            <a href="/create-playlist">
+              <button className='new_playlist_button'>
+                New Playlist
               </button>
-            )
-          })}
-          <a href="/create-playlist">
-            <button className='new_playlist_button'>
-              New Playlist
-            </button>
-          </a>
+            </a>
+            {globalPlaylists.map((playlist, index) => {
+              return (
+                <button className="playlist_button" onContextMenu={(e) => {
+                  handlePlaylistContextMenu(e, playlist, contextMenuRef, setContextMenuSong)}}
+                  onClick={() => handlePlaylist(playlist)}
+                  ref={addToPlaylistsButtonsRef}>
+                    
+                  {playlist.name}
+                </button>
+              )
+            })}
+          </div>
         </div>
 
         <div className="file_selection">

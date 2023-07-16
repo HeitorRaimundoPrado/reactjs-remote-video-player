@@ -6,6 +6,16 @@ form {
     justify-content: center;
     align-items: center;
     margin-bottom: 30px;
+    .search-icon-div {
+        height: 50px;
+        width: 50px;
+        padding: 16px 0px 0px 15px;
+        border: none;
+        border-radius: 25px 0px 0px 25px;
+        color: var.$c1;
+        background-color: var.$c2;
+        cursor: default;
+    }
     span {
         height: 50px;
         width: 50px;

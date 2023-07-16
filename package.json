@@ -17,6 +17,7 @@
     "capacitor-music-controls-plugin": "^1.0.1",
     "capacitor-music-controls-plugin-v3": "^1.1.0",
     "dotenv": "^16.1.4",
+    "flask": "^0.2.10",
     "jquery": "^3.7.0",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
