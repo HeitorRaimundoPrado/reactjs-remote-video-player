@@ -17,9 +17,6 @@ export default function Home(props) {
                     <p> {props.t('home.header.secondParagraph')} </p>
                     <a href="https://github.com/HeitorRaimundoPrado/reactjs-remote-video-player"><img src='github.svg' height='20px' width='20x'/>GitHub</a>
                 </header>
-                <p className="centralized-white-p">
-                  ** {props.t('home.noLoginNeeded')} ** 
-                </p>    
                 <AuthLinks removeToken={removeToken}/>
             </main>
         </>

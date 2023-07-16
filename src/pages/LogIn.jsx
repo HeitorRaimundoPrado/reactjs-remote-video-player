@@ -1,3 +1,6 @@
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable react/no-unknown-property */
+/* eslint-disable react/prop-types */
 import { useState } from "react"
 import { Link, useSearchParams } from "react-router-dom"
 import { API_BASE_URL } from "../constants"
@@ -8,6 +11,7 @@ const LogIn = (props) => {
     email: '',
     password: ''
   })
+  const [loading, setLoading] = useState(false)
 
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -43,15 +47,41 @@ const LogIn = (props) => {
 
   }
 
+  /*const handleLogin = (e) => {
+    e.preventDefault();
+    
+    try {
+      setLoading(true)
+      fetch(`${API_BASE_URL}/api/auth/token`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: loginForm.email,
+          password: loginForm.password
+        })
+      }).then(response => response.json())
+        .then(data => {
+        props.setToken(data.access_token);
+        console.log(data);
+        })
+    } catch (error) {
+      <p>error</p>
+    } finally {
+      setLoading(false)
+    }
+  }*/
+
   const handleChange = (e) => {
     const {value, name} = e.target;
     setLoginForm(prevNote => ({
       ...prevNote, [name]: value
     }));
   }
-  return (
+  return (  
     <>
-    <h2>Login</h2>
+      <h2>Login</h2>
 
       <form onSubmit={handleLogin} className='login_form'>
         { from_signup == 1 && <div className="success-signup-msg">

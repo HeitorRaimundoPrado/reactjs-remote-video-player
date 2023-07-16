@@ -54,7 +54,7 @@ const CreatePlaylist = (props) => {
 
         <form onSubmit={(e) => {handleSubmit(e, songsToSend)}}>
 
-          <input name="name" type="text" placeholder="Playlist Name" className="sound_playlist_name"/>
+          <input name="name" type="text" placeholder="Playlist Name" className="sound_playlist_name" minLength={0} maxLength={15}/>
 
           <div className='selection_songs_container'>
             <div className='selection_songs'>

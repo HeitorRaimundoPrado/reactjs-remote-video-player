@@ -47,17 +47,19 @@ const YouTubePage = (props) => {
 
   return (
     <>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+      {/*<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />*/}
       <h2>Videos</h2>
       <form onSubmit={handleSubmit}>
-        <span className="material-symbols-outlined">
-          search
-        </span>
-        <input type="text" placeholder={props.t("youtubePage.searchYoutube")} className="form__search" value={inputText} onChange={(e) => setInputText(e.target.value)}/>
 
+        <div className="search-icon-div">
+
+          <img src="magnifying-glass-solid.svg" alt="search" width="20px" height="20px"/>
+
+        </div>
+       
+        <input type="text" placeholder={props.t("youtubePage.searchYoutube")} className="form__search" value={inputText} onChange={(e) => setInputText(e.target.value)}/>
         <input type="submit" value="Go" className="form__submit"/>
       </form>
-
         {
           Loading ?
           <Loader/> :

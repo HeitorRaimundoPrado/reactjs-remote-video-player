@@ -1,36 +1,39 @@
 @use './var';
 
 .sound-page-search {
-  width: 80%;
-  margin-inline: auto;
+  width: 100%;
+  //margin-inline: auto;
   .search-icon-div {
-    background-color: #fff;
-    border-top-left-radius: 30px;
-    border-bottom-left-radius: 30px;
-    margin-left: 2px;
-    display: flex;
-    align-items: center;
     height: 50px;
-    width: 40px;
-    padding: 10px;
+    width: 50px;
+    padding: 16px 0px 0px 15px;
+    border: none;
+    border-radius: 25px 0px 0px 25px;
+    color: var.$c1;
+    background-color: var.$c2;
+    cursor: default;
   }
 }
 
 .playlists_container {
-    //width: 80%;
-    width: 90%;
-    margin-left: 5%;
-    overflow: auto;
-    &:-webkit-scrollbar {
-      display: none;
+    width: 100%;
+    .all_playlists {
+        width: 89%;
+        display: flex;
+        flex-direction: row;
+        margin: 0px auto;
+        overflow-x: auto;
     }
-    scrollbar-width: none;
+    .all_playlists::-webkit-scrollbar {
+        display: none;
+    }
     h3 {
-        margin: 0px 0px 10px 0px;
+        margin: 0px 0px 10px 5%;
     }
     .new_playlist_button {
         height: 90px;
         width: 130px;
+        margin-right: 15px;
         border: none;
         cursor: pointer;
         border-radius: 3px;
@@ -40,7 +43,8 @@
     .playlist_button {
         opacity: 0.85;
         height: 90px;
-        width: 130px;
+        min-width: 130px;
+        max-width: 131px;
         border: none;
         cursor: pointer;
         border-radius: 3px;
