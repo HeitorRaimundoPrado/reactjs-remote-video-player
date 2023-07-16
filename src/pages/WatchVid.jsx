@@ -3,11 +3,13 @@ import { API_BASE_URL } from '../constants';
 import { useSearchParams } from 'react-router-dom'
 import '../style/WatchVid.scss'
 import VideoPlayer from '../components/VideoPlayer';
+import Loader from '../components/Loader'
 
 const WatchVid = () => {
   const [allVideo, setAllVideo] = useState('');
   const [audioURL, setAudioURL] = useState('');
   const [watchDivHTML, setWatchDivHTML] = useState('');
+  const [loading, setLoading] = useState(false)
 
   const [searchParams] = useSearchParams();
   const [vidDisplay, setVidDisplay] = useState('none');
@@ -33,7 +35,8 @@ const WatchVid = () => {
     }
 
 
-    const fetchYoutube = async () => {
+    /*const fetchYoutube = async () => {
+      
       await fetch(url)
         .then(res => res.json())
         .then(data => {
@@ -41,6 +44,24 @@ const WatchVid = () => {
           console.log(data[0]);
           setAudioURL(data[1]);
         })
+    }*/
+
+    const fetchYoutube = async () => {
+      try {
+        setLoading(true)
+        await fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          setAllVideo(data[0]);
+          console.log(data[0]);
+          setAudioURL(data[1]);
+        })
+      } catch (error) {
+        <p>error</p>
+      } finally {
+        setLoading(false)
+      }
+      
     }
 
     if (local !== 1) {
@@ -61,6 +82,7 @@ const WatchVid = () => {
   useEffect(() => {
     setWatchDivHTML(
       <main className="main_video">
+        
         {audioURL !== '' && <VideoPlayer allVideo={allVideo} audioUrl={audioURL}/>}
 
         <div className="video_div_download">
@@ -78,7 +100,7 @@ const WatchVid = () => {
   return (
     <>
       <div className="watch">
-        {watchDivHTML}
+        {loading ? <Loader/> : watchDivHTML}
       </div>
     </>
   )

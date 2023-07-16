@@ -8,7 +8,7 @@
         height: 50px;
         width: calc(70% + 50px);
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
         border-radius: 25px;
@@ -21,12 +21,17 @@
             align-items: center;
             justify-content: center;
             border-radius: 25px;
-            margin-right: 30%;
+            margin-left: 5px;
             font-size: 0.9em;
             color: var.$c2;
             background-color: var.$c4;
             cursor: pointer;
             transition: .3s;
+        }
+        .input_type {
+            display: flex;
+            align-items: center;
+            margin-right: 5px;
         }
         .form_label_upload:hover {
             background-color: var.$hover-c4;
