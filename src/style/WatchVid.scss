@@ -3,6 +3,12 @@
 .main_video {
     display: flex;
     flex-direction: column;
+    .loader_container {
+        margin: 0;
+        height: 200px;
+        display: flex;
+        align-items: center;
+    }
     video {
         height: auto;
         width: 100%;

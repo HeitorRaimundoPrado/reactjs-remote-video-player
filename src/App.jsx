@@ -10,7 +10,6 @@ import UploadForm from './pages/UploadForm'
 
 import { useSwipeable } from 'react-swipeable'
 
-import HomePage from './pages/HomePage.jsx'
 import SoundPage from './pages/SoundPage.jsx'
 import YouTubePage from './pages/YouTubePage.jsx'
 import CreatePlaylist from './pages/CreatePlaylist.jsx'
@@ -31,9 +30,13 @@ import { useEffect, useState } from 'react'
 import HandleReplistContext from './contexts/HandlePlaylist'
 import RepIdxContext from './contexts/RepIdx'
 
+import { Suspense } from "react"
+import { useTranslation } from  'react-i18next'
 
 
 function App() {
+  const {t, i18n } = useTranslation();
+
   const [replist, setReplist] = useState([]);
   const [repIdx, setRepIdx] = useState(0);
 
@@ -76,26 +79,20 @@ function App() {
         <RepIdxContext.Provider value={{ repIdx, setRepIdx }}>
           <BrowserRouter>
             <Routes>
-              <Route path='/' element={<Home/>}/>
-              <Route path='/test-watch' element={<TestWatch/>}/>
-              <Route path='/test-search' element={<TestSearch/>}/>
-              <Route path='/test-upload' element={<TestUpload/>}/>
-              <Route path='/test-audio' element={<TestAudio/>}/>
-              <Route path='/test-get-music' element={<TestGetAllMusic/>}/>
+              <Route path='/' element={<Home t={t}/>}/>
 
-              <Route path='/' element={<HomePage/>}/>
-              <Route path='/sound' element={<SoundPage/>}/>
-              <Route path='/youtube' element={<YouTubePage/>}/>
+              <Route path='/sound' element={<SoundPage t={t}/>}/>
+              <Route path='/youtube' element={<YouTubePage t={t}/>}/>
 
-              <Route path='/create-playlist' element={<CreatePlaylist/>}/>
+              <Route path='/create-playlist' element={<CreatePlaylist t={t}/>}/>
 
-              <Route path='/watch' element={<WatchVid/>}/>
-              <Route path='/upload' element={<UploadForm/>}/>
+              <Route path='/watch' element={<WatchVid t={t}/>}/>
+              <Route path='/upload' element={<UploadForm t={t}/>}/>
 
-              <Route path='/signup' element={<SingUp/>}/>
-              <Route path='/login' element={<LogIn setToken={setToken}/>}/>
+              <Route path='/signup' element={<SingUp t={t}/>}/>
+              <Route path='/login' element={<LogIn setToken={setToken} t={t}/>}/>
 
-              <Route path='edit-playlist' element={<EditPlaylist/>}/>
+              <Route path='edit-playlist' element={<EditPlaylist t={t}/>}/>
               
             </Routes>
           </BrowserRouter>

@@ -3,7 +3,7 @@ import { API_BASE_URL } from '../constants';
 import { useSearchParams } from 'react-router-dom'
 import '../style/WatchVid.scss'
 import VideoPlayer from '../components/VideoPlayer';
-import Loader from '../components/Loader'
+import Loader from '../components/Loader';
 
 const WatchVid = () => {
   const [allVideo, setAllVideo] = useState('');
@@ -35,16 +35,6 @@ const WatchVid = () => {
     }
 
 
-    /*const fetchYoutube = async () => {
-      
-      await fetch(url)
-        .then(res => res.json())
-        .then(data => {
-          setAllVideo(data[0]);
-          console.log(data[0]);
-          setAudioURL(data[1]);
-        })
-    }*/
 
     const fetchYoutube = async () => {
       try {
@@ -55,13 +45,11 @@ const WatchVid = () => {
           setAllVideo(data[0]);
           console.log(data[0]);
           setAudioURL(data[1]);
+          setLoading(false)
         })
       } catch (error) {
         <p>error</p>
-      } finally {
-        setLoading(false)
-      }
-      
+      }    
     }
 
     if (local !== 1) {
@@ -82,7 +70,7 @@ const WatchVid = () => {
   useEffect(() => {
     setWatchDivHTML(
       <main className="main_video">
-        
+
         {audioURL !== '' && <VideoPlayer allVideo={allVideo} audioUrl={audioURL}/>}
 
         <div className="video_div_download">

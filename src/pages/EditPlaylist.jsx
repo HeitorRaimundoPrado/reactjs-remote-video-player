@@ -5,7 +5,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import jQuery from "jquery";
 import '../style/EditPlaylist.scss'
 
-const EditPlaylist = () => {
+const EditPlaylist = (props) => {
   const [playlistSongs, setPlaylistSongs] = useState([]);
   const [playlistName, setPlaylistName] = useState('');
   const [searchParams] = useSearchParams();
@@ -78,7 +78,7 @@ const EditPlaylist = () => {
   
   return (
     <div className="edit_container">
-      <h2>Edit {playlistName}</h2>
+      <h2>{ props.t("editPlaylist.edit") } {playlistName}</h2>
       <DragDropContext onDragEnd={handleOnDragEnd}>
 
         <Droppable droppableId="playlist">
@@ -104,7 +104,7 @@ const EditPlaylist = () => {
                         {song.name}
 
                         <button type="button" onClick={() => handleDeleteSong(String(song.id))} className="button_remove_song">
-                          Remove
+                          { props.t("editPlaylist.remove") }
                         </button>
 
                       </li>
@@ -119,7 +119,7 @@ const EditPlaylist = () => {
       </DragDropContext>
 
       <form onSubmit={handleSubmit} className="save_edit_form">
-        <button type="submit">Save Changes</button>
+        <button type="submit"> {props.t("editPlaylist.saveChanges")} </button>
       </form>
     </div>
   )

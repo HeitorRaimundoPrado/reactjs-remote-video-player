@@ -1,22 +1,34 @@
 /* eslint-disable react/jsx-key */
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { API_BASE_URL } from '../constants';
 import Loader from '../components/Loader'
 import "../style/Youtube.scss"
+import { useSearchParams } from 'react-router-dom';
 
-const YouTubePage = () => {
+const YouTubePage = (props) => {
   const [searchResults, setSearchResults] = useState([])
   const [inputText, setInputText] = useState('')
   const [Loading, setLoading] = useState(false)
 
-  /*const handleSubmit = async (e) => {
-    e.preventDefault();
+  const [searchParams] = useSearchParams();
 
-    const res = await fetch(`${API_BASE_URL}/api/youtube/search?` + new URLSearchParams({term: e.target[0].value}))
+  const q = searchParams.get("q");
 
-    const json = await res.json();
-    setSearchResults(json);
-  }*/
+  useEffect(() => {
+    if (q !== null && q !== undefined) {
+      try {
+        setLoading(true);
+        fetch(`${API_BASE_URL}/api/youtube/search?` + new URLSearchParams({term: q}))
+          .then(resp => resp.json())
+          .then(data => {
+            setSearchResults(data);
+            setLoading(false);
+          })
+      } catch(error) {
+        console.log(error);
+      }
+    }
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,8 +57,7 @@ const YouTubePage = () => {
 
         </div>
        
-        <input type="text" placeholder="Search YouTube" className="form__search" value={inputText} onChange={(e) => setInputText(e.target.value)}/>
-
+        <input type="text" placeholder={props.t("youtubePage.searchYoutube")} className="form__search" value={inputText} onChange={(e) => setInputText(e.target.value)}/>
         <input type="submit" value="Go" className="form__submit"/>
       </form>
         {

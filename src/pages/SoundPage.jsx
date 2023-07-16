@@ -14,6 +14,7 @@ import '../style/SoundPage.scss'
 import jQuery from "jquery";
 
 const DataContext = createContext();
+
 const generateRandomColor = () => {
   const color = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
   return color;
@@ -47,6 +48,7 @@ const handleDeleteSong = (songs, setSongs, baseUrl, idx) => {
   songsCopy.splice(idx, 1);
   setSongs(songsCopy);
 }
+
 const Files = (props) => {
   const{playAudio, handleAddToPlaylist, audRef, addToPlaylistRef, setAddToPlaylistSong, baseUrl} = props;
 
@@ -66,11 +68,11 @@ const Files = (props) => {
             {item.artist} - {item.name}
           </button>
           <button onClick={() => handleDeleteSong(data, setData, baseUrl, idx)} className='delete_music'>
-            Delete
+            {props.t("soundPage.delete")}
           </button>
           <a href="#add_to_playlist_container" className='add_music_playlist'>
             <button onClick={() => handleAddToPlaylist(item, addToPlaylistRef, setAddToPlaylistSong, setRepIdx, idx)} >
-              Add To Playlist
+              {props.t("soundPage.addToPlaylist")}
             </button>
           </a>
         </li>
@@ -249,7 +251,7 @@ const handlePlaylistContextMenu = (e, playlist, contextMenuRef, setContextMenuSo
   console.log('right click');
 }
 
-const SoundPage = () => {
+const SoundPage = (props) => {
   const [allSongs, setAllSongs] = useState([]);
   const [globalPlaylists, setGlobalPlaylists] = useState([]);
   const [addToPlaylistSong, setAddToPlaylistSong] = useState('');
@@ -259,6 +261,7 @@ const SoundPage = () => {
   const [searchContent, setSearchContent] = useState('');
   const [allVideo, setAllVideo] = useState([]);
   const [curSong, setCurSong] = useState("Not Playing");
+  const [suggestYoutube, setSuggestYoutube] = useState(false);
 
 
   const { replist, setReplist } = useContext(HandleReplistContext);
@@ -280,8 +283,13 @@ const SoundPage = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     const filteredSongs = allSongs.filter((item) => {
-      return item.toLowerCase().includes(searchContent.toLowerCase());
+      return item.name.toLowerCase().includes(searchContent.toLowerCase());
     })
+    
+    if (filteredSongs.length == 0) {
+      // window.location.href = "/youtube?" + new URLSearchParams(q=searchContent)
+      setSuggestYoutube(true);
+    }
     setReplist(filteredSongs);
   }
 
@@ -291,8 +299,13 @@ const SoundPage = () => {
       return;
     }
     const filteredSongs = allSongs.filter((item) => {
-      return item.toLowerCase().includes(searchContent.toLowerCase());
+      return item.name.toLowerCase().includes(searchContent.toLowerCase());
     })
+
+    if (filteredSongs.length == 0) {
+      setSuggestYoutube(true);
+    }
+
     setReplist(filteredSongs);
 
   }, [searchContent])
@@ -388,10 +401,7 @@ const SoundPage = () => {
           <img src="magnifying-glass-solid.svg" alt="search" width="20px" height="20px"/>
         </div>
         <input type="text" onChange={(e) => setSearchContent(e.target.value)}
-        placeholder="Search Audio" className="form__search"/>
-
-        {/*<input type="text" onChange={(e) => setSearchContent(e.target.value)}
-        placeholder="Search Audio" className="form__search"/>*/}
+        placeholder={props.t("soundPage.searchAudio")} className="form__search"/>
 
         <input type="submit" value="Go" className="form__submit"/>
       </form>
@@ -404,7 +414,7 @@ const SoundPage = () => {
           <div className="all_playlists">
             <a href="/create-playlist">
               <button className='new_playlist_button'>
-                New Playlist
+                {props.t("soundPage.newPlaylist")}
               </button>
             </a>
             {globalPlaylists.map((playlist, index) => {
@@ -426,21 +436,21 @@ const SoundPage = () => {
           <div>
             <button onClick={() => {
               setReplist(allSongs)
-              setBaseUrl(`${API_BASE_URL}/api/music`)}} className='selection_public secon-all'>Public
+              setBaseUrl(`${API_BASE_URL}/api/music`)}} className='selection_public secon-all'> {props.t("soundPage.publicFiles")}
             </button>
             <button onClick={() => {
               setReplist(privateFiles)
-              setBaseUrl(`${API_BASE_URL}/api/private/music`)}} className='selection_private secon-all'>Private
+              setBaseUrl(`${API_BASE_URL}/api/private/music`)}} className='selection_private secon-all'> { props.t("soundPage.privateFiles")}
             </button>
             <button onClick={() => {
               setReplist(allVideo);
               setBaseUrl('');
-              }} className='selection_video secon-all'>All Video
+              }} className='selection_video secon-all'> {props.t("soundPage.allVideo")}
             </button>
           </div>
           <div className='upload_audio_container'>
               <Link to='/upload' element={<UploadForm/>} className='upload_page_link'>
-                Upload Audio
+                {props.t("soundPage.uploadAudio")}
               </Link>
           </div>
         </div>
@@ -453,7 +463,15 @@ const SoundPage = () => {
                audRef={audioRef}
                handleAddToPlaylist={handleAddToPlaylist}
                baseUrl={baseUrl}
+               t={props.t}
         />
+
+        { suggestYoutube && <>
+          <button className='suggest_youtube' onClick={() => {
+            window.location.href = "/youtube?" + new URLSearchParams({q: searchContent});
+          }}> {props.t("soundPage.suggestYoutube")} </button>
+        </>
+        }
 
       </DataContext.Provider>
 

@@ -12,7 +12,7 @@ const AuthLinks = (props) => {
     :
 
     <button onClick={
-      props.removeToken
+      () => props.removeToken()
     }>Logout</button> 
   }
   </div>

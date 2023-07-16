@@ -28,7 +28,7 @@ const handleAddSong = (song, songsToSend, setSongsToSend) => {
   setSongsToSend([...songsToSend, song]);
 }
 
-const CreatePlaylist = () => {
+const CreatePlaylist = (props) => {
   const [songsToSend, setSongsToSend] = useState([]);
   const [songs, setSongs] = useState([])
 
@@ -58,7 +58,7 @@ const CreatePlaylist = () => {
 
           <div className='selection_songs_container'>
             <div className='selection_songs'>
-              <h3>Select Audio</h3>
+              <h3>{props.t("createPlaylistPage.selectAudio")}</h3>
               <ul>
                 {songs.map((song) => {
                   return <li>
@@ -79,7 +79,7 @@ const CreatePlaylist = () => {
               </ul>
             </div>
           </div>
-          <input type="submit" value="Create" className="form_submit_playlist"/>
+          <input type="submit" value={props.t("createPlaylistPage.create")} className="form_submit_playlist"/>
         </form>
       </div>
     </>
