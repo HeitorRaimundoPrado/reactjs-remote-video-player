@@ -15,7 +15,8 @@
     "publicFiles": "Public Files",
     "privateFiles": "Private Files",
     "allVideo": "All Video",
-    "searchAudio": "Search Audio"
+    "searchAudio": "Search Audio",
+    "suggestYoutube": "Result not found - Click to Search Youtube"
   },
   "createPlaylistPage": {
     "selectAudio": "Select Audio",

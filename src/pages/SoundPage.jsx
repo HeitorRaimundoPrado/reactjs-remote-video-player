@@ -14,6 +14,7 @@ import '../style/SoundPage.scss'
 import jQuery from "jquery";
 
 const DataContext = createContext();
+
 const generateRandomColor = () => {
   const color = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
   return color;
@@ -47,6 +48,7 @@ const handleDeleteSong = (songs, setSongs, baseUrl, idx) => {
   songsCopy.splice(idx, 1);
   setSongs(songsCopy);
 }
+
 const Files = (props) => {
   const{playAudio, handleAddToPlaylist, audRef, addToPlaylistRef, setAddToPlaylistSong, baseUrl} = props;
 
@@ -259,6 +261,7 @@ const SoundPage = (props) => {
   const [searchContent, setSearchContent] = useState('');
   const [allVideo, setAllVideo] = useState([]);
   const [curSong, setCurSong] = useState("Not Playing");
+  const [suggestYoutube, setSuggestYoutube] = useState(false);
 
 
   const { replist, setReplist } = useContext(HandleReplistContext);
@@ -280,8 +283,13 @@ const SoundPage = (props) => {
   const handleSearch = (e) => {
     e.preventDefault();
     const filteredSongs = allSongs.filter((item) => {
-      return item.toLowerCase().includes(searchContent.toLowerCase());
+      return item.name.toLowerCase().includes(searchContent.toLowerCase());
     })
+    
+    if (filteredSongs.length == 0) {
+      // window.location.href = "/youtube?" + new URLSearchParams(q=searchContent)
+      setSuggestYoutube(true);
+    }
     setReplist(filteredSongs);
   }
 
@@ -291,8 +299,13 @@ const SoundPage = (props) => {
       return;
     }
     const filteredSongs = allSongs.filter((item) => {
-      return item.toLowerCase().includes(searchContent.toLowerCase());
+      return item.name.toLowerCase().includes(searchContent.toLowerCase());
     })
+
+    if (filteredSongs.length == 0) {
+      setSuggestYoutube(true);
+    }
+
     setReplist(filteredSongs);
 
   }, [searchContent])
@@ -408,6 +421,7 @@ const SoundPage = (props) => {
               </button>
             )
           })}
+
           <a href="/create-playlist">
             <button className='new_playlist_button'>
               {props.t("soundPage.newPlaylist")}
@@ -449,6 +463,13 @@ const SoundPage = (props) => {
                baseUrl={baseUrl}
                t={props.t}
         />
+
+        { suggestYoutube && <>
+          <button className='suggest_youtube' onClick={() => {
+            window.location.href = "/youtube?" + new URLSearchParams({q: searchContent});
+          }}> {props.t("soundPage.suggestYoutube")} </button>
+        </>
+        }
 
       </DataContext.Provider>
 

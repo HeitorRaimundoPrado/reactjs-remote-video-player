@@ -15,7 +15,8 @@
     "publicFiles": "Arquivos Públicos",
     "privateFiles": "Arquivos Privados",
     "allVideo": "Todos os Vídeos",
-    "searchAudio": "Pesquisar Áudio"
+    "searchAudio": "Pesquisar Áudio",
+    "suggestYoutube": "Resultado não encontrado - clique para pesquisar no YouTube"
   },
   "createPlaylistPage": {
     "selectAudio": "Selecionar Áudio",

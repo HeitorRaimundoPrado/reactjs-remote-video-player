@@ -1,14 +1,34 @@
 /* eslint-disable react/jsx-key */
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { API_BASE_URL } from '../constants';
 import Loader from '../components/Loader'
 import "../style/Youtube.scss"
+import { useSearchParams } from 'react-router-dom';
 
 const YouTubePage = (props) => {
   const [searchResults, setSearchResults] = useState([])
   const [inputText, setInputText] = useState('')
   const [Loading, setLoading] = useState(false)
 
+  const [searchParams] = useSearchParams();
+
+  const q = searchParams.get("q");
+
+  useEffect(() => {
+    if (q !== null && q !== undefined) {
+      try {
+        setLoading(true);
+        fetch(`${API_BASE_URL}/api/youtube/search?` + new URLSearchParams({term: q}))
+          .then(resp => resp.json())
+          .then(data => {
+            setSearchResults(data);
+            setLoading(false);
+          })
+      } catch(error) {
+        console.log(error);
+      }
+    }
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
