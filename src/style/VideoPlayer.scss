@@ -23,6 +23,30 @@
     img {
       margin-block: 5px;
     }
+
+    .speed_selector {
+      background-color: rgba(0, 0, 0, 0);
+      color: white;
+      border: 0;
+      margin: 0;
+      outline: none;
+    }
+
+    .playback_rate_selector {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      right: 152px;
+      bottom: 45px;
+      
+      button {
+        padding: 5px;
+        background-color: rgba(0, 0, 0, 0.75);
+        color: white;
+        border: none;
+        outline: none;
+      }
+    }
     
     .video_pause {
       outline: none;
@@ -84,8 +108,8 @@
 
     .resolution_selector {
       position: absolute;
-      right: 100px;
-      bottom: 40px;
+      right: 96px;
+      bottom: 45px;
       width: 50px;
       display: flex;
       flex-direction: column;
