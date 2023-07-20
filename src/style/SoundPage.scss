@@ -206,3 +206,19 @@
     }
   }
 }
+
+.shuffle_playlist_button {
+  display: flex;
+  font-size: 1rem;
+  border-radius: 38px;
+  margin-left: 75px;
+  height: fit-content;
+  align-items: center;
+  jusitify-content: center;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: none;
+  outline: none;
+  color: var.$c2;
+  background-color: var.$c4;
+}

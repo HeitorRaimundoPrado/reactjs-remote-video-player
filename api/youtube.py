@@ -1,44 +1,47 @@
 import os
-from flask import Blueprint, request, send_from_directory, send_file
-import pytube
-import requests
-import re
-from bs4 import BeautifulSoup
+from flask import Blueprint, request, send_from_directory, send_file, after_this_request, current_app
+import yt_dlp
 import json
 import tempfile
-import subprocess
+import shutil
+import scrapetube
 
-get_pfp_memo = dict()
 
 bp = Blueprint('youtube', __name__)
-
-def get_pfp(url: str) -> str:
-    if get_pfp_memo.get(url) is not None:
-        return get_pfp_memo[url]
-
-    soup = BeautifulSoup(requests.get(url, cookies={'CONSENT': 'YES+1'}).text, 'html.parser')
-
-    data = re.search(r"var ytInitialData = ({.*});", str(soup.prettify())).group(1) #type: ignore
-
-    json_data = json.loads(data)
-
-    get_pfp_memo[url] = json_data['header']['c4TabbedHeaderRenderer']['avatar']['thumbnails'][2]['url']
-    return get_pfp_memo[url]
 
 # get the true urls for video and audio in <url>
 @bp.route('/api/youtube/get/')
 def youtube_get():
     url = request.args['url']
     ret_json = dict()
-    streams = pytube.YouTube(url).streams
-    video_resolutions = []
-    res_set = set()
-    for stream in streams.filter(type='video', progressive=False).order_by('resolution').desc():
-        if stream.resolution not in res_set:
-            video_resolutions.append({'url': stream.url, 'resolution': stream.resolution})
-            res_set.add(stream.resolution)
 
-    ret_json = [video_resolutions, streams.filter(type="audio").order_by('abr').desc().first().url] # type: ignore
+    ydl_opts = {}
+
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        info = ydl.extract_info(url, download=False)
+
+    video_resolutions = []
+    audio_streams = []
+
+    res_set = set()
+    info = ydl.sanitize_info(info)
+
+    if info is None:
+        return {}
+
+
+    for stream in [(format["url"], format["resolution"], format['abr'], format['video_ext']) for format in info["formats"]]: #type:ignore
+        if stream[1] not in res_set and stream[1] != "audio only":
+
+            if stream[3] == 'mp4':
+                video_resolutions.append({'url': stream[0], 'resolution': stream[1]})
+                res_set.add(stream[1])
+
+        elif stream[1] == 'audio only' and stream[2] != None:
+            audio_streams.append(stream)
+
+    print(json.dumps(audio_streams, indent=1))
+    ret_json = [video_resolutions, max(audio_streams, key=lambda x: x[2])[0]] 
     return ret_json
 
 # use youtube data api to retrieve the results from <search>
@@ -46,17 +49,19 @@ def youtube_get():
 def youtube_search():
     term = request.args['term']
 
-    search = pytube.Search(term).results
+    search = scrapetube.get_search(term, limit=15)
     if search is None:
         return []
 
     ret_json = list()
     for video in search:
-        ret_json.append({'pfp': get_pfp(video.channel_url), 'thumbnail':video.thumbnail_url, 'channel': video.author,'title': video.title, 'url': video.watch_url})
+        pfp = video["channelThumbnailSupportedRenderers"]["channelThumbnailWithLinkRenderer"]["thumbnail"]["thumbnails"][0]["url"]
+        thumbnail = video["thumbnail"]["thumbnails"][0]['url']
+        channel_url = video["channelThumbnailSupportedRenderers"]["channelThumbnailWithLinkRenderer"]["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"]
+        channel_name = video["ownerText"]["runs"][0]["text"]
+        video_title = video["title"]['runs'][0]['text']
 
-    # print('\n\n')
-    # print(ret_json)
-    # print('\n\n')
+        ret_json.append({'pfp': pfp, 'thumbnail': thumbnail, 'channel': channel_name,'title': video_title, 'url': video["videoId"], "channel_url": channel_url})
 
     return ret_json 
 
@@ -64,20 +69,39 @@ def youtube_search():
 @bp.route('/api/youtube/download')
 def youtube_download():
     url = request.args['url']
+
     with tempfile.TemporaryDirectory() as tmp_dir:
-        file_name = pytube.YouTube(url).streams.get_highest_resolution().download(output_path=tmp_dir) # type: ignore
-        print('sending file')
+        ydl_opts = {
+                'quiet': True,  # Suppress logging output (optional)
+                'format': "best+bestaudio",
+                'outtmpl': str(os.path.join(tmp_dir,  "%(title)s.%(%ext)s")) # Specify the output path for the downloaded file
+            }
+
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            file_name = ydl.prepare_filename(ydl.extract_info(url, download=False))
+            ydl.download([url])
+
         return send_file(file_name, as_attachment=True, mimetype="application/octet-stream")
 
 @bp.route('/api/youtube/download_audio')
 def youtube_download_audio():
     url = request.args['url']
     with tempfile.TemporaryDirectory() as tmp_dir:
-        yt = pytube.YouTube(url)
-        file_name = yt.streams.get_audio_only().download(output_path=tmp_dir) # type: ignore
-        print(os.listdir(tmp_dir))
-        dest = os.path.join(tmp_dir, file_name.replace('.mp4', '.mp3'))
-        subprocess.run(f'ffmpeg -i "{file_name}" "{dest}" ', shell=True)
 
-        response = send_file(dest, as_attachment=True, mimetype="application/octet-stream")
+        ydl_opts = {
+            'quiet': True,  # Suppress logging output (optional)
+            'outtmpl': str(os.path.join(tmp_dir, '%(title)s')),  # Specify the output directory and template
+            'format': 'bestaudio/best',  # Choose the best audio format available
+            'postprocessors': [{
+                'key': 'FFmpegExtractAudio',  # Extract audio using FFmpeg
+                'preferredcodec': 'mp3',  # Convert to MP3 format
+                'preferredquality': '192',  # Audio quality (192 kbps)
+            }]
+        }
+
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            file_name = ydl.prepare_filename(ydl.extract_info(url, download=True))
+
+        response = send_file(file_name + '.mp3', as_attachment=True, mimetype="application/octet-stream")
         return response
+

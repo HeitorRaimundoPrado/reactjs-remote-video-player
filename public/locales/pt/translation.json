@@ -3,7 +3,8 @@
     "header": {
       "title": "Sobre o App",
       "firstParagraph": "Esse aplicativo funciona tanto como uma alternativa ao YouTube ( página à direita ) quanto um reprodutor de áudio ( página à esquerda )",
-      "secondParagraph": "Qualquer uso desse aplicativo para violar leis de direitos autorais não é de responsabilidade dos criadores e qualquer arquivo público que viole as mesmas serão removidos pelos moderadores"
+      "secondParagraph": "Qualquer uso desse aplicativo para violar leis de direitos autorais não é de responsabilidade dos criadores e qualquer arquivo público que viole as mesmas serão removidos pelos moderadores",
+      "thirdParagraph": "Login é necessário somente se você quiser subir arquivos de áudio privados"
     },
     "noLoginNeeded": "NÃO É NECESSÁRIO FAZER LOGIN PARA USAR O APLICATIVO"
   },

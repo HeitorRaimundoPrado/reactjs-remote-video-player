@@ -116,6 +116,11 @@ const VideoPlayer = ({ allVideo, audioUrl }) => {
     }
   };
 
+  const handleSetPlaybackRate = (rate) => {
+    videoRef.current.playbackRate = rate;
+    audioRef.current.playbackRate = rate;
+  }
+
   const isPlaying = useCallback(() => {
     if (audioRef.current !== null && audioRef.current !== undefined) {
       return !audioRef.current.paused;
@@ -140,6 +145,17 @@ const VideoPlayer = ({ allVideo, audioUrl }) => {
     }
   }, [shouldPlay])
 
+  const showSpeedSelector = () => {
+    const rateSelector = document.querySelector(".playback_rate_selector");
+    if (rateSelector.style.display === "none") {
+      rateSelector.style.display = "flex";
+    }
+
+    else {
+      rateSelector.style.display = "none";
+    }
+  }
+
   return (
     <div className="video-player-container" ref={videoContainerRef}>
 
@@ -153,6 +169,7 @@ const VideoPlayer = ({ allVideo, audioUrl }) => {
             <img src="pause-solid.svg" className="svg-white" alt="pause" width="30px" height="30px"/> :
             <img src="play-solid.svg" className="svg-white" alt="play" width="30px" height="30px"/>
           }
+
         </button>
         <input className="video_seek"
           type="range"
@@ -164,6 +181,10 @@ const VideoPlayer = ({ allVideo, audioUrl }) => {
         />
 
         <div className="controls_right">
+          <button onClick={showSpeedSelector} className="speed_selector">
+            {videoRef.current === null ? "" : videoRef.current.playbackRate} X
+          </button> 
+
           <button className="video_resolution_show" type="button" 
             onClick={() => {
             allResRef.current.style.display === 'flex' ? allResRef.current.style.display = 'none' : allResRef.current.style.display = 'flex';
@@ -176,6 +197,13 @@ const VideoPlayer = ({ allVideo, audioUrl }) => {
                               <img src="expand-solid.svg" className="svg-white" alt="fullscreen" width="30px" height="30px"/>
             }
           </button>
+        </div>
+
+
+        <div className="playback_rate_selector" style={{display: "none"}}>
+          <button onClick={() => handleSetPlaybackRate(1)}>1.0</button>
+          <button onClick={() => handleSetPlaybackRate(1.5)}>1.5</button>
+          <button onClick={() => handleSetPlaybackRate(2)}>2.0</button>
         </div>
 
         <ResolutionSelector 

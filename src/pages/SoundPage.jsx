@@ -20,6 +20,20 @@ const generateRandomColor = () => {
   return color;
 };
 
+function shuffleArray(arr) {
+  let currentIndex = arr.length;
+  let randomIndex;
+
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    [arr[currentIndex], arr[randomIndex]] = [arr[randomIndex], arr[currentIndex]];
+  }
+
+  return arr;
+}
+
 const getContrastingColor = (color) => {
   // Convert the color to RGB
   const r = parseInt(color.substr(1, 2), 16);
@@ -392,6 +406,12 @@ const SoundPage = (props) => {
     }
   }, [repIdx, replist])
    
+  const handleShufflePlaylist = () => {
+    let replistCopy = JSON.parse(JSON.stringify(replist));
+    replistCopy = shuffleArray(replistCopy);
+    setReplist(replistCopy);
+  }
+
   return (
     <>
       <h2>Uploads</h2>
@@ -455,6 +475,10 @@ const SoundPage = (props) => {
           </div>
         </div>
       </div>
+
+      <button onClick={handleShufflePlaylist} className="shuffle_playlist_button">
+        Shuffle Playlist
+      </button>
 
       <DataContext.Provider value={[replist, setReplist]}>
         <Files addToPlaylistRef={addToPlaylistRef}

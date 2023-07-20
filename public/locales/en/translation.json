@@ -3,7 +3,8 @@
     "header": {
       "title": "About",
       "firstParagraph": "This application works both as a YouTube client ( go to page on the right ) and as a music player ( page on the left )",
-      "secondParagraph": "Any usage of this application to violate copyright laws are not of responsibility of the creators, and any public file that violates them will be removed by the moderators"
+      "secondParagraph": "Any usage of this application to violate copyright laws are not of responsibility of the creators, and any public file that violates them will be removed by the moderators",
+      "thirdParagraph": "Login is only needed if you want to upload audio files to a private account"
     },
     "noLoginNeeded": "IT IS NOT NECESSARY TO LOGIN TO USE THE APPLICATION"
   },

@@ -49,7 +49,7 @@ const YouTubePage = (props) => {
     <>
       {/*<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />*/}
       <h2>Videos</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} action="">
 
         <div className="search-icon-div">
 

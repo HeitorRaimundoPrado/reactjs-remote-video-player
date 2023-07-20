@@ -9,10 +9,10 @@ body {
         display: flex;
         flex-direction: column;
         header {
-            height: 300px;
+            height: fit-content;
             width: 95%;
             padding: 5%;
-            margin: 2% auto 0px auto;
+            margin: 2% auto 20px auto;
             //background: linear-gradient(135deg, var.$c4 20%, var.$c5 100%);
             border-radius: 3px;
             background-color: var.$c4;

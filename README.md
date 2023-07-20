@@ -6,7 +6,7 @@ If you want to be updated about the app, dont forget to follow us on [Twitter](h
 
 # Video Player with YouTube Client
 
-This is a video player application with a front-end written in React and a back-end written in Flask. The application allows users to play remote audio files saved on a server and search for, play and download YouTube videos using Python's pytube library.
+This is a video player application with a front-end written in React and a back-end written in Flask. The application allows users to play remote audio files saved on a server and search for, play and download YouTube videos using Python's yt-dlp and scrapetube
 
 ## Features
 
@@ -18,7 +18,7 @@ This is a video player application with a front-end written in React and a back-
 
 - Front-end: React
 - Back-end: Flask
-- YouTube integration: pytube library
+- YouTube integration: yt-dlp and scrapetube
 
 ## Prerequisites
 
@@ -26,7 +26,9 @@ To run this application locally, you need to have the following software install
 
 - Python 3
 - Flask
-- pytube library
+- yt-dlp
+- scrapetube
+- npm
 
 ## Installation
 
@@ -129,7 +131,7 @@ Note: For more detailed instructions on using Capacitor with Ionic, refer to the
 3.
 
  Player Controls:
-   - The video player includes basic controls such as play/pause, volume control, and seeking.
+   - The video player includes basic controls such as play/pause, resolution selection and seeking.
 
 ## Contributing
 
@@ -149,7 +151,6 @@ This project is licensed under the [MIT License](LICENSE).
 
 - The React front-end of this application was built using [Vite](https://vitejs.dev/guide/).
 - The Flask back-end was developed using the [Flask](https://flask.palletsprojects.com/) framework.
-- The YouTube client functionality was implemented using the [pytube](https://pypi.org/project/pytube/) library.
 
 ## Contact
 
