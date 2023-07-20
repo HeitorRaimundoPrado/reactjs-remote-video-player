@@ -476,7 +476,7 @@ const SoundPage = (props) => {
         </div>
       </div>
 
-      <button onClick={handleShufflePlaylist}>
+      <button onClick={handleShufflePlaylist} className="shuffle_playlist_button">
         Shuffle Playlist
       </button>
 
