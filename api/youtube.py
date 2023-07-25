@@ -1,9 +1,8 @@
 import os
-from flask import Blueprint, request, send_from_directory, send_file, after_this_request, current_app
+from flask import Blueprint, request, send_file
 import yt_dlp
 import json
 import tempfile
-import shutil
 import scrapetube
 
 
@@ -15,7 +14,13 @@ def youtube_get():
     url = request.args['url']
     ret_json = dict()
 
-    ydl_opts = {}
+    ydl_opts = {
+        'quiet': True,
+        'skip_download': True,
+        'youtube_include_dash_manifest': False,
+        'youtube_include_hls_manifest': False,
+        'extract_flat': True
+    }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=False)
